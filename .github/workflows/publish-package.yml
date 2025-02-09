@@ -23,5 +23,10 @@ jobs:
           bundler-cache: true
           ruby-version: ruby
 
-      # Release
-      - uses: rubygems/release-gem@v1
+      - name: Verify Rakefile and tasks
+        run: bundle exec rake --tasks  # Debugging step
+
+      - name: Release Gem
+        run: bundle exec rake release
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.RUBY_API_KEY }}
