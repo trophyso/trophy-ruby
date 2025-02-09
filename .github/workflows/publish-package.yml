@@ -30,6 +30,9 @@ jobs:
         run: bundle exec rake --tasks  # Debugging step
 
       - name: Release Gem
-        run: bundle exec rake release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          bundle exec rake release
         env:
           GEM_HOST_API_KEY: ${{ secrets.RUBY_API_KEY }}
