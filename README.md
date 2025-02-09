@@ -12,13 +12,13 @@ You don't need this source code unless you want to modify the gem. If you just w
 package, just run:
 
 ```bash
-gem install trophy
+gem install trophy_api_client
 ```
 
 If you want to build the gem from source:
 
 ```bash
-gem build trophy.gemspec
+gem build trophy_api_client.gemspec
 ```
 
 ## Usage
@@ -27,7 +27,21 @@ The package needs to be configured with your account's API key which is availabl
 dashboard.
 
 ```ruby
+require 'trophy_api_client'
+include TrophyApiClient
 
+client = TrophyApiClient::Client.new(
+  api_key: 'YOUR_API_KEY'
+)
+
+result = client.metrics.event(
+  :key => 'words-written',
+  :user => {
+    :id => '18',
+    :email => 'jk.rowling@harrypotter.com'
+  },
+  :value => 750
+)
 ```
 
 ## Documentation
