@@ -2,13 +2,13 @@
 
 module TrophyApiClient
   module Gemconfig
-    VERSION = ""
-    AUTHORS = [""].freeze
+    VERSION = "0.1.9"
+    AUTHORS = ["Trophy Labs, Inc"].freeze
     EMAIL = ""
-    SUMMARY = ""
-    DESCRIPTION = ""
-    HOMEPAGE = "https://github.com/REPO/URL"
-    SOURCE_CODE_URI = "https://github.com/REPO/URL"
-    CHANGELOG_URI = "https://github.com/REPO/URL/blob/master/CHANGELOG.md"
+    SUMMARY = "Ruby library for the Trophy API."
+    DESCRIPTION = "Ruby library for the Trophy API."
+    HOMEPAGE = "https://github.com/trophyso/trophy-ruby"
+    SOURCE_CODE_URI = "https://github.com/trophyso/trophy-ruby"
+    CHANGELOG_URI = "https://github.com/trophyso/trophy-ruby"
   end
 end
