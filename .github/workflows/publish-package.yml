@@ -23,6 +23,9 @@ jobs:
           bundler-cache: true
           ruby-version: ruby
 
+      - name: Install Dependencies
+        run: bundle install --jobs 4 --retry 3
+
       - name: Verify Rakefile and tasks
         run: bundle exec rake --tasks  # Debugging step
 
