@@ -26,7 +26,7 @@ module TrophyApiClient
     # @return [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     attr_reader :achievements
     # @return [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
-    attr_reader :streak
+    attr_reader :current_streak
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -43,10 +43,10 @@ module TrophyApiClient
     # @param status [TrophyApiClient::MetricStatus] The status of the metric.
     # @param current [Float] The user's current total for the metric.
     # @param achievements [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
-    # @param streak [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
+    # @param current_streak [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricResponse]
-    def initialize(id:, key:, name:, emoji:, streak_frequency:, status:, current:, achievements:, streak: OMIT,
+    def initialize(id:, key:, name:, emoji:, streak_frequency:, status:, current:, achievements:, current_streak: OMIT,
                    additional_properties: nil)
       @id = id
       @key = key
@@ -56,7 +56,7 @@ module TrophyApiClient
       @status = status
       @current = current
       @achievements = achievements
-      @streak = streak if streak != OMIT
+      @current_streak = current_streak if current_streak != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "id": id,
@@ -67,7 +67,7 @@ module TrophyApiClient
         "status": status,
         "current": current,
         "achievements": achievements,
-        "streak": streak
+        "currentStreak": current_streak
       }.reject do |_k, v|
         v == OMIT
       end
@@ -91,11 +91,11 @@ module TrophyApiClient
         item = item.to_json
         TrophyApiClient::AchievementResponse.from_json(json_object: item)
       end
-      if parsed_json["streak"].nil?
-        streak = nil
+      if parsed_json["currentStreak"].nil?
+        current_streak = nil
       else
-        streak = parsed_json["streak"].to_json
-        streak = TrophyApiClient::StreakResponse.from_json(json_object: streak)
+        current_streak = parsed_json["currentStreak"].to_json
+        current_streak = TrophyApiClient::StreakResponse.from_json(json_object: current_streak)
       end
       new(
         id: id,
@@ -106,7 +106,7 @@ module TrophyApiClient
         status: status,
         current: current,
         achievements: achievements,
-        streak: streak,
+        current_streak: current_streak,
         additional_properties: struct
       )
     end
@@ -133,7 +133,7 @@ module TrophyApiClient
       obj.status.is_a?(TrophyApiClient::MetricStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
       obj.current.is_a?(Float) != false || raise("Passed value for field obj.current is not the expected type, validation failed.")
       obj.achievements.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
-      obj.streak.nil? || TrophyApiClient::StreakResponse.validate_raw(obj: obj.streak)
+      obj.current_streak.nil? || TrophyApiClient::StreakResponse.validate_raw(obj: obj.current_streak)
     end
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "../types/event_request_user"
+require_relative "../types/upserted_user"
 require_relative "../types/event_response"
 require "async"
 
@@ -19,11 +19,12 @@ module TrophyApiClient
     # Increment or decrement the value of a metric for a user.
     #
     # @param key [String] Unique reference of the metric as set when created.
-    # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::EventRequestUser, as a Hash
+    # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :subscribe_to_emails (Boolean)
     # @param value [Float] The value to add to the user's current total for the given metric.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::EventResponse]
@@ -35,7 +36,7 @@ module TrophyApiClient
     #  )
     #  api.metrics.event(
     #    key: "words-written",
-    #    user: { id: "18", email: "jk.rowling@harrypotter.com", tz: "Europe/London" },
+    #    user: { email: "user@example.com", tz: "Europe/London", id: "18" },
     #    value: 750
     #  )
     def event(key:, user:, value:, request_options: nil)
@@ -70,11 +71,12 @@ module TrophyApiClient
     # Increment or decrement the value of a metric for a user.
     #
     # @param key [String] Unique reference of the metric as set when created.
-    # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::EventRequestUser, as a Hash
+    # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :subscribe_to_emails (Boolean)
     # @param value [Float] The value to add to the user's current total for the given metric.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::EventResponse]
@@ -86,7 +88,7 @@ module TrophyApiClient
     #  )
     #  api.metrics.event(
     #    key: "words-written",
-    #    user: { id: "18", email: "jk.rowling@harrypotter.com", tz: "Europe/London" },
+    #    user: { email: "user@example.com", tz: "Europe/London", id: "18" },
     #    value: 750
     #  )
     def event(key:, user:, value:, request_options: nil)
