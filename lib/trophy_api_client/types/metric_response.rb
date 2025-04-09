@@ -2,7 +2,7 @@
 
 require_relative "streak_frequency"
 require_relative "metric_status"
-require_relative "achievement_response"
+require_relative "multi_stage_achievement_response"
 require_relative "streak_response"
 require "ostruct"
 require "json"
@@ -23,7 +23,7 @@ module TrophyApiClient
     attr_reader :status
     # @return [Float] The user's current total for the metric.
     attr_reader :current
-    # @return [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @return [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     attr_reader :achievements
     # @return [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     attr_reader :current_streak
@@ -42,7 +42,7 @@ module TrophyApiClient
     # @param streak_frequency [TrophyApiClient::StreakFrequency] The frequency of the streak.
     # @param status [TrophyApiClient::MetricStatus] The status of the metric.
     # @param current [Float] The user's current total for the metric.
-    # @param achievements [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @param achievements [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     # @param current_streak [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricResponse]
@@ -89,7 +89,7 @@ module TrophyApiClient
       current = parsed_json["current"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::AchievementResponse.from_json(json_object: item)
+        TrophyApiClient::MultiStageAchievementResponse.from_json(json_object: item)
       end
       if parsed_json["currentStreak"].nil?
         current_streak = nil

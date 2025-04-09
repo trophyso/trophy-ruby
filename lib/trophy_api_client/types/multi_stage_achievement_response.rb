@@ -5,7 +5,7 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  class AchievementResponse
+  class MultiStageAchievementResponse
     # @return [String] The unique ID of the achievement.
     attr_reader :id
     # @return [String] The name of this achievement.
@@ -41,7 +41,7 @@ module TrophyApiClient
     # @param key [String] The key used to reference this achievement in the API.
     # @param achieved_at [DateTime] The date and time the achievement was completed, in ISO 8601 format.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::AchievementResponse]
+    # @return [TrophyApiClient::MultiStageAchievementResponse]
     def initialize(id:, name: OMIT, badge_url: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, key: OMIT,
                    achieved_at: OMIT, additional_properties: nil)
       @id = id
@@ -67,10 +67,10 @@ module TrophyApiClient
       end
     end
 
-    # Deserialize a JSON object to an instance of AchievementResponse
+    # Deserialize a JSON object to an instance of MultiStageAchievementResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::AchievementResponse]
+    # @return [TrophyApiClient::MultiStageAchievementResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -95,7 +95,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of AchievementResponse to a JSON object
+    # Serialize an instance of MultiStageAchievementResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "achievement_response"
+require_relative "multi_stage_achievement_response"
 require "ostruct"
 require "json"
 
@@ -8,7 +8,7 @@ module TrophyApiClient
   class EventResponseMetricsItem
     # @return [String] The ID of the metric.
     attr_reader :metric_id
-    # @return [Array<TrophyApiClient::AchievementResponse>] A list of any new achievements that the user has now completed as a result of
+    # @return [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of any new achievements that the user has now completed as a result of
     #  this event being submitted.
     attr_reader :completed
     # @return [OpenStruct] Additional properties unmapped to the current class definition
@@ -20,7 +20,7 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param metric_id [String] The ID of the metric.
-    # @param completed [Array<TrophyApiClient::AchievementResponse>] A list of any new achievements that the user has now completed as a result of
+    # @param completed [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of any new achievements that the user has now completed as a result of
     #  this event being submitted.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::EventResponseMetricsItem]
@@ -43,7 +43,7 @@ module TrophyApiClient
       metric_id = parsed_json["metricId"]
       completed = parsed_json["completed"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::AchievementResponse.from_json(json_object: item)
+        TrophyApiClient::MultiStageAchievementResponse.from_json(json_object: item)
       end
       new(
         metric_id: metric_id,

@@ -6,7 +6,7 @@ require_relative "../types/user"
 require_relative "../types/updated_user"
 require_relative "../types/metric_response"
 require "json"
-require_relative "../types/achievement_response"
+require_relative "../types/multi_stage_achievement_response"
 require "async"
 
 module TrophyApiClient
@@ -20,7 +20,7 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Create a new user.
+    # Identify a new user.
     #
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -195,7 +195,7 @@ module TrophyApiClient
     #
     # @param id [String] ID of the user.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::AchievementResponse>]
+    # @return [Array<TrophyApiClient::MultiStageAchievementResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -223,7 +223,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
         item = item.to_json
-        TrophyApiClient::AchievementResponse.from_json(json_object: item)
+        TrophyApiClient::MultiStageAchievementResponse.from_json(json_object: item)
       end
     end
   end
@@ -238,7 +238,7 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Create a new user.
+    # Identify a new user.
     #
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -423,7 +423,7 @@ module TrophyApiClient
     #
     # @param id [String] ID of the user.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::AchievementResponse>]
+    # @return [Array<TrophyApiClient::MultiStageAchievementResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -452,7 +452,7 @@ module TrophyApiClient
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
           item = item.to_json
-          TrophyApiClient::AchievementResponse.from_json(json_object: item)
+          TrophyApiClient::MultiStageAchievementResponse.from_json(json_object: item)
         end
       end
     end
