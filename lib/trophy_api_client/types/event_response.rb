@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "event_response_metrics_item"
-require_relative "streak_response"
+require_relative "increment_metric_streak_response"
 require "ostruct"
 require "json"
 
@@ -15,7 +15,7 @@ module TrophyApiClient
     attr_reader :total
     # @return [Array<TrophyApiClient::EventResponseMetricsItem>] Changes to achievements as a result of this event.
     attr_reader :achievements
-    # @return [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
+    # @return [TrophyApiClient::IncrementMetricStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     attr_reader :current_streak
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -29,7 +29,7 @@ module TrophyApiClient
     # @param metric_id [String] The unique ID of the metric that was updated.
     # @param total [Float] The user's new total progress against the metric.
     # @param achievements [Array<TrophyApiClient::EventResponseMetricsItem>] Changes to achievements as a result of this event.
-    # @param current_streak [TrophyApiClient::StreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
+    # @param current_streak [TrophyApiClient::IncrementMetricStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::EventResponse]
     def initialize(event_id:, metric_id:, total:, achievements: OMIT, current_streak: OMIT, additional_properties: nil)
@@ -68,7 +68,7 @@ module TrophyApiClient
         current_streak = nil
       else
         current_streak = parsed_json["currentStreak"].to_json
-        current_streak = TrophyApiClient::StreakResponse.from_json(json_object: current_streak)
+        current_streak = TrophyApiClient::IncrementMetricStreakResponse.from_json(json_object: current_streak)
       end
       new(
         event_id: event_id,
@@ -98,7 +98,7 @@ module TrophyApiClient
       obj.metric_id.is_a?(String) != false || raise("Passed value for field obj.metric_id is not the expected type, validation failed.")
       obj.total.is_a?(Float) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
       obj.achievements&.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
-      obj.current_streak.nil? || TrophyApiClient::StreakResponse.validate_raw(obj: obj.current_streak)
+      obj.current_streak.nil? || TrophyApiClient::IncrementMetricStreakResponse.validate_raw(obj: obj.current_streak)
     end
   end
 end

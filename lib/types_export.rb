@@ -2,6 +2,9 @@
 
 require_relative "trophy_api_client/types/metric_status"
 require_relative "trophy_api_client/types/streak_frequency"
+require_relative "trophy_api_client/types/base_streak_response"
+require_relative "trophy_api_client/types/increment_metric_streak_response"
+require_relative "trophy_api_client/types/streak_response_streak_history_item"
 require_relative "trophy_api_client/types/streak_response"
 require_relative "trophy_api_client/types/multi_stage_achievement_response"
 require_relative "trophy_api_client/types/one_off_achievement_response"
