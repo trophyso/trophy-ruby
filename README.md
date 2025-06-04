@@ -1,14 +1,14 @@
 # Trophy Ruby SDK
 
 The Trophy Ruby SDK provides convenient access to the Trophy API from applications written in the
-Ruby language. 
+Ruby language.
 
-Trophy provides APIs and tools for adding gamification to your application, keeping users engaged 
+Trophy provides APIs and tools for adding gamification to your application, keeping users engaged
 through rewards, achievements, streaks, and personalized communication.
 
 ## Installation
 
-You don't need this source code unless you want to modify the gem. If you just want to use the 
+You don't need this source code unless you want to modify the gem. If you just want to use the
 package, just run:
 
 ```bash
@@ -46,5 +46,5 @@ result = client.metrics.event(
 
 ## Documentation
 
-See the [Trophy API Docs](https://trophy.docs.buildwithfern.com/overview/introduction) for more
+See the [Trophy API Docs](https://docs.trophy.so) for more
 information on the accessible endpoints.
