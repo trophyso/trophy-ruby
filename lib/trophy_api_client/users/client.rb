@@ -134,8 +134,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.allmetrics(id: "userId")
-    def allmetrics(id:, request_options: nil)
+    #  api.users.all_metrics(id: "userId")
+    def all_metrics(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -171,8 +171,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.singlemetric(id: "userId", key: "key")
-    def singlemetric(id:, key:, request_options: nil)
+    #  api.users.single_metric(id: "userId", key: "key")
+    def single_metric(id:, key:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -203,8 +203,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.allachievements(id: "userId")
-    def allachievements(id:, request_options: nil)
+    #  api.users.all_achievements(id: "userId")
+    def all_achievements(id:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -393,8 +393,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.allmetrics(id: "userId")
-    def allmetrics(id:, request_options: nil)
+    #  api.users.all_metrics(id: "userId")
+    def all_metrics(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -432,8 +432,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.singlemetric(id: "userId", key: "key")
-    def singlemetric(id:, key:, request_options: nil)
+    #  api.users.single_metric(id: "userId", key: "key")
+    def single_metric(id:, key:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -466,8 +466,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.allachievements(id: "userId")
-    def allachievements(id:, request_options: nil)
+    #  api.users.all_achievements(id: "userId")
+    def all_achievements(id:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
