@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "metric_status"
-require_relative "multi_stage_achievement_response"
+require_relative "metric_achievement_response"
 require "ostruct"
 require "json"
 
@@ -13,13 +13,11 @@ module TrophyApiClient
     attr_reader :key
     # @return [String] The name of the metric.
     attr_reader :name
-    # @return [String] The emoji to represent the metric.
-    attr_reader :emoji
     # @return [TrophyApiClient::MetricStatus] The status of the metric.
     attr_reader :status
     # @return [Float] The user's current total for the metric.
     attr_reader :current
-    # @return [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @return [Array<TrophyApiClient::MetricAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     attr_reader :achievements
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -32,17 +30,15 @@ module TrophyApiClient
     # @param id [String] The unique ID of the metric.
     # @param key [String] The unique key of the metric.
     # @param name [String] The name of the metric.
-    # @param emoji [String] The emoji to represent the metric.
     # @param status [TrophyApiClient::MetricStatus] The status of the metric.
     # @param current [Float] The user's current total for the metric.
-    # @param achievements [Array<TrophyApiClient::MultiStageAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @param achievements [Array<TrophyApiClient::MetricAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricResponse]
-    def initialize(id:, key:, name:, emoji:, status:, current:, achievements:, additional_properties: nil)
+    def initialize(id:, key:, name:, status:, current:, achievements:, additional_properties: nil)
       @id = id
       @key = key
       @name = name
-      @emoji = emoji
       @status = status
       @current = current
       @achievements = achievements
@@ -51,7 +47,6 @@ module TrophyApiClient
         "id": id,
         "key": key,
         "name": name,
-        "emoji": emoji,
         "status": status,
         "current": current,
         "achievements": achievements
@@ -68,18 +63,16 @@ module TrophyApiClient
       id = parsed_json["id"]
       key = parsed_json["key"]
       name = parsed_json["name"]
-      emoji = parsed_json["emoji"]
       status = parsed_json["status"]
       current = parsed_json["current"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::MultiStageAchievementResponse.from_json(json_object: item)
+        TrophyApiClient::MetricAchievementResponse.from_json(json_object: item)
       end
       new(
         id: id,
         key: key,
         name: name,
-        emoji: emoji,
         status: status,
         current: current,
         achievements: achievements,
@@ -104,7 +97,6 @@ module TrophyApiClient
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
-      obj.emoji.is_a?(String) != false || raise("Passed value for field obj.emoji is not the expected type, validation failed.")
       obj.status.is_a?(TrophyApiClient::MetricStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
       obj.current.is_a?(Float) != false || raise("Passed value for field obj.current is not the expected type, validation failed.")
       obj.achievements.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
