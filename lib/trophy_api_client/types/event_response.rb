@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "event_response_metrics_item"
+require_relative "achievement_response"
 require_relative "increment_metric_streak_response"
 require "ostruct"
 require "json"
@@ -13,7 +13,7 @@ module TrophyApiClient
     attr_reader :metric_id
     # @return [Float] The user's new total progress against the metric.
     attr_reader :total
-    # @return [Array<TrophyApiClient::EventResponseMetricsItem>] Changes to achievements as a result of this event.
+    # @return [Array<TrophyApiClient::AchievementResponse>] Achievements completed as a result of this event.
     attr_reader :achievements
     # @return [TrophyApiClient::IncrementMetricStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     attr_reader :current_streak
@@ -28,7 +28,7 @@ module TrophyApiClient
     # @param event_id [String] The unique ID of the event.
     # @param metric_id [String] The unique ID of the metric that was updated.
     # @param total [Float] The user's new total progress against the metric.
-    # @param achievements [Array<TrophyApiClient::EventResponseMetricsItem>] Changes to achievements as a result of this event.
+    # @param achievements [Array<TrophyApiClient::AchievementResponse>] Achievements completed as a result of this event.
     # @param current_streak [TrophyApiClient::IncrementMetricStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::EventResponse]
@@ -62,7 +62,7 @@ module TrophyApiClient
       total = parsed_json["total"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::EventResponseMetricsItem.from_json(json_object: item)
+        TrophyApiClient::AchievementResponse.from_json(json_object: item)
       end
       if parsed_json["currentStreak"].nil?
         current_streak = nil

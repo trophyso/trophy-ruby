@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "metric_status"
-require_relative "metric_achievement_response"
+require_relative "achievement_response"
 require "ostruct"
 require "json"
 
@@ -17,7 +17,7 @@ module TrophyApiClient
     attr_reader :status
     # @return [Float] The user's current total for the metric.
     attr_reader :current
-    # @return [Array<TrophyApiClient::MetricAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @return [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     attr_reader :achievements
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -32,7 +32,7 @@ module TrophyApiClient
     # @param name [String] The name of the metric.
     # @param status [TrophyApiClient::MetricStatus] The status of the metric.
     # @param current [Float] The user's current total for the metric.
-    # @param achievements [Array<TrophyApiClient::MetricAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
+    # @param achievements [Array<TrophyApiClient::AchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricResponse]
     def initialize(id:, key:, name:, status:, current:, achievements:, additional_properties: nil)
@@ -67,7 +67,7 @@ module TrophyApiClient
       current = parsed_json["current"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::MetricAchievementResponse.from_json(json_object: item)
+        TrophyApiClient::AchievementResponse.from_json(json_object: item)
       end
       new(
         id: id,
