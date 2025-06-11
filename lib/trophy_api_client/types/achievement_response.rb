@@ -10,6 +10,8 @@ module TrophyApiClient
     attr_reader :id
     # @return [String] The name of this achievement.
     attr_reader :name
+    # @return [String] The trigger of the achievement, either 'metric', 'streak', or 'api'.
+    attr_reader :trigger
     # @return [String] The URL of the badge image for the achievement, if one has been uploaded.
     attr_reader :badge_url
     # @return [DateTime] The date and time the achievement was completed, in ISO 8601 format.
@@ -39,6 +41,7 @@ module TrophyApiClient
 
     # @param id [String] The unique ID of the achievement.
     # @param name [String] The name of this achievement.
+    # @param trigger [String] The trigger of the achievement, either 'metric', 'streak', or 'api'.
     # @param badge_url [String] The URL of the badge image for the achievement, if one has been uploaded.
     # @param achieved_at [DateTime] The date and time the achievement was completed, in ISO 8601 format.
     # @param key [String] The key used to reference this achievement in the API (only applicable if
@@ -53,10 +56,11 @@ module TrophyApiClient
     #  trigger = 'metric')
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementResponse]
-    def initialize(id:, name:, badge_url: OMIT, achieved_at: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT,
-                   metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
+    def initialize(id:, name:, trigger:, badge_url: OMIT, achieved_at: OMIT, key: OMIT, streak_length: OMIT,
+                   metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
       @id = id
       @name = name
+      @trigger = trigger
       @badge_url = badge_url if badge_url != OMIT
       @achieved_at = achieved_at if achieved_at != OMIT
       @key = key if key != OMIT
@@ -68,6 +72,7 @@ module TrophyApiClient
       @_field_set = {
         "id": id,
         "name": name,
+        "trigger": trigger,
         "badgeUrl": badge_url,
         "achievedAt": achieved_at,
         "key": key,
@@ -89,6 +94,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(json_object)
       id = parsed_json["id"]
       name = parsed_json["name"]
+      trigger = parsed_json["trigger"]
       badge_url = parsed_json["badgeUrl"]
       achieved_at = (DateTime.parse(parsed_json["achievedAt"]) unless parsed_json["achievedAt"].nil?)
       key = parsed_json["key"]
@@ -99,6 +105,7 @@ module TrophyApiClient
       new(
         id: id,
         name: name,
+        trigger: trigger,
         badge_url: badge_url,
         achieved_at: achieved_at,
         key: key,
@@ -126,6 +133,7 @@ module TrophyApiClient
     def self.validate_raw(obj:)
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
+      obj.trigger.is_a?(String) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")
       obj.badge_url&.is_a?(String) != false || raise("Passed value for field obj.badge_url is not the expected type, validation failed.")
       obj.achieved_at&.is_a?(DateTime) != false || raise("Passed value for field obj.achieved_at is not the expected type, validation failed.")
       obj.key&.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
