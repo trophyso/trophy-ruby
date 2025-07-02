@@ -4,7 +4,11 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  class AchievementResponse
+  class AchievementWithStatsResponse
+    # @return [Integer] The number of users who have completed this achievement.
+    attr_reader :completions
+    # @return [Float] The percentage of all users who have completed this achievement.
+    attr_reader :completed_percentage
     # @return [String] The unique ID of the achievement.
     attr_reader :id
     # @return [String] The name of this achievement.
@@ -38,6 +42,8 @@ module TrophyApiClient
 
     OMIT = Object.new
 
+    # @param completions [Integer] The number of users who have completed this achievement.
+    # @param completed_percentage [Float] The percentage of all users who have completed this achievement.
     # @param id [String] The unique ID of the achievement.
     # @param name [String] The name of this achievement.
     # @param trigger [String] The trigger of the achievement, either 'metric', 'streak', or 'api'.
@@ -54,9 +60,11 @@ module TrophyApiClient
     # @param metric_name [String] The name of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::AchievementResponse]
-    def initialize(id:, name:, trigger:, description: OMIT, badge_url: OMIT, key: OMIT, streak_length: OMIT,
-                   metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
+    # @return [TrophyApiClient::AchievementWithStatsResponse]
+    def initialize(id:, name:, trigger:, completions: OMIT, completed_percentage: OMIT, description: OMIT,
+                   badge_url: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
+      @completions = completions if completions != OMIT
+      @completed_percentage = completed_percentage if completed_percentage != OMIT
       @id = id
       @name = name
       @trigger = trigger
@@ -69,6 +77,8 @@ module TrophyApiClient
       @metric_name = metric_name if metric_name != OMIT
       @additional_properties = additional_properties
       @_field_set = {
+        "completions": completions,
+        "completedPercentage": completed_percentage,
         "id": id,
         "name": name,
         "trigger": trigger,
@@ -84,13 +94,15 @@ module TrophyApiClient
       end
     end
 
-    # Deserialize a JSON object to an instance of AchievementResponse
+    # Deserialize a JSON object to an instance of AchievementWithStatsResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::AchievementResponse]
+    # @return [TrophyApiClient::AchievementWithStatsResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
+      completions = parsed_json["completions"]
+      completed_percentage = parsed_json["completedPercentage"]
       id = parsed_json["id"]
       name = parsed_json["name"]
       trigger = parsed_json["trigger"]
@@ -102,6 +114,8 @@ module TrophyApiClient
       metric_value = parsed_json["metricValue"]
       metric_name = parsed_json["metricName"]
       new(
+        completions: completions,
+        completed_percentage: completed_percentage,
         id: id,
         name: name,
         trigger: trigger,
@@ -116,7 +130,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of AchievementResponse to a JSON object
+    # Serialize an instance of AchievementWithStatsResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -130,6 +144,8 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
+      obj.completions&.is_a?(Integer) != false || raise("Passed value for field obj.completions is not the expected type, validation failed.")
+      obj.completed_percentage&.is_a?(Float) != false || raise("Passed value for field obj.completed_percentage is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.trigger.is_a?(String) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")

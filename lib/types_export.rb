@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "trophy_api_client/users/types/users_metric_event_summary_request_aggregation"
+require_relative "trophy_api_client/users/types/users_metric_event_summary_response_item"
 require_relative "trophy_api_client/types/metric_status"
 require_relative "trophy_api_client/types/streak_frequency"
 require_relative "trophy_api_client/types/base_streak_response"
@@ -7,6 +9,8 @@ require_relative "trophy_api_client/types/increment_metric_streak_response"
 require_relative "trophy_api_client/types/streak_response_streak_history_item"
 require_relative "trophy_api_client/types/streak_response"
 require_relative "trophy_api_client/types/achievement_response"
+require_relative "trophy_api_client/types/completed_achievement_response"
+require_relative "trophy_api_client/types/achievement_with_stats_response"
 require_relative "trophy_api_client/types/metric_response"
 require_relative "trophy_api_client/types/updated_user"
 require_relative "trophy_api_client/types/upserted_user"

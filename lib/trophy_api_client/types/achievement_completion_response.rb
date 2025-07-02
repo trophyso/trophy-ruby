@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "achievement_response"
+require_relative "completed_achievement_response"
 require "ostruct"
 require "json"
 
@@ -8,7 +8,7 @@ module TrophyApiClient
   class AchievementCompletionResponse
     # @return [String] The unique ID of the completion.
     attr_reader :completion_id
-    # @return [TrophyApiClient::AchievementResponse]
+    # @return [TrophyApiClient::CompletedAchievementResponse]
     attr_reader :achievement
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -19,7 +19,7 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param completion_id [String] The unique ID of the completion.
-    # @param achievement [TrophyApiClient::AchievementResponse]
+    # @param achievement [TrophyApiClient::CompletedAchievementResponse]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementCompletionResponse]
     def initialize(completion_id:, achievement:, additional_properties: nil)
@@ -41,7 +41,7 @@ module TrophyApiClient
         achievement = nil
       else
         achievement = parsed_json["achievement"].to_json
-        achievement = TrophyApiClient::AchievementResponse.from_json(json_object: achievement)
+        achievement = TrophyApiClient::CompletedAchievementResponse.from_json(json_object: achievement)
       end
       new(
         completion_id: completion_id,
@@ -65,7 +65,7 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.completion_id.is_a?(String) != false || raise("Passed value for field obj.completion_id is not the expected type, validation failed.")
-      TrophyApiClient::AchievementResponse.validate_raw(obj: obj.achievement)
+      TrophyApiClient::CompletedAchievementResponse.validate_raw(obj: obj.achievement)
     end
   end
 end

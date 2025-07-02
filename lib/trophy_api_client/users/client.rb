@@ -6,7 +6,9 @@ require_relative "../types/user"
 require_relative "../types/updated_user"
 require_relative "../types/metric_response"
 require "json"
-require_relative "../types/achievement_response"
+require_relative "types/users_metric_event_summary_request_aggregation"
+require_relative "types/users_metric_event_summary_response_item"
+require_relative "../types/completed_achievement_response"
 require_relative "../types/streak_response"
 require "async"
 
@@ -192,11 +194,62 @@ module TrophyApiClient
       TrophyApiClient::MetricResponse.from_json(json_object: response.body)
     end
 
+    # Get a summary of metric events over time for a user.
+    #
+    # @param id [String] ID of the user.
+    # @param key [String] Unique key of the metric.
+    # @param aggregation [TrophyApiClient::Users::UsersMetricEventSummaryRequestAggregation] The time period over which to aggregate the event data.
+    # @param start_date [String] The start date for the data range in YYYY-MM-DD format. The startDate must be
+    #  before the endDate, and the date range must not exceed 400 days.
+    # @param end_date [String] The end date for the data range in YYYY-MM-DD format. The endDate must be after
+    #  the startDate, and the date range must not exceed 400 days.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [Array<TrophyApiClient::Users::UsersMetricEventSummaryResponseItem>]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.metric_event_summary(
+    #    id: "userId",
+    #    key: "words-written",
+    #    aggregation: DAILY,
+    #    start_date: "2024-01-01",
+    #    end_date: "2024-01-31"
+    #  )
+    def metric_event_summary(id:, key:, aggregation:, start_date:, end_date:, request_options: nil)
+      response = @request_client.conn.get do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        req.params = {
+          **(request_options&.additional_query_parameters || {}),
+          "aggregation": aggregation,
+          "startDate": start_date,
+          "endDate": end_date
+        }.compact
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
+        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
+      end
+      parsed_json = JSON.parse(response.body)
+      parsed_json&.map do |item|
+        item = item.to_json
+        TrophyApiClient::Users::UsersMetricEventSummaryResponseItem.from_json(json_object: item)
+      end
+    end
+
     # Get all of a user's completed achievements.
     #
     # @param id [String] ID of the user.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::AchievementResponse>]
+    # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -224,7 +277,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
         item = item.to_json
-        TrophyApiClient::AchievementResponse.from_json(json_object: item)
+        TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
       end
     end
 
@@ -455,11 +508,64 @@ module TrophyApiClient
       end
     end
 
+    # Get a summary of metric events over time for a user.
+    #
+    # @param id [String] ID of the user.
+    # @param key [String] Unique key of the metric.
+    # @param aggregation [TrophyApiClient::Users::UsersMetricEventSummaryRequestAggregation] The time period over which to aggregate the event data.
+    # @param start_date [String] The start date for the data range in YYYY-MM-DD format. The startDate must be
+    #  before the endDate, and the date range must not exceed 400 days.
+    # @param end_date [String] The end date for the data range in YYYY-MM-DD format. The endDate must be after
+    #  the startDate, and the date range must not exceed 400 days.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [Array<TrophyApiClient::Users::UsersMetricEventSummaryResponseItem>]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.metric_event_summary(
+    #    id: "userId",
+    #    key: "words-written",
+    #    aggregation: DAILY,
+    #    start_date: "2024-01-01",
+    #    end_date: "2024-01-31"
+    #  )
+    def metric_event_summary(id:, key:, aggregation:, start_date:, end_date:, request_options: nil)
+      Async do
+        response = @request_client.conn.get do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          req.params = {
+            **(request_options&.additional_query_parameters || {}),
+            "aggregation": aggregation,
+            "startDate": start_date,
+            "endDate": end_date
+          }.compact
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
+          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
+        end
+        parsed_json = JSON.parse(response.body)
+        parsed_json&.map do |item|
+          item = item.to_json
+          TrophyApiClient::Users::UsersMetricEventSummaryResponseItem.from_json(json_object: item)
+        end
+      end
+    end
+
     # Get all of a user's completed achievements.
     #
     # @param id [String] ID of the user.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::AchievementResponse>]
+    # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -488,7 +594,7 @@ module TrophyApiClient
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
           item = item.to_json
-          TrophyApiClient::AchievementResponse.from_json(json_object: item)
+          TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
         end
       end
     end
