@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "achievement_response_trigger"
+require_relative "metric_event_streak_response"
 require "ostruct"
 require "json"
 
@@ -13,7 +15,7 @@ module TrophyApiClient
     attr_reader :id
     # @return [String] The name of this achievement.
     attr_reader :name
-    # @return [String] The trigger of the achievement, either 'metric', 'streak', or 'api'.
+    # @return [TrophyApiClient::AchievementResponseTrigger] The trigger of the achievement.
     attr_reader :trigger
     # @return [String] The description of this achievement.
     attr_reader :description
@@ -34,6 +36,8 @@ module TrophyApiClient
     # @return [String] The name of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
     attr_reader :metric_name
+    # @return [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
+    attr_reader :current_streak
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -46,7 +50,7 @@ module TrophyApiClient
     # @param completed_percentage [Float] The percentage of all users who have completed this achievement.
     # @param id [String] The unique ID of the achievement.
     # @param name [String] The name of this achievement.
-    # @param trigger [String] The trigger of the achievement, either 'metric', 'streak', or 'api'.
+    # @param trigger [TrophyApiClient::AchievementResponseTrigger] The trigger of the achievement.
     # @param description [String] The description of this achievement.
     # @param badge_url [String] The URL of the badge image for the achievement, if one has been uploaded.
     # @param key [String] The key used to reference this achievement in the API (only applicable if
@@ -59,10 +63,11 @@ module TrophyApiClient
     #  trigger = 'metric')
     # @param metric_name [String] The name of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
+    # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementWithStatsResponse]
     def initialize(id:, name:, trigger:, completions: OMIT, completed_percentage: OMIT, description: OMIT,
-                   badge_url: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
+                   badge_url: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, current_streak: OMIT, additional_properties: nil)
       @completions = completions if completions != OMIT
       @completed_percentage = completed_percentage if completed_percentage != OMIT
       @id = id
@@ -75,6 +80,7 @@ module TrophyApiClient
       @metric_id = metric_id if metric_id != OMIT
       @metric_value = metric_value if metric_value != OMIT
       @metric_name = metric_name if metric_name != OMIT
+      @current_streak = current_streak if current_streak != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "completions": completions,
@@ -88,7 +94,8 @@ module TrophyApiClient
         "streakLength": streak_length,
         "metricId": metric_id,
         "metricValue": metric_value,
-        "metricName": metric_name
+        "metricName": metric_name,
+        "currentStreak": current_streak
       }.reject do |_k, v|
         v == OMIT
       end
@@ -113,6 +120,12 @@ module TrophyApiClient
       metric_id = parsed_json["metricId"]
       metric_value = parsed_json["metricValue"]
       metric_name = parsed_json["metricName"]
+      if parsed_json["currentStreak"].nil?
+        current_streak = nil
+      else
+        current_streak = parsed_json["currentStreak"].to_json
+        current_streak = TrophyApiClient::MetricEventStreakResponse.from_json(json_object: current_streak)
+      end
       new(
         completions: completions,
         completed_percentage: completed_percentage,
@@ -126,6 +139,7 @@ module TrophyApiClient
         metric_id: metric_id,
         metric_value: metric_value,
         metric_name: metric_name,
+        current_streak: current_streak,
         additional_properties: struct
       )
     end
@@ -148,7 +162,7 @@ module TrophyApiClient
       obj.completed_percentage&.is_a?(Float) != false || raise("Passed value for field obj.completed_percentage is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
-      obj.trigger.is_a?(String) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")
+      obj.trigger.is_a?(TrophyApiClient::AchievementResponseTrigger) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.badge_url&.is_a?(String) != false || raise("Passed value for field obj.badge_url is not the expected type, validation failed.")
       obj.key&.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
@@ -156,6 +170,7 @@ module TrophyApiClient
       obj.metric_id&.is_a?(String) != false || raise("Passed value for field obj.metric_id is not the expected type, validation failed.")
       obj.metric_value&.is_a?(Float) != false || raise("Passed value for field obj.metric_value is not the expected type, validation failed.")
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
+      obj.current_streak.nil? || TrophyApiClient::MetricEventStreakResponse.validate_raw(obj: obj.current_streak)
     end
   end
 end

@@ -5,8 +5,8 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # An object representing the user's streak after incrementing a metric.
-  class IncrementMetricStreakResponse
+  # An object representing the user's streak after sending a metric event.
+  class MetricEventStreakResponse
     # @return [Boolean] Whether this metric event increased the user's streak length.
     attr_reader :extended
     # @return [Integer] The length of the user's current streak.
@@ -37,7 +37,7 @@ module TrophyApiClient
     # @param period_end [String] The end date of the current streak period.
     # @param expires [String] The date the streak will expire if the user does not increment a metric.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::IncrementMetricStreakResponse]
+    # @return [TrophyApiClient::MetricEventStreakResponse]
     def initialize(length:, frequency:, extended: OMIT, started: OMIT, period_start: OMIT, period_end: OMIT,
                    expires: OMIT, additional_properties: nil)
       @extended = extended if extended != OMIT
@@ -61,10 +61,10 @@ module TrophyApiClient
       end
     end
 
-    # Deserialize a JSON object to an instance of IncrementMetricStreakResponse
+    # Deserialize a JSON object to an instance of MetricEventStreakResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::IncrementMetricStreakResponse]
+    # @return [TrophyApiClient::MetricEventStreakResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -87,7 +87,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of IncrementMetricStreakResponse to a JSON object
+    # Serialize an instance of MetricEventStreakResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)
