@@ -93,6 +93,41 @@ module TrophyApiClient
       TrophyApiClient::User.from_json(json_object: response.body)
     end
 
+    # Upsert a user (create or update).
+    #
+    # @param id [String] ID of the user to upsert.
+    # @param request [Hash] The user object.Request of type TrophyApiClient::UpdatedUser, as a Hash
+    #   * :email (String)
+    #   * :name (String)
+    #   * :tz (String)
+    #   * :subscribe_to_emails (Boolean)
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::User]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.upsert(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    def upsert(id:, request:, request_options: nil)
+      response = @request_client.conn.put do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+      end
+      TrophyApiClient::User.from_json(json_object: response.body)
+    end
+
     # Update a user.
     #
     # @param id [String] ID of the user to update.
@@ -475,6 +510,43 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
+          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+        end
+        TrophyApiClient::User.from_json(json_object: response.body)
+      end
+    end
+
+    # Upsert a user (create or update).
+    #
+    # @param id [String] ID of the user to upsert.
+    # @param request [Hash] The user object.Request of type TrophyApiClient::UpdatedUser, as a Hash
+    #   * :email (String)
+    #   * :name (String)
+    #   * :tz (String)
+    #   * :subscribe_to_emails (Boolean)
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::User]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.upsert(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    def upsert(id:, request:, request_options: nil)
+      Async do
+        response = @request_client.conn.put do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
