@@ -26,7 +26,7 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Identify a new user.
+    # Create a new user.
     #
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -93,9 +93,9 @@ module TrophyApiClient
       TrophyApiClient::User.from_json(json_object: response.body)
     end
 
-    # Upsert a user (create or update).
+    # Identify a user.
     #
-    # @param id [String] ID of the user to upsert.
+    # @param id [String] ID of the user to identify.
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpdatedUser, as a Hash
     #   * :email (String)
     #   * :name (String)
@@ -109,8 +109,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.upsert(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
-    def upsert(id:, request:, request_options: nil)
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    def identify(id:, request:, request_options: nil)
       response = @request_client.conn.put do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -445,7 +445,7 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Identify a new user.
+    # Create a new user.
     #
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -516,9 +516,9 @@ module TrophyApiClient
       end
     end
 
-    # Upsert a user (create or update).
+    # Identify a user.
     #
-    # @param id [String] ID of the user to upsert.
+    # @param id [String] ID of the user to identify.
     # @param request [Hash] The user object.Request of type TrophyApiClient::UpdatedUser, as a Hash
     #   * :email (String)
     #   * :name (String)
@@ -532,8 +532,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.upsert(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
-    def upsert(id:, request:, request_options: nil)
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    def identify(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.put do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
