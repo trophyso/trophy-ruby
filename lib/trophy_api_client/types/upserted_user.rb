@@ -14,6 +14,8 @@ module TrophyApiClient
     attr_reader :name
     # @return [String] The user's timezone (used for email scheduling).
     attr_reader :tz
+    # @return [Array<String>] The user's device tokens, used for push notifications.
+    attr_reader :device_tokens
     # @return [Boolean] Whether the user should receive Trophy-powered emails. Cannot be false if an
     #  email is provided.
     attr_reader :subscribe_to_emails
@@ -29,15 +31,18 @@ module TrophyApiClient
     # @param email [String] The user's email address. Required if subscribeToEmails is true.
     # @param name [String] The name to refer to the user by in emails.
     # @param tz [String] The user's timezone (used for email scheduling).
+    # @param device_tokens [Array<String>] The user's device tokens, used for push notifications.
     # @param subscribe_to_emails [Boolean] Whether the user should receive Trophy-powered emails. Cannot be false if an
     #  email is provided.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::UpsertedUser]
-    def initialize(id:, email: OMIT, name: OMIT, tz: OMIT, subscribe_to_emails: OMIT, additional_properties: nil)
+    def initialize(id:, email: OMIT, name: OMIT, tz: OMIT, device_tokens: OMIT, subscribe_to_emails: OMIT,
+                   additional_properties: nil)
       @id = id
       @email = email if email != OMIT
       @name = name if name != OMIT
       @tz = tz if tz != OMIT
+      @device_tokens = device_tokens if device_tokens != OMIT
       @subscribe_to_emails = subscribe_to_emails if subscribe_to_emails != OMIT
       @additional_properties = additional_properties
       @_field_set = {
@@ -45,6 +50,7 @@ module TrophyApiClient
         "email": email,
         "name": name,
         "tz": tz,
+        "deviceTokens": device_tokens,
         "subscribeToEmails": subscribe_to_emails
       }.reject do |_k, v|
         v == OMIT
@@ -62,12 +68,14 @@ module TrophyApiClient
       email = parsed_json["email"]
       name = parsed_json["name"]
       tz = parsed_json["tz"]
+      device_tokens = parsed_json["deviceTokens"]
       subscribe_to_emails = parsed_json["subscribeToEmails"]
       new(
         id: id,
         email: email,
         name: name,
         tz: tz,
+        device_tokens: device_tokens,
         subscribe_to_emails: subscribe_to_emails,
         additional_properties: struct
       )
@@ -91,6 +99,7 @@ module TrophyApiClient
       obj.email&.is_a?(String) != false || raise("Passed value for field obj.email is not the expected type, validation failed.")
       obj.name&.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.tz&.is_a?(String) != false || raise("Passed value for field obj.tz is not the expected type, validation failed.")
+      obj.device_tokens&.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
       obj.subscribe_to_emails&.is_a?(Boolean) != false || raise("Passed value for field obj.subscribe_to_emails is not the expected type, validation failed.")
     end
   end

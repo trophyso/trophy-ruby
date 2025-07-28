@@ -24,6 +24,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param value [Float] The value to add to the user's current total for the given metric.
     # @param request_options [TrophyApiClient::RequestOptions]
@@ -76,6 +77,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param value [Float] The value to add to the user's current total for the given metric.
     # @param request_options [TrophyApiClient::RequestOptions]

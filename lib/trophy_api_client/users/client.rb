@@ -33,6 +33,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
@@ -100,6 +101,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
@@ -135,6 +137,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
@@ -452,6 +455,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
@@ -523,6 +527,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
@@ -560,6 +565,7 @@ module TrophyApiClient
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
+    #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
