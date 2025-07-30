@@ -14,8 +14,8 @@ module TrophyApiClient
     attr_reader :tz
     # @return [Array<String>] The user's device tokens, used for push notifications.
     attr_reader :device_tokens
-    # @return [Boolean] Whether the user should receive Trophy-powered emails. Cannot be false if an
-    #  email is provided.
+    # @return [Boolean] Whether the user should receive Trophy-powered emails. If false, Trophy will not
+    #  store the user's email address.
     attr_reader :subscribe_to_emails
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -29,8 +29,8 @@ module TrophyApiClient
     # @param name [String] The name to refer to the user by in emails.
     # @param tz [String] The user's timezone (used for email scheduling).
     # @param device_tokens [Array<String>] The user's device tokens, used for push notifications.
-    # @param subscribe_to_emails [Boolean] Whether the user should receive Trophy-powered emails. Cannot be false if an
-    #  email is provided.
+    # @param subscribe_to_emails [Boolean] Whether the user should receive Trophy-powered emails. If false, Trophy will not
+    #  store the user's email address.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::UpdatedUser]
     def initialize(email: OMIT, name: OMIT, tz: OMIT, device_tokens: OMIT, subscribe_to_emails: OMIT,
