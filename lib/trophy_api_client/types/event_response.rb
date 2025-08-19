@@ -2,7 +2,6 @@
 
 require_relative "completed_achievement_response"
 require_relative "metric_event_streak_response"
-require_relative "metric_event_points_response"
 require "ostruct"
 require "json"
 
@@ -18,8 +17,7 @@ module TrophyApiClient
     attr_reader :achievements
     # @return [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     attr_reader :current_streak
-    # @return [TrophyApiClient::MetricEventPointsResponse] The points added by this event, and a breakdown of the points awards that added
-    #  points.
+    # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this event.
     attr_reader :points
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -34,8 +32,7 @@ module TrophyApiClient
     # @param total [Float] The user's new total progress against the metric.
     # @param achievements [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed as a result of this event.
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
-    # @param points [TrophyApiClient::MetricEventPointsResponse] The points added by this event, and a breakdown of the points awards that added
-    #  points.
+    # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this event.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::EventResponse]
     def initialize(event_id:, metric_id:, total:, achievements: OMIT, current_streak: OMIT, points: OMIT,
@@ -79,11 +76,9 @@ module TrophyApiClient
         current_streak = parsed_json["currentStreak"].to_json
         current_streak = TrophyApiClient::MetricEventStreakResponse.from_json(json_object: current_streak)
       end
-      if parsed_json["points"].nil?
-        points = nil
-      else
-        points = parsed_json["points"].to_json
-        points = TrophyApiClient::MetricEventPointsResponse.from_json(json_object: points)
+      points = parsed_json["points"]&.transform_values do |value|
+        value = value.to_json
+        TrophyApiClient::MetricEventPointsResponse.from_json(json_object: value)
       end
       new(
         event_id: event_id,
@@ -115,7 +110,7 @@ module TrophyApiClient
       obj.total.is_a?(Float) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
       obj.achievements&.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
       obj.current_streak.nil? || TrophyApiClient::MetricEventStreakResponse.validate_raw(obj: obj.current_streak)
-      obj.points.nil? || TrophyApiClient::MetricEventPointsResponse.validate_raw(obj: obj.points)
+      obj.points&.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
     end
   end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "achievement_with_stats_response_user_attributes_item"
+require_relative "achievement_with_stats_response_event_attribute"
 require_relative "achievement_response_trigger"
 require_relative "metric_event_streak_response"
 require "ostruct"
@@ -10,7 +12,13 @@ module TrophyApiClient
     # @return [Integer] The number of users who have completed this achievement.
     attr_reader :completions
     # @return [Float] The percentage of all users who have completed this achievement.
-    attr_reader :completed_percentage
+    attr_reader :rarity
+    # @return [Array<TrophyApiClient::AchievementWithStatsResponseUserAttributesItem>] User attribute filters that must be met for this achievement to be completed.
+    #  Only present if the achievement has user attribute filters configured.
+    attr_reader :user_attributes
+    # @return [TrophyApiClient::AchievementWithStatsResponseEventAttribute] Event attribute filter that must be met for this achievement to be completed.
+    #  Only present if the achievement has an event filter configured.
+    attr_reader :event_attribute
     # @return [String] The unique ID of the achievement.
     attr_reader :id
     # @return [String] The name of this achievement.
@@ -47,7 +55,11 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param completions [Integer] The number of users who have completed this achievement.
-    # @param completed_percentage [Float] The percentage of all users who have completed this achievement.
+    # @param rarity [Float] The percentage of all users who have completed this achievement.
+    # @param user_attributes [Array<TrophyApiClient::AchievementWithStatsResponseUserAttributesItem>] User attribute filters that must be met for this achievement to be completed.
+    #  Only present if the achievement has user attribute filters configured.
+    # @param event_attribute [TrophyApiClient::AchievementWithStatsResponseEventAttribute] Event attribute filter that must be met for this achievement to be completed.
+    #  Only present if the achievement has an event filter configured.
     # @param id [String] The unique ID of the achievement.
     # @param name [String] The name of this achievement.
     # @param trigger [TrophyApiClient::AchievementResponseTrigger] The trigger of the achievement.
@@ -66,10 +78,12 @@ module TrophyApiClient
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementWithStatsResponse]
-    def initialize(id:, name:, trigger:, completions: OMIT, completed_percentage: OMIT, description: OMIT,
-                   badge_url: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, current_streak: OMIT, additional_properties: nil)
+    def initialize(id:, name:, trigger:, completions: OMIT, rarity: OMIT, user_attributes: OMIT, event_attribute: OMIT,
+                   description: OMIT, badge_url: OMIT, key: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, current_streak: OMIT, additional_properties: nil)
       @completions = completions if completions != OMIT
-      @completed_percentage = completed_percentage if completed_percentage != OMIT
+      @rarity = rarity if rarity != OMIT
+      @user_attributes = user_attributes if user_attributes != OMIT
+      @event_attribute = event_attribute if event_attribute != OMIT
       @id = id
       @name = name
       @trigger = trigger
@@ -84,7 +98,9 @@ module TrophyApiClient
       @additional_properties = additional_properties
       @_field_set = {
         "completions": completions,
-        "completedPercentage": completed_percentage,
+        "rarity": rarity,
+        "userAttributes": user_attributes,
+        "eventAttribute": event_attribute,
         "id": id,
         "name": name,
         "trigger": trigger,
@@ -109,7 +125,17 @@ module TrophyApiClient
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
       completions = parsed_json["completions"]
-      completed_percentage = parsed_json["completedPercentage"]
+      rarity = parsed_json["rarity"]
+      user_attributes = parsed_json["userAttributes"]&.map do |item|
+        item = item.to_json
+        TrophyApiClient::AchievementWithStatsResponseUserAttributesItem.from_json(json_object: item)
+      end
+      if parsed_json["eventAttribute"].nil?
+        event_attribute = nil
+      else
+        event_attribute = parsed_json["eventAttribute"].to_json
+        event_attribute = TrophyApiClient::AchievementWithStatsResponseEventAttribute.from_json(json_object: event_attribute)
+      end
       id = parsed_json["id"]
       name = parsed_json["name"]
       trigger = parsed_json["trigger"]
@@ -128,7 +154,9 @@ module TrophyApiClient
       end
       new(
         completions: completions,
-        completed_percentage: completed_percentage,
+        rarity: rarity,
+        user_attributes: user_attributes,
+        event_attribute: event_attribute,
         id: id,
         name: name,
         trigger: trigger,
@@ -159,7 +187,9 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.completions&.is_a?(Integer) != false || raise("Passed value for field obj.completions is not the expected type, validation failed.")
-      obj.completed_percentage&.is_a?(Float) != false || raise("Passed value for field obj.completed_percentage is not the expected type, validation failed.")
+      obj.rarity&.is_a?(Float) != false || raise("Passed value for field obj.rarity is not the expected type, validation failed.")
+      obj.user_attributes&.is_a?(Array) != false || raise("Passed value for field obj.user_attributes is not the expected type, validation failed.")
+      obj.event_attribute.nil? || TrophyApiClient::AchievementWithStatsResponseEventAttribute.validate_raw(obj: obj.event_attribute)
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.trigger.is_a?(TrophyApiClient::AchievementResponseTrigger) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")

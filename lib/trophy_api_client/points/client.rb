@@ -3,7 +3,7 @@
 require_relative "../../requests"
 require_relative "../types/points_summary_response"
 require "json"
-require_relative "../types/points_trigger_response"
+require_relative "../types/points_system_response"
 require "async"
 
 module TrophyApiClient
@@ -19,6 +19,10 @@ module TrophyApiClient
 
     # Get a breakdown of the number of users with points in each range.
     #
+    # @param key [String] Key of the points system.
+    # @param user_attributes [String] Optional colon-delimited user attribute filters in the format
+    #  attributeKey:value,attributeKey:value. Only users matching ALL specified
+    #  attributes will be included in the points breakdown.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::POINTS_SUMMARY_RESPONSE]
     # @example
@@ -27,8 +31,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.points.summary
-    def summary(request_options: nil)
+    #  api.points.summary(key: "points-system-key", user_attributes: "plan-type:premium,region:us-east")
+    def summary(key:, user_attributes: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -37,13 +41,14 @@ module TrophyApiClient
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        unless request_options.nil? || request_options&.additional_query_parameters.nil?
-          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-        end
+        req.params = {
+          **(request_options&.additional_query_parameters || {}),
+          "userAttributes": user_attributes
+        }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/points/summary"
+        req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}/summary"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -52,18 +57,19 @@ module TrophyApiClient
       end
     end
 
-    # Get all points triggers.
+    # Get a points system with all its triggers.
     #
+    # @param key [String] Key of the points system.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::PointsTriggerResponse>]
+    # @return [TrophyApiClient::PointsSystemResponse]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.points.triggers
-    def triggers(request_options: nil)
+    #  api.points.system(key: "points-system-key")
+    def system(key:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -78,13 +84,9 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/points/triggers"
+        req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}"
       end
-      parsed_json = JSON.parse(response.body)
-      parsed_json&.map do |item|
-        item = item.to_json
-        TrophyApiClient::PointsTriggerResponse.from_json(json_object: item)
-      end
+      TrophyApiClient::PointsSystemResponse.from_json(json_object: response.body)
     end
   end
 
@@ -100,6 +102,10 @@ module TrophyApiClient
 
     # Get a breakdown of the number of users with points in each range.
     #
+    # @param key [String] Key of the points system.
+    # @param user_attributes [String] Optional colon-delimited user attribute filters in the format
+    #  attributeKey:value,attributeKey:value. Only users matching ALL specified
+    #  attributes will be included in the points breakdown.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::POINTS_SUMMARY_RESPONSE]
     # @example
@@ -108,8 +114,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.points.summary
-    def summary(request_options: nil)
+    #  api.points.summary(key: "points-system-key", user_attributes: "plan-type:premium,region:us-east")
+    def summary(key:, user_attributes: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -119,13 +125,14 @@ module TrophyApiClient
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          unless request_options.nil? || request_options&.additional_query_parameters.nil?
-            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-          end
+          req.params = {
+            **(request_options&.additional_query_parameters || {}),
+            "userAttributes": user_attributes
+          }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/points/summary"
+          req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}/summary"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -135,18 +142,19 @@ module TrophyApiClient
       end
     end
 
-    # Get all points triggers.
+    # Get a points system with all its triggers.
     #
+    # @param key [String] Key of the points system.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::PointsTriggerResponse>]
+    # @return [TrophyApiClient::PointsSystemResponse]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.points.triggers
-    def triggers(request_options: nil)
+    #  api.points.system(key: "points-system-key")
+    def system(key:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -162,13 +170,9 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/points/triggers"
+          req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}"
         end
-        parsed_json = JSON.parse(response.body)
-        parsed_json&.map do |item|
-          item = item.to_json
-          TrophyApiClient::PointsTriggerResponse.from_json(json_object: item)
-        end
+        TrophyApiClient::PointsSystemResponse.from_json(json_object: response.body)
       end
     end
   end

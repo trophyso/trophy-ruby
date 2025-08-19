@@ -35,6 +35,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -103,6 +104,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -111,7 +113,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       response = @request_client.conn.put do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -139,6 +141,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -147,7 +150,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -286,9 +289,12 @@ module TrophyApiClient
       end
     end
 
-    # Get all of a user's completed achievements.
+    # Get a user's achievements.
     #
     # @param id [String] ID of the user.
+    # @param include_incomplete [String] When set to 'true', returns both completed and incomplete achievements for the
+    #  user. When omitted or set to any other value, returns only completed
+    #  achievements.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
     # @example
@@ -297,8 +303,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.all_achievements(id: "userId")
-    def all_achievements(id:, request_options: nil)
+    #  api.users.achievements(id: "userId")
+    def achievements(id:, include_incomplete: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -307,9 +313,10 @@ module TrophyApiClient
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        unless request_options.nil? || request_options&.additional_query_parameters.nil?
-          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-        end
+        req.params = {
+          **(request_options&.additional_query_parameters || {}),
+          "includeIncomplete": include_incomplete
+        }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -357,9 +364,10 @@ module TrophyApiClient
       TrophyApiClient::StreakResponse.from_json(json_object: response.body)
     end
 
-    # Get a user's points.
+    # Get a user's points for a specific points system.
     #
     # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
     # @param awards [Integer] The number of recent point awards to return.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::GetUserPointsResponse]
@@ -369,8 +377,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.points(id: "userId")
-    def points(id:, awards: nil, request_options: nil)
+    #  api.users.points(id: "userId", key: "points-system-key")
+    def points(id:, key:, awards: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -383,14 +391,16 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points"
+        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}"
       end
       TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
     end
 
-    # Get a summary of points awards over time for a user.
+    # Get a summary of points awards over time for a user for a specific points
+    #  system.
     #
     # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
     # @param aggregation [TrophyApiClient::Users::UsersPointsEventSummaryRequestAggregation] The time period over which to aggregate the event data.
     # @param start_date [String] The start date for the data range in YYYY-MM-DD format. The startDate must be
     #  before the endDate, and the date range must not exceed 400 days.
@@ -406,11 +416,12 @@ module TrophyApiClient
     #  )
     #  api.users.points_event_summary(
     #    id: "userId",
+    #    key: "points-system-key",
     #    aggregation: DAILY,
     #    start_date: "2024-01-01",
     #    end_date: "2024-01-31"
     #  )
-    def points_event_summary(id:, aggregation:, start_date:, end_date:, request_options: nil)
+    def points_event_summary(id:, key:, aggregation:, start_date:, end_date:, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -428,7 +439,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/event-summary"
+        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -457,6 +468,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -529,6 +541,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -537,7 +550,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.put do |req|
@@ -567,6 +580,7 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::User]
     # @example
@@ -575,7 +589,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London" })
+    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|
@@ -722,9 +736,12 @@ module TrophyApiClient
       end
     end
 
-    # Get all of a user's completed achievements.
+    # Get a user's achievements.
     #
     # @param id [String] ID of the user.
+    # @param include_incomplete [String] When set to 'true', returns both completed and incomplete achievements for the
+    #  user. When omitted or set to any other value, returns only completed
+    #  achievements.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
     # @example
@@ -733,8 +750,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.all_achievements(id: "userId")
-    def all_achievements(id:, request_options: nil)
+    #  api.users.achievements(id: "userId")
+    def achievements(id:, include_incomplete: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -744,9 +761,10 @@ module TrophyApiClient
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          unless request_options.nil? || request_options&.additional_query_parameters.nil?
-            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-          end
+          req.params = {
+            **(request_options&.additional_query_parameters || {}),
+            "includeIncomplete": include_incomplete
+          }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
@@ -797,9 +815,10 @@ module TrophyApiClient
       end
     end
 
-    # Get a user's points.
+    # Get a user's points for a specific points system.
     #
     # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
     # @param awards [Integer] The number of recent point awards to return.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::GetUserPointsResponse]
@@ -809,8 +828,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.points(id: "userId")
-    def points(id:, awards: nil, request_options: nil)
+    #  api.users.points(id: "userId", key: "points-system-key")
+    def points(id:, key:, awards: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -824,15 +843,17 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points"
+          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}"
         end
         TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
       end
     end
 
-    # Get a summary of points awards over time for a user.
+    # Get a summary of points awards over time for a user for a specific points
+    #  system.
     #
     # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
     # @param aggregation [TrophyApiClient::Users::UsersPointsEventSummaryRequestAggregation] The time period over which to aggregate the event data.
     # @param start_date [String] The start date for the data range in YYYY-MM-DD format. The startDate must be
     #  before the endDate, and the date range must not exceed 400 days.
@@ -848,11 +869,12 @@ module TrophyApiClient
     #  )
     #  api.users.points_event_summary(
     #    id: "userId",
+    #    key: "points-system-key",
     #    aggregation: DAILY,
     #    start_date: "2024-01-01",
     #    end_date: "2024-01-31"
     #  )
-    def points_event_summary(id:, aggregation:, start_date:, end_date:, request_options: nil)
+    def points_event_summary(id:, key:, aggregation:, start_date:, end_date:, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -871,7 +893,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/event-summary"
+          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|

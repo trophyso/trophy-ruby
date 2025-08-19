@@ -3,7 +3,7 @@
 require_relative "../../requests"
 require_relative "../types/achievement_with_stats_response"
 require "json"
-require_relative "../types/updated_user"
+require_relative "../types/upserted_user"
 require_relative "../types/achievement_completion_response"
 require "async"
 
@@ -56,12 +56,14 @@ module TrophyApiClient
     # Mark an achievement as completed for a user.
     #
     # @param key [String] Unique reference of the achievement as set when created.
-    # @param user [Hash] The user that completed the achievement.Request of type TrophyApiClient::UpdatedUser, as a Hash
+    # @param user [Hash] The user that completed the achievement.Request of type TrophyApiClient::UpsertedUser, as a Hash
+    #   * :id (String)
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::AchievementCompletionResponse]
     # @example
@@ -70,7 +72,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London" })
+    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
     def complete(key:, user:, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -140,12 +142,14 @@ module TrophyApiClient
     # Mark an achievement as completed for a user.
     #
     # @param key [String] Unique reference of the achievement as set when created.
-    # @param user [Hash] The user that completed the achievement.Request of type TrophyApiClient::UpdatedUser, as a Hash
+    # @param user [Hash] The user that completed the achievement.Request of type TrophyApiClient::UpsertedUser, as a Hash
+    #   * :id (String)
     #   * :email (String)
     #   * :name (String)
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::AchievementCompletionResponse]
     # @example
@@ -154,7 +158,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London" })
+    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
     def complete(key:, user:, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|

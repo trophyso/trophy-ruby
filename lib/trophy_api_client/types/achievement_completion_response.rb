@@ -10,6 +10,9 @@ module TrophyApiClient
     attr_reader :completion_id
     # @return [TrophyApiClient::CompletedAchievementResponse]
     attr_reader :achievement
+    # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
+    #  completion.
+    attr_reader :points
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -20,13 +23,18 @@ module TrophyApiClient
 
     # @param completion_id [String] The unique ID of the completion.
     # @param achievement [TrophyApiClient::CompletedAchievementResponse]
+    # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
+    #  completion.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementCompletionResponse]
-    def initialize(completion_id:, achievement:, additional_properties: nil)
+    def initialize(completion_id:, achievement:, points: OMIT, additional_properties: nil)
       @completion_id = completion_id
       @achievement = achievement
+      @points = points if points != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "completionId": completion_id, "achievement": achievement }
+      @_field_set = { "completionId": completion_id, "achievement": achievement, "points": points }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
     # Deserialize a JSON object to an instance of AchievementCompletionResponse
@@ -43,9 +51,14 @@ module TrophyApiClient
         achievement = parsed_json["achievement"].to_json
         achievement = TrophyApiClient::CompletedAchievementResponse.from_json(json_object: achievement)
       end
+      points = parsed_json["points"]&.transform_values do |value|
+        value = value.to_json
+        TrophyApiClient::MetricEventPointsResponse.from_json(json_object: value)
+      end
       new(
         completion_id: completion_id,
         achievement: achievement,
+        points: points,
         additional_properties: struct
       )
     end
@@ -66,6 +79,7 @@ module TrophyApiClient
     def self.validate_raw(obj:)
       obj.completion_id.is_a?(String) != false || raise("Passed value for field obj.completion_id is not the expected type, validation failed.")
       TrophyApiClient::CompletedAchievementResponse.validate_raw(obj: obj.achievement)
+      obj.points&.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
     end
   end
 end

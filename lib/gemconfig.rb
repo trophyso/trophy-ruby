@@ -2,7 +2,7 @@
 
 module TrophyApiClient
   module Gemconfig
-    VERSION = "1.0.16"
+    VERSION = "1.0.17"
     AUTHORS = ["Trophy Labs, Inc"].freeze
     EMAIL = ""
     SUMMARY = "Ruby library for the Trophy API."

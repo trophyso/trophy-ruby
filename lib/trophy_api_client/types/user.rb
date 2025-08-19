@@ -27,6 +27,9 @@ module TrophyApiClient
     # @return [Boolean] Whether the user should receive Trophy-powered emails. If false, Trophy will not
     #  store the user's email address.
     attr_reader :subscribe_to_emails
+    # @return [Hash{String => String}] User attributes as key-value pairs. Keys must match existing user attributes set
+    #  up in the Trophy dashboard.
+    attr_reader :attributes
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -46,10 +49,12 @@ module TrophyApiClient
     # @param device_tokens [Array<String>] The user's device tokens, used for push notifications.
     # @param subscribe_to_emails [Boolean] Whether the user should receive Trophy-powered emails. If false, Trophy will not
     #  store the user's email address.
+    # @param attributes [Hash{String => String}] User attributes as key-value pairs. Keys must match existing user attributes set
+    #  up in the Trophy dashboard.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::User]
     def initialize(id:, control: OMIT, created: OMIT, updated: OMIT, email: OMIT, name: OMIT, tz: OMIT,
-                   device_tokens: OMIT, subscribe_to_emails: OMIT, additional_properties: nil)
+                   device_tokens: OMIT, subscribe_to_emails: OMIT, attributes: OMIT, additional_properties: nil)
       @control = control if control != OMIT
       @created = created if created != OMIT
       @updated = updated if updated != OMIT
@@ -59,6 +64,7 @@ module TrophyApiClient
       @tz = tz if tz != OMIT
       @device_tokens = device_tokens if device_tokens != OMIT
       @subscribe_to_emails = subscribe_to_emails if subscribe_to_emails != OMIT
+      @attributes = attributes if attributes != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "control": control,
@@ -69,7 +75,8 @@ module TrophyApiClient
         "name": name,
         "tz": tz,
         "deviceTokens": device_tokens,
-        "subscribeToEmails": subscribe_to_emails
+        "subscribeToEmails": subscribe_to_emails,
+        "attributes": attributes
       }.reject do |_k, v|
         v == OMIT
       end
@@ -91,6 +98,7 @@ module TrophyApiClient
       tz = parsed_json["tz"]
       device_tokens = parsed_json["deviceTokens"]
       subscribe_to_emails = parsed_json["subscribeToEmails"]
+      attributes = parsed_json["attributes"]
       new(
         control: control,
         created: created,
@@ -101,6 +109,7 @@ module TrophyApiClient
         tz: tz,
         device_tokens: device_tokens,
         subscribe_to_emails: subscribe_to_emails,
+        attributes: attributes,
         additional_properties: struct
       )
     end
@@ -128,6 +137,7 @@ module TrophyApiClient
       obj.tz&.is_a?(String) != false || raise("Passed value for field obj.tz is not the expected type, validation failed.")
       obj.device_tokens&.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
       obj.subscribe_to_emails&.is_a?(Boolean) != false || raise("Passed value for field obj.subscribe_to_emails is not the expected type, validation failed.")
+      obj.attributes&.is_a?(Hash) != false || raise("Passed value for field obj.attributes is not the expected type, validation failed.")
     end
   end
 end

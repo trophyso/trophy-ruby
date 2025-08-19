@@ -26,7 +26,10 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param value [Float] The value to add to the user's current total for the given metric.
+    # @param attributes [Hash{String => String}] Event attributes as key-value pairs. Keys must match existing event attributes
+    #  set up in the Trophy dashboard.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::EventResponse]
     # @example
@@ -37,10 +40,11 @@ module TrophyApiClient
     #  )
     #  api.metrics.event(
     #    key: "words-written",
-    #    user: { email: "user@example.com", tz: "Europe/London", id: "18" },
-    #    value: 750
+    #    user: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" }, id: "18" },
+    #    value: 750,
+    #    attributes: { "category": "writing", "source": "mobile-app" }
     #  )
-    def event(key:, user:, value:, request_options: nil)
+    def event(key:, user:, value:, attributes: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -52,7 +56,12 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
-        req.body = { **(request_options&.additional_body_parameters || {}), user: user, value: value }.compact
+        req.body = {
+          **(request_options&.additional_body_parameters || {}),
+          user: user,
+          value: value,
+          attributes: attributes
+        }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/metrics/#{key}/event"
       end
       TrophyApiClient::EventResponse.from_json(json_object: response.body)
@@ -79,7 +88,10 @@ module TrophyApiClient
     #   * :tz (String)
     #   * :device_tokens (Array<String>)
     #   * :subscribe_to_emails (Boolean)
+    #   * :attributes (Hash{String => String})
     # @param value [Float] The value to add to the user's current total for the given metric.
+    # @param attributes [Hash{String => String}] Event attributes as key-value pairs. Keys must match existing event attributes
+    #  set up in the Trophy dashboard.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::EventResponse]
     # @example
@@ -90,10 +102,11 @@ module TrophyApiClient
     #  )
     #  api.metrics.event(
     #    key: "words-written",
-    #    user: { email: "user@example.com", tz: "Europe/London", id: "18" },
-    #    value: 750
+    #    user: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" }, id: "18" },
+    #    value: 750,
+    #    attributes: { "category": "writing", "source": "mobile-app" }
     #  )
-    def event(key:, user:, value:, request_options: nil)
+    def event(key:, user:, value:, attributes: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -106,7 +119,12 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
-          req.body = { **(request_options&.additional_body_parameters || {}), user: user, value: value }.compact
+          req.body = {
+            **(request_options&.additional_body_parameters || {}),
+            user: user,
+            value: value,
+            attributes: attributes
+          }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/metrics/#{key}/event"
         end
         TrophyApiClient::EventResponse.from_json(json_object: response.body)
