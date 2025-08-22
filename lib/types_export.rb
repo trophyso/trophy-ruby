@@ -4,6 +4,7 @@ require_relative "trophy_api_client/users/types/users_metric_event_summary_reque
 require_relative "trophy_api_client/users/types/users_metric_event_summary_response_item"
 require_relative "trophy_api_client/users/types/users_points_event_summary_request_aggregation"
 require_relative "trophy_api_client/users/types/users_points_event_summary_response_item"
+require_relative "trophy_api_client/streaks/types/streaks_rankings_request_type"
 require_relative "trophy_api_client/types/metric_status"
 require_relative "trophy_api_client/types/streak_frequency"
 require_relative "trophy_api_client/types/base_streak_response"
@@ -36,3 +37,4 @@ require_relative "trophy_api_client/types/points_trigger_response_user_attribute
 require_relative "trophy_api_client/types/points_trigger_response_event_attribute"
 require_relative "trophy_api_client/types/points_trigger_response"
 require_relative "trophy_api_client/types/points_system_response"
+require_relative "trophy_api_client/types/streak_ranking_user"

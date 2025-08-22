@@ -6,6 +6,7 @@ require_relative "requests"
 require_relative "trophy_api_client/achievements/client"
 require_relative "trophy_api_client/metrics/client"
 require_relative "trophy_api_client/users/client"
+require_relative "trophy_api_client/streaks/client"
 require_relative "trophy_api_client/points/client"
 
 module TrophyApiClient
@@ -16,6 +17,8 @@ module TrophyApiClient
     attr_reader :metrics
     # @return [TrophyApiClient::UsersClient]
     attr_reader :users
+    # @return [TrophyApiClient::StreaksClient]
+    attr_reader :streaks
     # @return [TrophyApiClient::PointsClient]
     attr_reader :points
 
@@ -37,6 +40,7 @@ module TrophyApiClient
       @achievements = TrophyApiClient::AchievementsClient.new(request_client: @request_client)
       @metrics = TrophyApiClient::MetricsClient.new(request_client: @request_client)
       @users = TrophyApiClient::UsersClient.new(request_client: @request_client)
+      @streaks = TrophyApiClient::StreaksClient.new(request_client: @request_client)
       @points = TrophyApiClient::PointsClient.new(request_client: @request_client)
     end
   end
@@ -48,6 +52,8 @@ module TrophyApiClient
     attr_reader :metrics
     # @return [TrophyApiClient::AsyncUsersClient]
     attr_reader :users
+    # @return [TrophyApiClient::AsyncStreaksClient]
+    attr_reader :streaks
     # @return [TrophyApiClient::AsyncPointsClient]
     attr_reader :points
 
@@ -69,6 +75,7 @@ module TrophyApiClient
       @achievements = TrophyApiClient::AsyncAchievementsClient.new(request_client: @async_request_client)
       @metrics = TrophyApiClient::AsyncMetricsClient.new(request_client: @async_request_client)
       @users = TrophyApiClient::AsyncUsersClient.new(request_client: @async_request_client)
+      @streaks = TrophyApiClient::AsyncStreaksClient.new(request_client: @async_request_client)
       @points = TrophyApiClient::AsyncPointsClient.new(request_client: @async_request_client)
     end
   end
