@@ -18,6 +18,7 @@ module TrophyApiClient
 
     # Increment or decrement the value of a metric for a user.
     #
+    # @param idempotency_key [String]
     # @param key [String] Unique reference of the metric as set when created.
     # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -39,19 +40,21 @@ module TrophyApiClient
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.metrics.event(
+    #    idempotency_key: "e4296e4b-8493-4bd1-9c30-5a1a9ac4d78f",
     #    key: "words-written",
     #    user: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" }, id: "18" },
     #    value: 750,
     #    attributes: { "category": "writing", "source": "mobile-app" }
     #  )
-    def event(key:, user:, value:, attributes: nil, request_options: nil)
+    def event(key:, user:, value:, idempotency_key: nil, attributes: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = {
-      **(req.headers || {}),
-      **@request_client.get_headers,
-      **(request_options&.additional_headers || {})
+          **(req.headers || {}),
+          **@request_client.get_headers,
+          **(request_options&.additional_headers || {}),
+          "Idempotency-Key": idempotency_key
         }.compact
         unless request_options.nil? || request_options&.additional_query_parameters.nil?
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
@@ -80,6 +83,7 @@ module TrophyApiClient
 
     # Increment or decrement the value of a metric for a user.
     #
+    # @param idempotency_key [String]
     # @param key [String] Unique reference of the metric as set when created.
     # @param user [Hash] The user that triggered the event.Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
@@ -101,20 +105,22 @@ module TrophyApiClient
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.metrics.event(
+    #    idempotency_key: "e4296e4b-8493-4bd1-9c30-5a1a9ac4d78f",
     #    key: "words-written",
     #    user: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" }, id: "18" },
     #    value: 750,
     #    attributes: { "category": "writing", "source": "mobile-app" }
     #  )
-    def event(key:, user:, value:, attributes: nil, request_options: nil)
+    def event(key:, user:, value:, idempotency_key: nil, attributes: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = {
-        **(req.headers || {}),
-        **@request_client.get_headers,
-        **(request_options&.additional_headers || {})
+            **(req.headers || {}),
+            **@request_client.get_headers,
+            **(request_options&.additional_headers || {}),
+            "Idempotency-Key": idempotency_key
           }.compact
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
