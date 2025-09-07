@@ -19,6 +19,10 @@ module TrophyApiClient
     attr_reader :current_streak
     # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this event.
     attr_reader :points
+    # @return [String] The idempotency key used for the event, if one was provided.
+    attr_reader :idempotency_key
+    # @return [Boolean] Whether the event was replayed due to idempotency.
+    attr_reader :idempotent_replayed
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -33,16 +37,20 @@ module TrophyApiClient
     # @param achievements [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed as a result of this event.
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this event.
+    # @param idempotency_key [String] The idempotency key used for the event, if one was provided.
+    # @param idempotent_replayed [Boolean] Whether the event was replayed due to idempotency.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::EventResponse]
     def initialize(event_id:, metric_id:, total:, achievements: OMIT, current_streak: OMIT, points: OMIT,
-                   additional_properties: nil)
+                   idempotency_key: OMIT, idempotent_replayed: OMIT, additional_properties: nil)
       @event_id = event_id
       @metric_id = metric_id
       @total = total
       @achievements = achievements if achievements != OMIT
       @current_streak = current_streak if current_streak != OMIT
       @points = points if points != OMIT
+      @idempotency_key = idempotency_key if idempotency_key != OMIT
+      @idempotent_replayed = idempotent_replayed if idempotent_replayed != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "eventId": event_id,
@@ -50,7 +58,9 @@ module TrophyApiClient
         "total": total,
         "achievements": achievements,
         "currentStreak": current_streak,
-        "points": points
+        "points": points,
+        "idempotencyKey": idempotency_key,
+        "idempotentReplayed": idempotent_replayed
       }.reject do |_k, v|
         v == OMIT
       end
@@ -80,6 +90,8 @@ module TrophyApiClient
         value = value.to_json
         TrophyApiClient::MetricEventPointsResponse.from_json(json_object: value)
       end
+      idempotency_key = parsed_json["idempotencyKey"]
+      idempotent_replayed = parsed_json["idempotentReplayed"]
       new(
         event_id: event_id,
         metric_id: metric_id,
@@ -87,6 +99,8 @@ module TrophyApiClient
         achievements: achievements,
         current_streak: current_streak,
         points: points,
+        idempotency_key: idempotency_key,
+        idempotent_replayed: idempotent_replayed,
         additional_properties: struct
       )
     end
@@ -111,6 +125,8 @@ module TrophyApiClient
       obj.achievements&.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
       obj.current_streak.nil? || TrophyApiClient::MetricEventStreakResponse.validate_raw(obj: obj.current_streak)
       obj.points&.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
+      obj.idempotency_key&.is_a?(String) != false || raise("Passed value for field obj.idempotency_key is not the expected type, validation failed.")
+      obj.idempotent_replayed&.is_a?(Boolean) != false || raise("Passed value for field obj.idempotent_replayed is not the expected type, validation failed.")
     end
   end
 end
