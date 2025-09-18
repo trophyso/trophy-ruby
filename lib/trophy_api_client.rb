@@ -8,6 +8,7 @@ require_relative "trophy_api_client/metrics/client"
 require_relative "trophy_api_client/users/client"
 require_relative "trophy_api_client/streaks/client"
 require_relative "trophy_api_client/points/client"
+require_relative "trophy_api_client/leaderboards/client"
 
 module TrophyApiClient
   class Client
@@ -21,6 +22,8 @@ module TrophyApiClient
     attr_reader :streaks
     # @return [TrophyApiClient::PointsClient]
     attr_reader :points
+    # @return [TrophyApiClient::LeaderboardsClient]
+    attr_reader :leaderboards
 
     # @param base_url [String]
     # @param environment [TrophyApiClient::Environment]
@@ -42,6 +45,7 @@ module TrophyApiClient
       @users = TrophyApiClient::UsersClient.new(request_client: @request_client)
       @streaks = TrophyApiClient::StreaksClient.new(request_client: @request_client)
       @points = TrophyApiClient::PointsClient.new(request_client: @request_client)
+      @leaderboards = TrophyApiClient::LeaderboardsClient.new(request_client: @request_client)
     end
   end
 
@@ -56,6 +60,8 @@ module TrophyApiClient
     attr_reader :streaks
     # @return [TrophyApiClient::AsyncPointsClient]
     attr_reader :points
+    # @return [TrophyApiClient::AsyncLeaderboardsClient]
+    attr_reader :leaderboards
 
     # @param base_url [String]
     # @param environment [TrophyApiClient::Environment]
@@ -77,6 +83,7 @@ module TrophyApiClient
       @users = TrophyApiClient::AsyncUsersClient.new(request_client: @async_request_client)
       @streaks = TrophyApiClient::AsyncStreaksClient.new(request_client: @async_request_client)
       @points = TrophyApiClient::AsyncPointsClient.new(request_client: @async_request_client)
+      @leaderboards = TrophyApiClient::AsyncLeaderboardsClient.new(request_client: @async_request_client)
     end
   end
 end
