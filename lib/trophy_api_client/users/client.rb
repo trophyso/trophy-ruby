@@ -463,12 +463,12 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.leaderboards(
+    #  api.users.leaderboard(
     #    id: "user-123",
     #    key: "weekly-words",
     #    run: "2025-01-15"
     #  )
-    def leaderboards(id:, key:, run: nil, request_options: nil)
+    def leaderboard(id:, key:, run: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -955,12 +955,12 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.leaderboards(
+    #  api.users.leaderboard(
     #    id: "user-123",
     #    key: "weekly-words",
     #    run: "2025-01-15"
     #  )
-    def leaderboards(id:, key:, run: nil, request_options: nil)
+    def leaderboard(id:, key:, run: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
