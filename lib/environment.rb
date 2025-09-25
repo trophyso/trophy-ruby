@@ -2,6 +2,6 @@
 
 module TrophyApiClient
   class Environment
-    PRODUCTION = { api: "api.trophy.so", admin: "admin.trophy.so" }.freeze
+    PRODUCTION = { api: "https://api.trophy.so/v1", admin: "https://admin.trophy.so/v1" }.freeze
   end
 end
