@@ -22,10 +22,9 @@ module TrophyApiClient
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [TrophyApiClient::RequestClient]
-    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::DEFAULT, max_retries: nil,
+    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
                    timeout_in_seconds: nil)
       @default_environment = environment
-      @base_url = environment || base_url
       @api_key = api_key
       @conn = Faraday.new do |faraday|
         faraday.request :json
@@ -36,9 +35,10 @@ module TrophyApiClient
     end
 
     # @param request_options [TrophyApiClient::RequestOptions]
+    # @param environment [String]
     # @return [String]
-    def get_url(request_options: nil)
-      request_options&.base_url || @default_environment || @base_url
+    def get_url(environment:, request_options: nil)
+      request_options&.base_url || @default_environment[environment] || @base_url
     end
 
     # @return [Hash{String => String}]
@@ -65,10 +65,9 @@ module TrophyApiClient
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [TrophyApiClient::AsyncRequestClient]
-    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::DEFAULT, max_retries: nil,
+    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
                    timeout_in_seconds: nil)
       @default_environment = environment
-      @base_url = environment || base_url
       @api_key = api_key
       @conn = Faraday.new do |faraday|
         faraday.request :json
@@ -80,9 +79,10 @@ module TrophyApiClient
     end
 
     # @param request_options [TrophyApiClient::RequestOptions]
+    # @param environment [String]
     # @return [String]
-    def get_url(request_options: nil)
-      request_options&.base_url || @default_environment || @base_url
+    def get_url(environment:, request_options: nil)
+      request_options&.base_url || @default_environment[environment] || @base_url
     end
 
     # @return [Hash{String => String}]

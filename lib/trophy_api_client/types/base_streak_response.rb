@@ -18,6 +18,18 @@ module TrophyApiClient
     attr_reader :period_end
     # @return [String] The date the streak will expire if the user does not increment a metric.
     attr_reader :expires
+    # @return [Integer] The number of available streak freezes. Only present if the organization has
+    #  enabled streak freezes.
+    attr_reader :freezes
+    # @return [Integer] The maximum number of streak freezes a user can have. Only present if the
+    #  organization has enabled streak freezes.
+    attr_reader :max_freezes
+    # @return [Integer] The interval at which the user will earn streak freezes, in days. Only present
+    #  if the organization has enabled streak freeze auto-earn.
+    attr_reader :freeze_auto_earn_interval
+    # @return [Integer] The amount of streak freezes the user will earn per interval. Only present if
+    #  the organization has enabled streak freeze auto-earn.
+    attr_reader :freeze_auto_earn_amount
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -32,16 +44,28 @@ module TrophyApiClient
     # @param period_start [String] The start date of the current streak period.
     # @param period_end [String] The end date of the current streak period.
     # @param expires [String] The date the streak will expire if the user does not increment a metric.
+    # @param freezes [Integer] The number of available streak freezes. Only present if the organization has
+    #  enabled streak freezes.
+    # @param max_freezes [Integer] The maximum number of streak freezes a user can have. Only present if the
+    #  organization has enabled streak freezes.
+    # @param freeze_auto_earn_interval [Integer] The interval at which the user will earn streak freezes, in days. Only present
+    #  if the organization has enabled streak freeze auto-earn.
+    # @param freeze_auto_earn_amount [Integer] The amount of streak freezes the user will earn per interval. Only present if
+    #  the organization has enabled streak freeze auto-earn.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::BaseStreakResponse]
     def initialize(length:, frequency:, started: OMIT, period_start: OMIT, period_end: OMIT, expires: OMIT,
-                   additional_properties: nil)
+                   freezes: OMIT, max_freezes: OMIT, freeze_auto_earn_interval: OMIT, freeze_auto_earn_amount: OMIT, additional_properties: nil)
       @length = length
       @frequency = frequency
       @started = started if started != OMIT
       @period_start = period_start if period_start != OMIT
       @period_end = period_end if period_end != OMIT
       @expires = expires if expires != OMIT
+      @freezes = freezes if freezes != OMIT
+      @max_freezes = max_freezes if max_freezes != OMIT
+      @freeze_auto_earn_interval = freeze_auto_earn_interval if freeze_auto_earn_interval != OMIT
+      @freeze_auto_earn_amount = freeze_auto_earn_amount if freeze_auto_earn_amount != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "length": length,
@@ -49,7 +73,11 @@ module TrophyApiClient
         "started": started,
         "periodStart": period_start,
         "periodEnd": period_end,
-        "expires": expires
+        "expires": expires,
+        "freezes": freezes,
+        "maxFreezes": max_freezes,
+        "freezeAutoEarnInterval": freeze_auto_earn_interval,
+        "freezeAutoEarnAmount": freeze_auto_earn_amount
       }.reject do |_k, v|
         v == OMIT
       end
@@ -68,6 +96,10 @@ module TrophyApiClient
       period_start = parsed_json["periodStart"]
       period_end = parsed_json["periodEnd"]
       expires = parsed_json["expires"]
+      freezes = parsed_json["freezes"]
+      max_freezes = parsed_json["maxFreezes"]
+      freeze_auto_earn_interval = parsed_json["freezeAutoEarnInterval"]
+      freeze_auto_earn_amount = parsed_json["freezeAutoEarnAmount"]
       new(
         length: length,
         frequency: frequency,
@@ -75,6 +107,10 @@ module TrophyApiClient
         period_start: period_start,
         period_end: period_end,
         expires: expires,
+        freezes: freezes,
+        max_freezes: max_freezes,
+        freeze_auto_earn_interval: freeze_auto_earn_interval,
+        freeze_auto_earn_amount: freeze_auto_earn_amount,
         additional_properties: struct
       )
     end
@@ -99,6 +135,10 @@ module TrophyApiClient
       obj.period_start&.is_a?(String) != false || raise("Passed value for field obj.period_start is not the expected type, validation failed.")
       obj.period_end&.is_a?(String) != false || raise("Passed value for field obj.period_end is not the expected type, validation failed.")
       obj.expires&.is_a?(String) != false || raise("Passed value for field obj.expires is not the expected type, validation failed.")
+      obj.freezes&.is_a?(Integer) != false || raise("Passed value for field obj.freezes is not the expected type, validation failed.")
+      obj.max_freezes&.is_a?(Integer) != false || raise("Passed value for field obj.max_freezes is not the expected type, validation failed.")
+      obj.freeze_auto_earn_interval&.is_a?(Integer) != false || raise("Passed value for field obj.freeze_auto_earn_interval is not the expected type, validation failed.")
+      obj.freeze_auto_earn_amount&.is_a?(Integer) != false || raise("Passed value for field obj.freeze_auto_earn_amount is not the expected type, validation failed.")
     end
   end
 end

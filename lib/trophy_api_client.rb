@@ -9,6 +9,7 @@ require_relative "trophy_api_client/users/client"
 require_relative "trophy_api_client/streaks/client"
 require_relative "trophy_api_client/points/client"
 require_relative "trophy_api_client/leaderboards/client"
+require_relative "trophy_api_client/admin/client"
 
 module TrophyApiClient
   class Client
@@ -24,6 +25,8 @@ module TrophyApiClient
     attr_reader :points
     # @return [TrophyApiClient::LeaderboardsClient]
     attr_reader :leaderboards
+    # @return [TrophyApiClient::Admin::Client]
+    attr_reader :admin
 
     # @param base_url [String]
     # @param environment [TrophyApiClient::Environment]
@@ -31,7 +34,7 @@ module TrophyApiClient
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [TrophyApiClient::Client]
-    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::DEFAULT, max_retries: nil,
+    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
                    timeout_in_seconds: nil)
       @request_client = TrophyApiClient::RequestClient.new(
         base_url: base_url,
@@ -46,6 +49,7 @@ module TrophyApiClient
       @streaks = TrophyApiClient::StreaksClient.new(request_client: @request_client)
       @points = TrophyApiClient::PointsClient.new(request_client: @request_client)
       @leaderboards = TrophyApiClient::LeaderboardsClient.new(request_client: @request_client)
+      @admin = TrophyApiClient::Admin::Client.new(request_client: @request_client)
     end
   end
 
@@ -62,6 +66,8 @@ module TrophyApiClient
     attr_reader :points
     # @return [TrophyApiClient::AsyncLeaderboardsClient]
     attr_reader :leaderboards
+    # @return [TrophyApiClient::Admin::AsyncClient]
+    attr_reader :admin
 
     # @param base_url [String]
     # @param environment [TrophyApiClient::Environment]
@@ -69,7 +75,7 @@ module TrophyApiClient
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [TrophyApiClient::AsyncClient]
-    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::DEFAULT, max_retries: nil,
+    def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
                    timeout_in_seconds: nil)
       @async_request_client = TrophyApiClient::AsyncRequestClient.new(
         base_url: base_url,
@@ -84,6 +90,7 @@ module TrophyApiClient
       @streaks = TrophyApiClient::AsyncStreaksClient.new(request_client: @async_request_client)
       @points = TrophyApiClient::AsyncPointsClient.new(request_client: @async_request_client)
       @leaderboards = TrophyApiClient::AsyncLeaderboardsClient.new(request_client: @async_request_client)
+      @admin = TrophyApiClient::Admin::AsyncClient.new(request_client: @async_request_client)
     end
   end
 end

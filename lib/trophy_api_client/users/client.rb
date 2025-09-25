@@ -42,7 +42,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.create(request: { id: "user-id" })
@@ -59,7 +59,7 @@ module TrophyApiClient
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
         req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-        req.url "#{@request_client.get_url(request_options: request_options)}/users"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users"
       end
       TrophyApiClient::User.from_json(json_object: response.body)
     end
@@ -72,7 +72,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.get(id: "userId")
@@ -91,7 +91,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
       end
       TrophyApiClient::User.from_json(json_object: response.body)
     end
@@ -111,7 +111,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
@@ -128,7 +128,7 @@ module TrophyApiClient
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
         req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
       end
       TrophyApiClient::User.from_json(json_object: response.body)
     end
@@ -148,7 +148,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
@@ -165,7 +165,7 @@ module TrophyApiClient
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
         req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
       end
       TrophyApiClient::User.from_json(json_object: response.body)
     end
@@ -178,7 +178,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.all_metrics(id: "userId")
@@ -197,7 +197,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/metrics"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -215,7 +215,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.single_metric(id: "userId", key: "key")
@@ -234,7 +234,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/metrics/#{key}"
       end
       TrophyApiClient::MetricResponse.from_json(json_object: response.body)
     end
@@ -253,7 +254,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.metric_event_summary(
@@ -281,7 +282,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -301,7 +303,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.achievements(id: "userId")
@@ -321,7 +323,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/achievements"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/achievements"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -340,7 +343,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.streak(id: "userId")
@@ -360,7 +363,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/streak"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/streak"
       end
       TrophyApiClient::StreakResponse.from_json(json_object: response.body)
     end
@@ -375,7 +378,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.points(id: "userId", key: "points-system-key")
@@ -392,7 +395,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/points/#{key}"
       end
       TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
     end
@@ -412,7 +416,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.points_event_summary(
@@ -440,7 +444,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -460,7 +465,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.leaderboard(
@@ -481,7 +486,8 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/leaderboards/#{key}"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/leaderboards/#{key}"
       end
       TrophyApiClient::UserLeaderboardResponse.from_json(json_object: response.body)
     end
@@ -512,7 +518,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.create(request: { id: "user-id" })
@@ -530,7 +536,7 @@ module TrophyApiClient
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
           req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-          req.url "#{@request_client.get_url(request_options: request_options)}/users"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
       end
@@ -544,7 +550,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.get(id: "userId")
@@ -564,7 +570,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
       end
@@ -585,7 +591,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
@@ -603,7 +609,7 @@ module TrophyApiClient
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
           req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
       end
@@ -624,7 +630,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
@@ -642,7 +648,7 @@ module TrophyApiClient
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
           req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
       end
@@ -656,7 +662,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.all_metrics(id: "userId")
@@ -676,7 +682,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/metrics"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -695,7 +701,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.single_metric(id: "userId", key: "key")
@@ -715,7 +721,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/metrics/#{key}"
         end
         TrophyApiClient::MetricResponse.from_json(json_object: response.body)
       end
@@ -735,7 +742,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.metric_event_summary(
@@ -764,7 +771,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/metrics/#{key}/event-summary"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -785,7 +793,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.achievements(id: "userId")
@@ -806,7 +814,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/achievements"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/achievements"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -826,7 +835,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.streak(id: "userId")
@@ -847,7 +856,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/streak"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/streak"
         end
         TrophyApiClient::StreakResponse.from_json(json_object: response.body)
       end
@@ -863,7 +872,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.points(id: "userId", key: "points-system-key")
@@ -881,7 +890,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/points/#{key}"
         end
         TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
       end
@@ -902,7 +912,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.points_event_summary(
@@ -931,7 +941,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/points/#{key}/event-summary"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -952,7 +963,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.users.leaderboard(
@@ -974,7 +985,8 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/users/#{id}/leaderboards/#{key}"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/leaderboards/#{key}"
         end
         TrophyApiClient::UserLeaderboardResponse.from_json(json_object: response.body)
       end

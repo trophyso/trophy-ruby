@@ -12,6 +12,9 @@ module TrophyApiClient
     attr_reader :period_end
     # @return [Integer] The length of the user's streak during this period.
     attr_reader :length
+    # @return [Boolean] Whether the user used a streak freeze during this period. Only present if the
+    #  organization has enabled streak freezes.
+    attr_reader :used_freeze
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -23,14 +26,24 @@ module TrophyApiClient
     # @param period_start [String] The date this streak period started.
     # @param period_end [String] The date this streak period ended.
     # @param length [Integer] The length of the user's streak during this period.
+    # @param used_freeze [Boolean] Whether the user used a streak freeze during this period. Only present if the
+    #  organization has enabled streak freezes.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::StreakResponseStreakHistoryItem]
-    def initialize(period_start:, period_end:, length:, additional_properties: nil)
+    def initialize(period_start:, period_end:, length:, used_freeze: OMIT, additional_properties: nil)
       @period_start = period_start
       @period_end = period_end
       @length = length
+      @used_freeze = used_freeze if used_freeze != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "periodStart": period_start, "periodEnd": period_end, "length": length }
+      @_field_set = {
+        "periodStart": period_start,
+        "periodEnd": period_end,
+        "length": length,
+        "usedFreeze": used_freeze
+      }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
     # Deserialize a JSON object to an instance of StreakResponseStreakHistoryItem
@@ -43,10 +56,12 @@ module TrophyApiClient
       period_start = parsed_json["periodStart"]
       period_end = parsed_json["periodEnd"]
       length = parsed_json["length"]
+      used_freeze = parsed_json["usedFreeze"]
       new(
         period_start: period_start,
         period_end: period_end,
         length: length,
+        used_freeze: used_freeze,
         additional_properties: struct
       )
     end
@@ -68,6 +83,7 @@ module TrophyApiClient
       obj.period_start.is_a?(String) != false || raise("Passed value for field obj.period_start is not the expected type, validation failed.")
       obj.period_end.is_a?(String) != false || raise("Passed value for field obj.period_end is not the expected type, validation failed.")
       obj.length.is_a?(Integer) != false || raise("Passed value for field obj.length is not the expected type, validation failed.")
+      obj.used_freeze&.is_a?(Boolean) != false || raise("Passed value for field obj.used_freeze is not the expected type, validation failed.")
     end
   end
 end

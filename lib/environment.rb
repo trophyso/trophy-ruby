@@ -2,6 +2,6 @@
 
 module TrophyApiClient
   class Environment
-    DEFAULT = "https://app.trophy.so/api"
+    PRODUCTION = { api: "api.trophy.so", admin: "admin.trophy.so" }.freeze
   end
 end

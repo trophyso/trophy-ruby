@@ -25,7 +25,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.achievements.all
@@ -44,7 +44,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/achievements"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/achievements"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -69,7 +69,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
@@ -86,7 +86,8 @@ module TrophyApiClient
           req.params = { **(request_options&.additional_query_parameters || {}) }.compact
         end
         req.body = { **(request_options&.additional_body_parameters || {}), user: user }.compact
-        req.url "#{@request_client.get_url(request_options: request_options)}/achievements/#{key}/complete"
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/achievements/#{key}/complete"
       end
       TrophyApiClient::AchievementCompletionResponse.from_json(json_object: response.body)
     end
@@ -109,7 +110,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.achievements.all
@@ -129,7 +130,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/achievements"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/achievements"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -155,7 +156,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
@@ -173,7 +174,8 @@ module TrophyApiClient
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
           req.body = { **(request_options&.additional_body_parameters || {}), user: user }.compact
-          req.url "#{@request_client.get_url(request_options: request_options)}/achievements/#{key}/complete"
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/achievements/#{key}/complete"
         end
         TrophyApiClient::AchievementCompletionResponse.from_json(json_object: response.body)
       end

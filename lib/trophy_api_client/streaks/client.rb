@@ -27,7 +27,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.streaks.list
@@ -44,7 +44,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/streaks"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/streaks"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -62,7 +62,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.streaks.rankings
@@ -79,7 +79,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/streaks/rankings"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/streaks/rankings"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -108,7 +108,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.streaks.list
@@ -126,7 +126,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/streaks"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/streaks"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -145,7 +145,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.streaks.rankings
@@ -163,7 +163,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/streaks/rankings"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/streaks/rankings"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|

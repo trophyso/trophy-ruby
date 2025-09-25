@@ -28,7 +28,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.points.summary(key: "points-system-key", user_attributes: "plan-type:premium,region:us-east")
@@ -48,7 +48,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}/summary"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/points/#{key}/summary"
       end
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
@@ -65,7 +65,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.points.system(key: "points-system-key")
@@ -84,7 +84,7 @@ module TrophyApiClient
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
-        req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/points/#{key}"
       end
       TrophyApiClient::PointsSystemResponse.from_json(json_object: response.body)
     end
@@ -111,7 +111,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.points.summary(key: "points-system-key", user_attributes: "plan-type:premium,region:us-east")
@@ -132,7 +132,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}/summary"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/points/#{key}/summary"
         end
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
@@ -150,7 +150,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.points.system(key: "points-system-key")
@@ -170,7 +170,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
-          req.url "#{@request_client.get_url(request_options: request_options)}/points/#{key}"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/points/#{key}"
         end
         TrophyApiClient::PointsSystemResponse.from_json(json_object: response.body)
       end

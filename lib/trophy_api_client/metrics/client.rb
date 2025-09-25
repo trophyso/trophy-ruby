@@ -36,7 +36,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.metrics.event(
@@ -65,7 +65,7 @@ module TrophyApiClient
           value: value,
           attributes: attributes
         }.compact
-        req.url "#{@request_client.get_url(request_options: request_options)}/metrics/#{key}/event"
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/metrics/#{key}/event"
       end
       TrophyApiClient::EventResponse.from_json(json_object: response.body)
     end
@@ -101,7 +101,7 @@ module TrophyApiClient
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
-    #    environment: TrophyApiClient::Environment::DEFAULT,
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.metrics.event(
@@ -131,7 +131,7 @@ module TrophyApiClient
             value: value,
             attributes: attributes
           }.compact
-          req.url "#{@request_client.get_url(request_options: request_options)}/metrics/#{key}/event"
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/metrics/#{key}/event"
         end
         TrophyApiClient::EventResponse.from_json(json_object: response.body)
       end
