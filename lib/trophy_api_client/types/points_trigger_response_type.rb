@@ -6,5 +6,7 @@ module TrophyApiClient
     METRIC = "metric"
     ACHIEVEMENT = "achievement"
     STREAK = "streak"
+    TIME = "time"
+    USER_CREATION = "user_creation"
   end
 end

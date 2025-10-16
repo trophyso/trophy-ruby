@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "completed_achievement_response"
+require_relative "achievement_completion_response_achievement"
 require "ostruct"
 require "json"
 
@@ -8,7 +8,7 @@ module TrophyApiClient
   class AchievementCompletionResponse
     # @return [String] The unique ID of the completion.
     attr_reader :completion_id
-    # @return [TrophyApiClient::CompletedAchievementResponse]
+    # @return [TrophyApiClient::AchievementCompletionResponseAchievement]
     attr_reader :achievement
     # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
     #  completion.
@@ -22,19 +22,17 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param completion_id [String] The unique ID of the completion.
-    # @param achievement [TrophyApiClient::CompletedAchievementResponse]
+    # @param achievement [TrophyApiClient::AchievementCompletionResponseAchievement]
     # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
     #  completion.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementCompletionResponse]
-    def initialize(completion_id:, achievement:, points: OMIT, additional_properties: nil)
+    def initialize(completion_id:, achievement:, points:, additional_properties: nil)
       @completion_id = completion_id
       @achievement = achievement
-      @points = points if points != OMIT
+      @points = points
       @additional_properties = additional_properties
-      @_field_set = { "completionId": completion_id, "achievement": achievement, "points": points }.reject do |_k, v|
-        v == OMIT
-      end
+      @_field_set = { "completionId": completion_id, "achievement": achievement, "points": points }
     end
 
     # Deserialize a JSON object to an instance of AchievementCompletionResponse
@@ -49,7 +47,7 @@ module TrophyApiClient
         achievement = nil
       else
         achievement = parsed_json["achievement"].to_json
-        achievement = TrophyApiClient::CompletedAchievementResponse.from_json(json_object: achievement)
+        achievement = TrophyApiClient::AchievementCompletionResponseAchievement.from_json(json_object: achievement)
       end
       points = parsed_json["points"]&.transform_values do |value|
         value = value.to_json
@@ -78,8 +76,8 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.completion_id.is_a?(String) != false || raise("Passed value for field obj.completion_id is not the expected type, validation failed.")
-      TrophyApiClient::CompletedAchievementResponse.validate_raw(obj: obj.achievement)
-      obj.points&.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
+      TrophyApiClient::AchievementCompletionResponseAchievement.validate_raw(obj: obj.achievement)
+      obj.points.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
     end
   end
 end

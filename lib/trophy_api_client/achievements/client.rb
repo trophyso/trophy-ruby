@@ -72,7 +72,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
+    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
     def complete(key:, user:, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -159,7 +159,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", tz: "Europe/London", id: "user-id" })
+    #  api.achievements.complete(key: "finish-onboarding", user: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
     def complete(key:, user:, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|

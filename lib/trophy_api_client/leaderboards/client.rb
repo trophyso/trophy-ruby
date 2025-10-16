@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "../types/leaderboard_response"
+require_relative "types/leaderboards_all_response_item"
 require "json"
 require_relative "../types/leaderboard_response_with_rankings"
 require "async"
@@ -20,7 +20,7 @@ module TrophyApiClient
     # Get all active leaderboards for your organization.
     #
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::LeaderboardResponse>]
+    # @return [Array<TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -48,7 +48,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
         item = item.to_json
-        TrophyApiClient::LeaderboardResponse.from_json(json_object: item)
+        TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem.from_json(json_object: item)
       end
     end
 
@@ -71,6 +71,8 @@ module TrophyApiClient
     #  )
     #  api.leaderboards.get(
     #    key: "weekly-words",
+    #    offset: 1,
+    #    limit: 1,
     #    run: "2025-01-15",
     #    user_id: "user-123"
     #  )
@@ -112,7 +114,7 @@ module TrophyApiClient
     # Get all active leaderboards for your organization.
     #
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::LeaderboardResponse>]
+    # @return [Array<TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -141,7 +143,7 @@ module TrophyApiClient
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
           item = item.to_json
-          TrophyApiClient::LeaderboardResponse.from_json(json_object: item)
+          TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem.from_json(json_object: item)
         end
       end
     end
@@ -165,6 +167,8 @@ module TrophyApiClient
     #  )
     #  api.leaderboards.get(
     #    key: "weekly-words",
+    #    offset: 1,
+    #    limit: 1,
     #    run: "2025-01-15",
     #    user_id: "user-123"
     #  )

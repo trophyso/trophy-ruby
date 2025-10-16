@@ -58,9 +58,9 @@ module TrophyApiClient
     #  the organization has enabled streak freeze auto-earn.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricEventStreakResponse]
-    def initialize(length:, frequency:, extended: OMIT, started: OMIT, period_start: OMIT, period_end: OMIT,
-                   expires: OMIT, freezes: OMIT, max_freezes: OMIT, freeze_auto_earn_interval: OMIT, freeze_auto_earn_amount: OMIT, additional_properties: nil)
-      @extended = extended if extended != OMIT
+    def initialize(extended:, length:, frequency:, started: OMIT, period_start: OMIT, period_end: OMIT, expires: OMIT,
+                   freezes: OMIT, max_freezes: OMIT, freeze_auto_earn_interval: OMIT, freeze_auto_earn_amount: OMIT, additional_properties: nil)
+      @extended = extended
       @length = length
       @frequency = frequency
       @started = started if started != OMIT
@@ -137,7 +137,7 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.extended&.is_a?(Boolean) != false || raise("Passed value for field obj.extended is not the expected type, validation failed.")
+      obj.extended.is_a?(Boolean) != false || raise("Passed value for field obj.extended is not the expected type, validation failed.")
       obj.length.is_a?(Integer) != false || raise("Passed value for field obj.length is not the expected type, validation failed.")
       obj.frequency.is_a?(TrophyApiClient::StreakFrequency) != false || raise("Passed value for field obj.frequency is not the expected type, validation failed.")
       obj.started&.is_a?(String) != false || raise("Passed value for field obj.started is not the expected type, validation failed.")

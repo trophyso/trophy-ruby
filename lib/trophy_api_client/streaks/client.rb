@@ -65,7 +65,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.streaks.rankings
+    #  api.streaks.rankings(limit: 1, type: ACTIVE)
     def rankings(limit: nil, type: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -148,7 +148,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.streaks.rankings
+    #  api.streaks.rankings(limit: 1, type: ACTIVE)
     def rankings(limit: nil, type: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|

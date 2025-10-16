@@ -13,7 +13,7 @@ require_relative "../types/streak_response"
 require_relative "../types/get_user_points_response"
 require_relative "types/users_points_event_summary_request_aggregation"
 require_relative "types/users_points_event_summary_response_item"
-require_relative "../types/user_leaderboard_response"
+require_relative "../types/user_leaderboard_response_with_history"
 require "async"
 
 module TrophyApiClient
@@ -45,7 +45,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.create(request: { id: "user-id" })
+    #  api.users.create(request: { email: "user@example.com", name: "User", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
     def create(request:, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -114,7 +114,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       response = @request_client.conn.put do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -151,7 +151,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.update(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -306,7 +306,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.achievements(id: "userId")
+    #  api.users.achievements(id: "userId", include_incomplete: "true")
     def achievements(id:, include_incomplete: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -346,7 +346,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.streak(id: "userId")
+    #  api.users.streak(id: "userId", history_periods: 1)
     def streak(id:, history_periods: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -381,7 +381,11 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.points(id: "userId", key: "points-system-key")
+    #  api.users.points(
+    #    id: "userId",
+    #    key: "points-system-key",
+    #    awards: 1
+    #  )
     def points(id:, key:, awards: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -461,7 +465,7 @@ module TrophyApiClient
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [TrophyApiClient::UserLeaderboardResponse]
+    # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -489,7 +493,7 @@ module TrophyApiClient
         req.url "#{@request_client.get_url(environment: api,
                                            request_options: request_options)}/users/#{id}/leaderboards/#{key}"
       end
-      TrophyApiClient::UserLeaderboardResponse.from_json(json_object: response.body)
+      TrophyApiClient::UserLeaderboardResponseWithHistory.from_json(json_object: response.body)
     end
   end
 
@@ -521,7 +525,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.create(request: { id: "user-id" })
+    #  api.users.create(request: { email: "user@example.com", name: "User", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
     def create(request:, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
@@ -594,7 +598,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.put do |req|
@@ -633,7 +637,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.update(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|
@@ -796,7 +800,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.achievements(id: "userId")
+    #  api.users.achievements(id: "userId", include_incomplete: "true")
     def achievements(id:, include_incomplete: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
@@ -838,7 +842,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.streak(id: "userId")
+    #  api.users.streak(id: "userId", history_periods: 1)
     def streak(id:, history_periods: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
@@ -875,7 +879,11 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.points(id: "userId", key: "points-system-key")
+    #  api.users.points(
+    #    id: "userId",
+    #    key: "points-system-key",
+    #    awards: 1
+    #  )
     def points(id:, key:, awards: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
@@ -959,7 +967,7 @@ module TrophyApiClient
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [TrophyApiClient::UserLeaderboardResponse]
+    # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -988,7 +996,7 @@ module TrophyApiClient
           req.url "#{@request_client.get_url(environment: api,
                                              request_options: request_options)}/users/#{id}/leaderboards/#{key}"
         end
-        TrophyApiClient::UserLeaderboardResponse.from_json(json_object: response.body)
+        TrophyApiClient::UserLeaderboardResponseWithHistory.from_json(json_object: response.body)
       end
     end
   end

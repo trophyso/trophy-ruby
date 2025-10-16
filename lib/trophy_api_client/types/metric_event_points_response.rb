@@ -6,17 +6,21 @@ require "json"
 
 module TrophyApiClient
   class MetricEventPointsResponse
-    # @return [Float] The points added by this event.
+    # @return [Integer] The points added by this event.
     attr_reader :added
     # @return [String] The ID of the points system
     attr_reader :id
+    # @return [String] The key of the points system
+    attr_reader :key
     # @return [String] The name of the points system
     attr_reader :name
     # @return [String] The description of the points system
     attr_reader :description
     # @return [String] The URL of the badge image for the points system
     attr_reader :badge_url
-    # @return [Float] The user's total points
+    # @return [Float] The maximum number of points a user can be awarded in this points system
+    attr_reader :max_points
+    # @return [Integer] The user's total points
     attr_reader :total
     # @return [Array<TrophyApiClient::PointsAward>] Array of trigger awards that added points.
     attr_reader :awards
@@ -28,31 +32,37 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param added [Float] The points added by this event.
+    # @param added [Integer] The points added by this event.
     # @param id [String] The ID of the points system
+    # @param key [String] The key of the points system
     # @param name [String] The name of the points system
     # @param description [String] The description of the points system
     # @param badge_url [String] The URL of the badge image for the points system
-    # @param total [Float] The user's total points
+    # @param max_points [Float] The maximum number of points a user can be awarded in this points system
+    # @param total [Integer] The user's total points
     # @param awards [Array<TrophyApiClient::PointsAward>] Array of trigger awards that added points.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricEventPointsResponse]
-    def initialize(id:, name:, total:, awards:, added: OMIT, description: OMIT, badge_url: OMIT,
+    def initialize(added:, id:, key:, name:, total:, awards:, description: OMIT, badge_url: OMIT, max_points: OMIT,
                    additional_properties: nil)
-      @added = added if added != OMIT
+      @added = added
       @id = id
+      @key = key
       @name = name
       @description = description if description != OMIT
       @badge_url = badge_url if badge_url != OMIT
+      @max_points = max_points if max_points != OMIT
       @total = total
       @awards = awards
       @additional_properties = additional_properties
       @_field_set = {
         "added": added,
         "id": id,
+        "key": key,
         "name": name,
         "description": description,
         "badgeUrl": badge_url,
+        "maxPoints": max_points,
         "total": total,
         "awards": awards
       }.reject do |_k, v|
@@ -69,9 +79,11 @@ module TrophyApiClient
       parsed_json = JSON.parse(json_object)
       added = parsed_json["added"]
       id = parsed_json["id"]
+      key = parsed_json["key"]
       name = parsed_json["name"]
       description = parsed_json["description"]
       badge_url = parsed_json["badgeUrl"]
+      max_points = parsed_json["maxPoints"]
       total = parsed_json["total"]
       awards = parsed_json["awards"]&.map do |item|
         item = item.to_json
@@ -80,9 +92,11 @@ module TrophyApiClient
       new(
         added: added,
         id: id,
+        key: key,
         name: name,
         description: description,
         badge_url: badge_url,
+        max_points: max_points,
         total: total,
         awards: awards,
         additional_properties: struct
@@ -103,12 +117,14 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.added&.is_a?(Float) != false || raise("Passed value for field obj.added is not the expected type, validation failed.")
+      obj.added.is_a?(Integer) != false || raise("Passed value for field obj.added is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
+      obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.badge_url&.is_a?(String) != false || raise("Passed value for field obj.badge_url is not the expected type, validation failed.")
-      obj.total.is_a?(Float) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
+      obj.max_points&.is_a?(Float) != false || raise("Passed value for field obj.max_points is not the expected type, validation failed.")
+      obj.total.is_a?(Integer) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
       obj.awards.is_a?(Array) != false || raise("Passed value for field obj.awards is not the expected type, validation failed.")
     end
   end

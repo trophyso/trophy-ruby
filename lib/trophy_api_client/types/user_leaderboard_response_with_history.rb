@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
+require_relative "leaderboard_event"
 require_relative "leaderboard_response_rank_by"
 require_relative "leaderboard_response_run_unit"
 require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # A leaderboard with its configuration details.
-  class LeaderboardResponse
+  # A user's data for a specific leaderboard including rank, value, and history.
+  class UserLeaderboardResponseWithHistory
+    # @return [Array<TrophyApiClient::LeaderboardEvent>] An array of events showing the user's rank and value changes over time.
+    attr_reader :history
+    # @return [Integer] The user's current rank in this leaderboard. Null if the user is not on the
+    #  leaderboard.
+    attr_reader :rank
+    # @return [Integer] The user's current value in this leaderboard. Null if the user is not on the
+    #  leaderboard.
+    attr_reader :value
     # @return [String] The unique ID of the leaderboard.
     attr_reader :id
     # @return [String] The user-facing name of the leaderboard.
@@ -47,6 +56,11 @@ module TrophyApiClient
 
     OMIT = Object.new
 
+    # @param history [Array<TrophyApiClient::LeaderboardEvent>] An array of events showing the user's rank and value changes over time.
+    # @param rank [Integer] The user's current rank in this leaderboard. Null if the user is not on the
+    #  leaderboard.
+    # @param value [Integer] The user's current value in this leaderboard. Null if the user is not on the
+    #  leaderboard.
     # @param id [String] The unique ID of the leaderboard.
     # @param name [String] The user-facing name of the leaderboard.
     # @param key [String] The unique key used to reference the leaderboard in APIs.
@@ -65,9 +79,12 @@ module TrophyApiClient
     # @param run_interval [Integer] The interval between repetitions, relative to the start date and repetition
     #  type.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::LeaderboardResponse]
-    def initialize(id:, name:, key:, rank_by:, description:, start:, max_participants:, run_interval:, metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT,
-                   points_system_name: OMIT, end_: OMIT, run_unit: OMIT, additional_properties: nil)
+    # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
+    def initialize(history:, id:, name:, key:, rank_by:, description:, start:, max_participants:, run_interval:, rank: OMIT, value: OMIT, metric_key: OMIT, metric_name: OMIT,
+                   points_system_key: OMIT, points_system_name: OMIT, end_: OMIT, run_unit: OMIT, additional_properties: nil)
+      @history = history
+      @rank = rank if rank != OMIT
+      @value = value if value != OMIT
       @id = id
       @name = name
       @key = key
@@ -84,6 +101,9 @@ module TrophyApiClient
       @run_interval = run_interval
       @additional_properties = additional_properties
       @_field_set = {
+        "history": history,
+        "rank": rank,
+        "value": value,
         "id": id,
         "name": name,
         "key": key,
@@ -103,13 +123,19 @@ module TrophyApiClient
       end
     end
 
-    # Deserialize a JSON object to an instance of LeaderboardResponse
+    # Deserialize a JSON object to an instance of UserLeaderboardResponseWithHistory
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::LeaderboardResponse]
+    # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
+      history = parsed_json["history"]&.map do |item|
+        item = item.to_json
+        TrophyApiClient::LeaderboardEvent.from_json(json_object: item)
+      end
+      rank = parsed_json["rank"]
+      value = parsed_json["value"]
       id = parsed_json["id"]
       name = parsed_json["name"]
       key = parsed_json["key"]
@@ -125,6 +151,9 @@ module TrophyApiClient
       run_unit = parsed_json["runUnit"]
       run_interval = parsed_json["runInterval"]
       new(
+        history: history,
+        rank: rank,
+        value: value,
         id: id,
         name: name,
         key: key,
@@ -143,7 +172,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of LeaderboardResponse to a JSON object
+    # Serialize an instance of UserLeaderboardResponseWithHistory to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -157,6 +186,9 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
+      obj.history.is_a?(Array) != false || raise("Passed value for field obj.history is not the expected type, validation failed.")
+      obj.rank&.is_a?(Integer) != false || raise("Passed value for field obj.rank is not the expected type, validation failed.")
+      obj.value&.is_a?(Integer) != false || raise("Passed value for field obj.value is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")

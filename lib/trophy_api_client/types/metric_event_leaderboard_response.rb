@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "leaderboard_response_status"
 require_relative "leaderboard_response_rank_by"
+require_relative "leaderboard_response_run_unit"
 require "ostruct"
 require "json"
 
@@ -16,7 +16,7 @@ module TrophyApiClient
     # @return [Integer] The user's rank in the leaderboard before the event, or null if the user was not
     #  on the leaderboard before the event.
     attr_reader :previous_rank
-    # @return [Float] The minimum value required to enter the leaderboard according to its current
+    # @return [Integer] The minimum value required to enter the leaderboard according to its current
     #  rankings.
     attr_reader :threshold
     # @return [String] The unique ID of the leaderboard.
@@ -25,8 +25,6 @@ module TrophyApiClient
     attr_reader :name
     # @return [String] The unique key used to reference the leaderboard in APIs.
     attr_reader :key
-    # @return [TrophyApiClient::LeaderboardResponseStatus] The status of the leaderboard.
-    attr_reader :status
     # @return [TrophyApiClient::LeaderboardResponseRankBy] What the leaderboard ranks by.
     attr_reader :rank_by
     # @return [String] The key of the metric to rank by, if rankBy is 'metric'.
@@ -43,7 +41,7 @@ module TrophyApiClient
     attr_reader :start
     # @return [Integer] The maximum number of participants in the leaderboard.
     attr_reader :max_participants
-    # @return [String] The repetition type for recurring leaderboards, or null for one-time
+    # @return [TrophyApiClient::LeaderboardResponseRunUnit] The repetition type for recurring leaderboards, or null for one-time
     #  leaderboards.
     attr_reader :run_unit
     # @return [Integer] The interval between repetitions, relative to the start date and repetition
@@ -63,12 +61,11 @@ module TrophyApiClient
     #  leaderboard.
     # @param previous_rank [Integer] The user's rank in the leaderboard before the event, or null if the user was not
     #  on the leaderboard before the event.
-    # @param threshold [Float] The minimum value required to enter the leaderboard according to its current
+    # @param threshold [Integer] The minimum value required to enter the leaderboard according to its current
     #  rankings.
     # @param id [String] The unique ID of the leaderboard.
     # @param name [String] The user-facing name of the leaderboard.
     # @param key [String] The unique key used to reference the leaderboard in APIs.
-    # @param status [TrophyApiClient::LeaderboardResponseStatus] The status of the leaderboard.
     # @param rank_by [TrophyApiClient::LeaderboardResponseRankBy] What the leaderboard ranks by.
     # @param metric_key [String] The key of the metric to rank by, if rankBy is 'metric'.
     # @param metric_name [String] The name of the metric to rank by, if rankBy is 'metric'.
@@ -77,14 +74,14 @@ module TrophyApiClient
     # @param description [String] The user-facing description of the leaderboard.
     # @param start [String] The start date of the leaderboard in YYYY-MM-DD format.
     # @param max_participants [Integer] The maximum number of participants in the leaderboard.
-    # @param run_unit [String] The repetition type for recurring leaderboards, or null for one-time
+    # @param run_unit [TrophyApiClient::LeaderboardResponseRunUnit] The repetition type for recurring leaderboards, or null for one-time
     #  leaderboards.
     # @param run_interval [Integer] The interval between repetitions, relative to the start date and repetition
     #  type.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricEventLeaderboardResponse]
-    def initialize(threshold:, id:, name:, key:, rank_by:, start:, max_participants:, run_interval:, end_: OMIT, rank: OMIT, previous_rank: OMIT, status: OMIT,
-                   metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, description: OMIT, run_unit: OMIT, additional_properties: nil)
+    def initialize(threshold:, id:, name:, key:, rank_by:, description:, start:, max_participants:, run_interval:, end_: OMIT, rank: OMIT, previous_rank: OMIT,
+                   metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, run_unit: OMIT, additional_properties: nil)
       @end_ = end_ if end_ != OMIT
       @rank = rank if rank != OMIT
       @previous_rank = previous_rank if previous_rank != OMIT
@@ -92,13 +89,12 @@ module TrophyApiClient
       @id = id
       @name = name
       @key = key
-      @status = status if status != OMIT
       @rank_by = rank_by
       @metric_key = metric_key if metric_key != OMIT
       @metric_name = metric_name if metric_name != OMIT
       @points_system_key = points_system_key if points_system_key != OMIT
       @points_system_name = points_system_name if points_system_name != OMIT
-      @description = description if description != OMIT
+      @description = description
       @start = start
       @max_participants = max_participants
       @run_unit = run_unit if run_unit != OMIT
@@ -112,7 +108,6 @@ module TrophyApiClient
         "id": id,
         "name": name,
         "key": key,
-        "status": status,
         "rankBy": rank_by,
         "metricKey": metric_key,
         "metricName": metric_name,
@@ -142,7 +137,6 @@ module TrophyApiClient
       id = parsed_json["id"]
       name = parsed_json["name"]
       key = parsed_json["key"]
-      status = parsed_json["status"]
       rank_by = parsed_json["rankBy"]
       metric_key = parsed_json["metricKey"]
       metric_name = parsed_json["metricName"]
@@ -161,7 +155,6 @@ module TrophyApiClient
         id: id,
         name: name,
         key: key,
-        status: status,
         rank_by: rank_by,
         metric_key: metric_key,
         metric_name: metric_name,
@@ -193,20 +186,19 @@ module TrophyApiClient
       obj.end_&.is_a?(String) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
       obj.rank&.is_a?(Integer) != false || raise("Passed value for field obj.rank is not the expected type, validation failed.")
       obj.previous_rank&.is_a?(Integer) != false || raise("Passed value for field obj.previous_rank is not the expected type, validation failed.")
-      obj.threshold.is_a?(Float) != false || raise("Passed value for field obj.threshold is not the expected type, validation failed.")
+      obj.threshold.is_a?(Integer) != false || raise("Passed value for field obj.threshold is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
-      obj.status&.is_a?(TrophyApiClient::LeaderboardResponseStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
       obj.rank_by.is_a?(TrophyApiClient::LeaderboardResponseRankBy) != false || raise("Passed value for field obj.rank_by is not the expected type, validation failed.")
       obj.metric_key&.is_a?(String) != false || raise("Passed value for field obj.metric_key is not the expected type, validation failed.")
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
       obj.points_system_key&.is_a?(String) != false || raise("Passed value for field obj.points_system_key is not the expected type, validation failed.")
       obj.points_system_name&.is_a?(String) != false || raise("Passed value for field obj.points_system_name is not the expected type, validation failed.")
-      obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
+      obj.description.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.start.is_a?(String) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
       obj.max_participants.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
-      obj.run_unit&.is_a?(String) != false || raise("Passed value for field obj.run_unit is not the expected type, validation failed.")
+      obj.run_unit&.is_a?(TrophyApiClient::LeaderboardResponseRunUnit) != false || raise("Passed value for field obj.run_unit is not the expected type, validation failed.")
       obj.run_interval.is_a?(Integer) != false || raise("Passed value for field obj.run_interval is not the expected type, validation failed.")
     end
   end

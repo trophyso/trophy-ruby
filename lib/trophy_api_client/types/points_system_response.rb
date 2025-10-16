@@ -14,6 +14,8 @@ module TrophyApiClient
     attr_reader :description
     # @return [String] The URL of the badge image for the points system, if one has been uploaded.
     attr_reader :badge_url
+    # @return [Float] The maximum number of points a user can be awarded in this points system
+    attr_reader :max_points
     # @return [Array<TrophyApiClient::PointsTriggerResponse>] Array of active triggers for this points system.
     attr_reader :triggers
     # @return [OpenStruct] Additional properties unmapped to the current class definition
@@ -28,14 +30,17 @@ module TrophyApiClient
     # @param name [String] The name of the points system.
     # @param description [String] The description of the points system.
     # @param badge_url [String] The URL of the badge image for the points system, if one has been uploaded.
+    # @param max_points [Float] The maximum number of points a user can be awarded in this points system
     # @param triggers [Array<TrophyApiClient::PointsTriggerResponse>] Array of active triggers for this points system.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::PointsSystemResponse]
-    def initialize(id:, name:, triggers:, description: OMIT, badge_url: OMIT, additional_properties: nil)
+    def initialize(id:, name:, triggers:, description: OMIT, badge_url: OMIT, max_points: OMIT,
+                   additional_properties: nil)
       @id = id
       @name = name
       @description = description if description != OMIT
       @badge_url = badge_url if badge_url != OMIT
+      @max_points = max_points if max_points != OMIT
       @triggers = triggers
       @additional_properties = additional_properties
       @_field_set = {
@@ -43,6 +48,7 @@ module TrophyApiClient
         "name": name,
         "description": description,
         "badgeUrl": badge_url,
+        "maxPoints": max_points,
         "triggers": triggers
       }.reject do |_k, v|
         v == OMIT
@@ -60,6 +66,7 @@ module TrophyApiClient
       name = parsed_json["name"]
       description = parsed_json["description"]
       badge_url = parsed_json["badgeUrl"]
+      max_points = parsed_json["maxPoints"]
       triggers = parsed_json["triggers"]&.map do |item|
         item = item.to_json
         TrophyApiClient::PointsTriggerResponse.from_json(json_object: item)
@@ -69,6 +76,7 @@ module TrophyApiClient
         name: name,
         description: description,
         badge_url: badge_url,
+        max_points: max_points,
         triggers: triggers,
         additional_properties: struct
       )
@@ -92,6 +100,7 @@ module TrophyApiClient
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.badge_url&.is_a?(String) != false || raise("Passed value for field obj.badge_url is not the expected type, validation failed.")
+      obj.max_points&.is_a?(Float) != false || raise("Passed value for field obj.max_points is not the expected type, validation failed.")
       obj.triggers.is_a?(Array) != false || raise("Passed value for field obj.triggers is not the expected type, validation failed.")
     end
   end

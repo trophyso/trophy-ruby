@@ -2,7 +2,7 @@
 
 module TrophyApiClient
   # The status of the leaderboard.
-  class LeaderboardResponseStatus
+  class LeaderboardResponseWithRankingsStatus
     ACTIVE = "active"
     SCHEDULED = "scheduled"
     FINISHED = "finished"
