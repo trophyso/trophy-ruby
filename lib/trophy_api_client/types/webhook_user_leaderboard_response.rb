@@ -26,6 +26,8 @@ module TrophyApiClient
     attr_reader :key
     # @return [TrophyApiClient::LeaderboardResponseRankBy] What the leaderboard ranks by.
     attr_reader :rank_by
+    # @return [String] The key of the attribute to break down this leaderboard by.
+    attr_reader :breakdown_attribute
     # @return [String] The key of the metric to rank by, if rankBy is 'metric'.
     attr_reader :metric_key
     # @return [String] The name of the metric to rank by, if rankBy is 'metric'.
@@ -67,6 +69,7 @@ module TrophyApiClient
     # @param name [String] The user-facing name of the leaderboard.
     # @param key [String] The unique key used to reference the leaderboard in APIs.
     # @param rank_by [TrophyApiClient::LeaderboardResponseRankBy] What the leaderboard ranks by.
+    # @param breakdown_attribute [String] The key of the attribute to break down this leaderboard by.
     # @param metric_key [String] The key of the metric to rank by, if rankBy is 'metric'.
     # @param metric_name [String] The name of the metric to rank by, if rankBy is 'metric'.
     # @param points_system_key [String] The key of the points system to rank by, if rankBy is 'points'.
@@ -83,7 +86,7 @@ module TrophyApiClient
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::WebhookUserLeaderboardResponse]
     def initialize(id:, name:, key:, rank_by:, description:, start:, max_participants:, run_interval:, previous_rank: OMIT, previous_value: OMIT, rank: OMIT, value: OMIT,
-                   metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, end_: OMIT, run_unit: OMIT, additional_properties: nil)
+                   breakdown_attribute: OMIT, metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, end_: OMIT, run_unit: OMIT, additional_properties: nil)
       @previous_rank = previous_rank if previous_rank != OMIT
       @previous_value = previous_value if previous_value != OMIT
       @rank = rank if rank != OMIT
@@ -92,6 +95,7 @@ module TrophyApiClient
       @name = name
       @key = key
       @rank_by = rank_by
+      @breakdown_attribute = breakdown_attribute if breakdown_attribute != OMIT
       @metric_key = metric_key if metric_key != OMIT
       @metric_name = metric_name if metric_name != OMIT
       @points_system_key = points_system_key if points_system_key != OMIT
@@ -112,6 +116,7 @@ module TrophyApiClient
         "name": name,
         "key": key,
         "rankBy": rank_by,
+        "breakdownAttribute": breakdown_attribute,
         "metricKey": metric_key,
         "metricName": metric_name,
         "pointsSystemKey": points_system_key,
@@ -142,6 +147,7 @@ module TrophyApiClient
       name = parsed_json["name"]
       key = parsed_json["key"]
       rank_by = parsed_json["rankBy"]
+      breakdown_attribute = parsed_json["breakdownAttribute"]
       metric_key = parsed_json["metricKey"]
       metric_name = parsed_json["metricName"]
       points_system_key = parsed_json["pointsSystemKey"]
@@ -161,6 +167,7 @@ module TrophyApiClient
         name: name,
         key: key,
         rank_by: rank_by,
+        breakdown_attribute: breakdown_attribute,
         metric_key: metric_key,
         metric_name: metric_name,
         points_system_key: points_system_key,
@@ -197,6 +204,7 @@ module TrophyApiClient
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.rank_by.is_a?(TrophyApiClient::LeaderboardResponseRankBy) != false || raise("Passed value for field obj.rank_by is not the expected type, validation failed.")
+      obj.breakdown_attribute&.is_a?(String) != false || raise("Passed value for field obj.breakdown_attribute is not the expected type, validation failed.")
       obj.metric_key&.is_a?(String) != false || raise("Passed value for field obj.metric_key is not the expected type, validation failed.")
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
       obj.points_system_key&.is_a?(String) != false || raise("Passed value for field obj.points_system_key is not the expected type, validation failed.")

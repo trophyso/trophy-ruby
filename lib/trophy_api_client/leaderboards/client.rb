@@ -61,6 +61,9 @@ module TrophyApiClient
     #  run.
     # @param user_id [String] When provided, offset is relative to this user's position on the leaderboard. If
     #  the user is not found in the leaderboard, returns empty rankings array.
+    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. This
+    #  parameter is required, and only valid for leaderboards with a breakdown
+    #  attribute.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
     # @example
@@ -74,9 +77,10 @@ module TrophyApiClient
     #    offset: 1,
     #    limit: 1,
     #    run: "2025-01-15",
-    #    user_id: "user-123"
+    #    user_id: "user-123",
+    #    user_attributes: "city:London"
     #  )
-    def get(key:, offset: nil, limit: nil, run: nil, user_id: nil, request_options: nil)
+    def get(key:, offset: nil, limit: nil, run: nil, user_id: nil, user_attributes: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -90,7 +94,8 @@ module TrophyApiClient
           "offset": offset,
           "limit": limit,
           "run": run,
-          "userId": user_id
+          "userId": user_id,
+          "userAttributes": user_attributes
         }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
@@ -157,6 +162,9 @@ module TrophyApiClient
     #  run.
     # @param user_id [String] When provided, offset is relative to this user's position on the leaderboard. If
     #  the user is not found in the leaderboard, returns empty rankings array.
+    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. This
+    #  parameter is required, and only valid for leaderboards with a breakdown
+    #  attribute.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
     # @example
@@ -170,9 +178,10 @@ module TrophyApiClient
     #    offset: 1,
     #    limit: 1,
     #    run: "2025-01-15",
-    #    user_id: "user-123"
+    #    user_id: "user-123",
+    #    user_attributes: "city:London"
     #  )
-    def get(key:, offset: nil, limit: nil, run: nil, user_id: nil, request_options: nil)
+    def get(key:, offset: nil, limit: nil, run: nil, user_id: nil, user_attributes: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -187,7 +196,8 @@ module TrophyApiClient
             "offset": offset,
             "limit": limit,
             "run": run,
-            "userId": user_id
+            "userId": user_id,
+            "userAttributes": user_attributes
           }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact

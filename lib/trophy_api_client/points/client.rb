@@ -21,8 +21,8 @@ module TrophyApiClient
     #
     # @param key [String] Key of the points system.
     # @param user_attributes [String] Optional colon-delimited user attribute filters in the format
-    #  attributeKey:value,attributeKey:value. Only users matching ALL specified
-    #  attributes will be included in the points breakdown.
+    #  attribute:value,attribute:value. Only users matching ALL specified attributes
+    #  will be included in the points breakdown.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::POINTS_SUMMARY_RESPONSE]
     # @example
@@ -104,8 +104,8 @@ module TrophyApiClient
     #
     # @param key [String] Key of the points system.
     # @param user_attributes [String] Optional colon-delimited user attribute filters in the format
-    #  attributeKey:value,attributeKey:value. Only users matching ALL specified
-    #  attributes will be included in the points breakdown.
+    #  attribute:value,attribute:value. Only users matching ALL specified attributes
+    #  will be included in the points breakdown.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::POINTS_SUMMARY_RESPONSE]
     # @example

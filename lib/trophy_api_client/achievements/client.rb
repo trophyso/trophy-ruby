@@ -20,6 +20,9 @@ module TrophyApiClient
 
     # Get all achievements and their completion stats.
     #
+    # @param user_attributes [String] Optional colon-delimited user attributes in the format
+    #  attribute:value,attribute:value. Only achievements accessible to a user with the
+    #  provided attributes will be returned.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::AchievementWithStatsResponse>]
     # @example
@@ -28,8 +31,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.all
-    def all(request_options: nil)
+    #  api.achievements.all(user_attributes: "plan-type:premium,region:us-east")
+    def all(user_attributes: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -38,9 +41,10 @@ module TrophyApiClient
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        unless request_options.nil? || request_options&.additional_query_parameters.nil?
-          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-        end
+        req.params = {
+          **(request_options&.additional_query_parameters || {}),
+          "userAttributes": user_attributes
+        }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -105,6 +109,9 @@ module TrophyApiClient
 
     # Get all achievements and their completion stats.
     #
+    # @param user_attributes [String] Optional colon-delimited user attributes in the format
+    #  attribute:value,attribute:value. Only achievements accessible to a user with the
+    #  provided attributes will be returned.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::AchievementWithStatsResponse>]
     # @example
@@ -113,8 +120,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.achievements.all
-    def all(request_options: nil)
+    #  api.achievements.all(user_attributes: "plan-type:premium,region:us-east")
+    def all(user_attributes: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -124,9 +131,10 @@ module TrophyApiClient
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          unless request_options.nil? || request_options&.additional_query_parameters.nil?
-            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-          end
+          req.params = {
+            **(request_options&.additional_query_parameters || {}),
+            "userAttributes": user_attributes
+          }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end
