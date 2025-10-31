@@ -56,14 +56,15 @@ module TrophyApiClient
     #
     # @param key [String] Unique key of the leaderboard as set when created.
     # @param offset [Integer] Number of rankings to skip for pagination.
-    # @param limit [Integer] Maximum number of rankings to return.
+    # @param limit [Integer] Maximum number of rankings to return. Cannot be greater than the size of the
+    #  leaderboard.
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
     # @param user_id [String] When provided, offset is relative to this user's position on the leaderboard. If
     #  the user is not found in the leaderboard, returns empty rankings array.
-    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. This
-    #  parameter is required, and only valid for leaderboards with a breakdown
-    #  attribute.
+    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. For
+    #  example, `city:London`. This parameter is required, and only valid for
+    #  leaderboards with a breakdown attribute.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
     # @example
@@ -157,14 +158,15 @@ module TrophyApiClient
     #
     # @param key [String] Unique key of the leaderboard as set when created.
     # @param offset [Integer] Number of rankings to skip for pagination.
-    # @param limit [Integer] Maximum number of rankings to return.
+    # @param limit [Integer] Maximum number of rankings to return. Cannot be greater than the size of the
+    #  leaderboard.
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
     # @param user_id [String] When provided, offset is relative to this user's position on the leaderboard. If
     #  the user is not found in the leaderboard, returns empty rankings array.
-    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. This
-    #  parameter is required, and only valid for leaderboards with a breakdown
-    #  attribute.
+    # @param user_attributes [String] Attribute key and value to filter the rankings by, separated by a colon. For
+    #  example, `city:London`. This parameter is required, and only valid for
+    #  leaderboards with a breakdown attribute.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
     # @example

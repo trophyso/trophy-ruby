@@ -45,7 +45,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.create(request: { email: "user@example.com", name: "User", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
+    #  api.users.create(request: { id: "user-id" })
     def create(request:, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -114,7 +114,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       response = @request_client.conn.put do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -151,7 +151,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       response = @request_client.conn.patch do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -525,7 +525,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.create(request: { email: "user@example.com", name: "User", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" }, id: "user-id" })
+    #  api.users.create(request: { id: "user-id" })
     def create(request:, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
@@ -598,7 +598,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.identify(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.identify(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def identify(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.put do |req|
@@ -637,7 +637,7 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.users.update(id: "id", request: { email: "user@example.com", name: "User", tz: "Europe/London", device_tokens: ["token1", "token2"], subscribe_to_emails: true, attributes: { "department": "engineering", "role": "developer" } })
+    #  api.users.update(id: "id", request: { email: "user@example.com", tz: "Europe/London", attributes: { "department": "engineering", "role": "developer" } })
     def update(id:, request:, request_options: nil)
       Async do
         response = @request_client.conn.patch do |req|

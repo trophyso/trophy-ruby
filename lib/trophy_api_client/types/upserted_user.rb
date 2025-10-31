@@ -41,15 +41,15 @@ module TrophyApiClient
     #  up in the Trophy dashboard.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::UpsertedUser]
-    def initialize(id:, email:, name:, device_tokens:, subscribe_to_emails:, attributes:, tz: OMIT,
-                   additional_properties: nil)
+    def initialize(id:, email: OMIT, name: OMIT, tz: OMIT, device_tokens: OMIT, subscribe_to_emails: OMIT,
+                   attributes: OMIT, additional_properties: nil)
       @id = id
-      @email = email
-      @name = name
+      @email = email if email != OMIT
+      @name = name if name != OMIT
       @tz = tz if tz != OMIT
-      @device_tokens = device_tokens
-      @subscribe_to_emails = subscribe_to_emails
-      @attributes = attributes
+      @device_tokens = device_tokens if device_tokens != OMIT
+      @subscribe_to_emails = subscribe_to_emails if subscribe_to_emails != OMIT
+      @attributes = attributes if attributes != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "id": id,
@@ -105,12 +105,12 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
-      obj.email.is_a?(String) != false || raise("Passed value for field obj.email is not the expected type, validation failed.")
-      obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
+      obj.email&.is_a?(String) != false || raise("Passed value for field obj.email is not the expected type, validation failed.")
+      obj.name&.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.tz&.is_a?(String) != false || raise("Passed value for field obj.tz is not the expected type, validation failed.")
-      obj.device_tokens.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
-      obj.subscribe_to_emails.is_a?(Boolean) != false || raise("Passed value for field obj.subscribe_to_emails is not the expected type, validation failed.")
-      obj.attributes.is_a?(Hash) != false || raise("Passed value for field obj.attributes is not the expected type, validation failed.")
+      obj.device_tokens&.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
+      obj.subscribe_to_emails&.is_a?(Boolean) != false || raise("Passed value for field obj.subscribe_to_emails is not the expected type, validation failed.")
+      obj.attributes&.is_a?(Hash) != false || raise("Passed value for field obj.attributes is not the expected type, validation failed.")
     end
   end
 end
