@@ -5,6 +5,5 @@ module TrophyApiClient
     DAILY = "daily"
     WEEKLY = "weekly"
     MONTHLY = "monthly"
-    YEARLY = "yearly"
   end
 end

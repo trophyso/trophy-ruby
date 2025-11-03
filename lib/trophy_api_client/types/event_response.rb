@@ -17,9 +17,11 @@ module TrophyApiClient
     attr_reader :achievements
     # @return [TrophyApiClient::MetricEventStreakResponse] The user's current streak.
     attr_reader :current_streak
-    # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key.
+    # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key. Only contains points systems that were affected
+    #  by the event.
     attr_reader :points
-    # @return [Hash{String => TrophyApiClient::MetricEventLeaderboardResponse}] A map of leaderboards by key.
+    # @return [Hash{String => TrophyApiClient::MetricEventLeaderboardResponse}] A map of leaderboards by key. Only contains leaderboards that were affected by
+    #  the event.
     attr_reader :leaderboards
     # @return [String] The idempotency key used for the event, if one was provided.
     attr_reader :idempotency_key
@@ -38,8 +40,10 @@ module TrophyApiClient
     # @param total [Float] The user's new total progress against the metric.
     # @param achievements [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed as a result of this event.
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak.
-    # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key.
-    # @param leaderboards [Hash{String => TrophyApiClient::MetricEventLeaderboardResponse}] A map of leaderboards by key.
+    # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key. Only contains points systems that were affected
+    #  by the event.
+    # @param leaderboards [Hash{String => TrophyApiClient::MetricEventLeaderboardResponse}] A map of leaderboards by key. Only contains leaderboards that were affected by
+    #  the event.
     # @param idempotency_key [String] The idempotency key used for the event, if one was provided.
     # @param idempotent_replayed [Boolean] Whether the event was replayed due to idempotency.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
