@@ -44,7 +44,7 @@ module TrophyApiClient
     #  leaderboards.
     attr_reader :run_unit
     # @return [Integer] The interval between repetitions, relative to the start date and repetition
-    #  type.
+    #  type. Null for one-time leaderboards.
     attr_reader :run_interval
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -73,11 +73,11 @@ module TrophyApiClient
     # @param run_unit [TrophyApiClient::LeaderboardResponseRunUnit] The repetition type for recurring leaderboards, or null for one-time
     #  leaderboards.
     # @param run_interval [Integer] The interval between repetitions, relative to the start date and repetition
-    #  type.
+    #  type. Null for one-time leaderboards.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
-    def initialize(status:, rankings:, id:, name:, key:, rank_by:, description:, start:, max_participants:, run_interval:, breakdown_attribute: OMIT, metric_key: OMIT,
-                   metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, end_: OMIT, run_unit: OMIT, additional_properties: nil)
+    def initialize(status:, rankings:, id:, name:, key:, rank_by:, start:, max_participants:, breakdown_attribute: OMIT, metric_key: OMIT,
+                   metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, description: OMIT, end_: OMIT, run_unit: OMIT, run_interval: OMIT, additional_properties: nil)
       @status = status
       @rankings = rankings
       @id = id
@@ -89,12 +89,12 @@ module TrophyApiClient
       @metric_name = metric_name if metric_name != OMIT
       @points_system_key = points_system_key if points_system_key != OMIT
       @points_system_name = points_system_name if points_system_name != OMIT
-      @description = description
+      @description = description if description != OMIT
       @start = start
       @end_ = end_ if end_ != OMIT
       @max_participants = max_participants
       @run_unit = run_unit if run_unit != OMIT
-      @run_interval = run_interval
+      @run_interval = run_interval if run_interval != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "status": status,
@@ -193,12 +193,12 @@ module TrophyApiClient
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
       obj.points_system_key&.is_a?(String) != false || raise("Passed value for field obj.points_system_key is not the expected type, validation failed.")
       obj.points_system_name&.is_a?(String) != false || raise("Passed value for field obj.points_system_name is not the expected type, validation failed.")
-      obj.description.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
+      obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.start.is_a?(String) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
       obj.end_&.is_a?(String) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
       obj.max_participants.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
       obj.run_unit&.is_a?(TrophyApiClient::LeaderboardResponseRunUnit) != false || raise("Passed value for field obj.run_unit is not the expected type, validation failed.")
-      obj.run_interval.is_a?(Integer) != false || raise("Passed value for field obj.run_interval is not the expected type, validation failed.")
+      obj.run_interval&.is_a?(Integer) != false || raise("Passed value for field obj.run_interval is not the expected type, validation failed.")
     end
   end
 end
