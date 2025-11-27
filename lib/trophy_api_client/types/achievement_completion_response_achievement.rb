@@ -10,7 +10,8 @@ module TrophyApiClient
   class AchievementCompletionResponseAchievement
     # @return [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
     attr_reader :current_streak
-    # @return [DateTime] The date and time the achievement was completed, in ISO 8601 format.
+    # @return [DateTime] The date and time the achievement was completed, in ISO 8601 format. Null if the
+    #  achievement has not been completed.
     attr_reader :achieved_at
     # @return [String] The unique ID of the achievement.
     attr_reader :id
@@ -46,7 +47,8 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak for the metric, if the metric has streaks enabled.
-    # @param achieved_at [DateTime] The date and time the achievement was completed, in ISO 8601 format.
+    # @param achieved_at [DateTime] The date and time the achievement was completed, in ISO 8601 format. Null if the
+    #  achievement has not been completed.
     # @param id [String] The unique ID of the achievement.
     # @param name [String] The name of this achievement.
     # @param trigger [TrophyApiClient::AchievementResponseTrigger] The trigger of the achievement.
@@ -64,10 +66,10 @@ module TrophyApiClient
     #  trigger = 'metric')
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementCompletionResponseAchievement]
-    def initialize(achieved_at:, id:, name:, trigger:, key:, current_streak: OMIT, description: OMIT, badge_url: OMIT,
-                   streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
+    def initialize(id:, name:, trigger:, key:, current_streak: OMIT, achieved_at: OMIT, description: OMIT,
+                   badge_url: OMIT, streak_length: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, additional_properties: nil)
       @current_streak = current_streak if current_streak != OMIT
-      @achieved_at = achieved_at
+      @achieved_at = achieved_at if achieved_at != OMIT
       @id = id
       @name = name
       @trigger = trigger
@@ -155,7 +157,7 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.current_streak.nil? || TrophyApiClient::MetricEventStreakResponse.validate_raw(obj: obj.current_streak)
-      obj.achieved_at.is_a?(DateTime) != false || raise("Passed value for field obj.achieved_at is not the expected type, validation failed.")
+      obj.achieved_at&.is_a?(DateTime) != false || raise("Passed value for field obj.achieved_at is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.trigger.is_a?(TrophyApiClient::AchievementResponseTrigger) != false || raise("Passed value for field obj.trigger is not the expected type, validation failed.")
