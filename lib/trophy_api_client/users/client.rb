@@ -14,6 +14,7 @@ require_relative "../types/get_user_points_response"
 require_relative "types/users_points_event_summary_request_aggregation"
 require_relative "types/users_points_event_summary_response_item"
 require_relative "../types/user_leaderboard_response_with_history"
+require_relative "../types/wrapped_response"
 require "async"
 
 module TrophyApiClient
@@ -500,6 +501,38 @@ module TrophyApiClient
                                            request_options: request_options)}/users/#{id}/leaderboards/#{key}"
       end
       TrophyApiClient::UserLeaderboardResponseWithHistory.from_json(json_object: response.body)
+    end
+
+    # Get a user's year-in-review wrapped data.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param year [Integer] The year to get wrapped data for. Defaults to the current year. Must be an
+    #  integer between 1 and the current year.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::WrappedResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.wrapped(id: "user-123", year: 1)
+    def wrapped(id:, year: nil, request_options: nil)
+      response = @request_client.conn.get do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        req.params = { **(request_options&.additional_query_parameters || {}), "year": year }.compact
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/wrapped"
+      end
+      TrophyApiClient::WrappedResponse.from_json(json_object: response.body)
     end
   end
 
@@ -1009,6 +1042,40 @@ module TrophyApiClient
                                              request_options: request_options)}/users/#{id}/leaderboards/#{key}"
         end
         TrophyApiClient::UserLeaderboardResponseWithHistory.from_json(json_object: response.body)
+      end
+    end
+
+    # Get a user's year-in-review wrapped data.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param year [Integer] The year to get wrapped data for. Defaults to the current year. Must be an
+    #  integer between 1 and the current year.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::WrappedResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.wrapped(id: "user-123", year: 1)
+    def wrapped(id:, year: nil, request_options: nil)
+      Async do
+        response = @request_client.conn.get do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          req.params = { **(request_options&.additional_query_parameters || {}), "year": year }.compact
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
+          req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/wrapped"
+        end
+        TrophyApiClient::WrappedResponse.from_json(json_object: response.body)
       end
     end
   end
