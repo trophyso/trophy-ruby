@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "completed_achievement_response"
+require_relative "user_achievement_response"
 require_relative "metric_event_streak_response"
 require "ostruct"
 require "json"
@@ -13,7 +13,7 @@ module TrophyApiClient
     attr_reader :metric_id
     # @return [Float] The user's new total progress against the metric.
     attr_reader :total
-    # @return [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed as a result of this event.
+    # @return [Array<TrophyApiClient::UserAchievementResponse>] Achievements completed as a result of this event.
     attr_reader :achievements
     # @return [TrophyApiClient::MetricEventStreakResponse] The user's current streak.
     attr_reader :current_streak
@@ -38,7 +38,7 @@ module TrophyApiClient
     # @param event_id [String] The unique ID of the event.
     # @param metric_id [String] The unique ID of the metric that was updated.
     # @param total [Float] The user's new total progress against the metric.
-    # @param achievements [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed as a result of this event.
+    # @param achievements [Array<TrophyApiClient::UserAchievementResponse>] Achievements completed as a result of this event.
     # @param current_streak [TrophyApiClient::MetricEventStreakResponse] The user's current streak.
     # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key. Only contains points systems that were affected
     #  by the event.
@@ -87,7 +87,7 @@ module TrophyApiClient
       total = parsed_json["total"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
+        TrophyApiClient::UserAchievementResponse.from_json(json_object: item)
       end
       if parsed_json["currentStreak"].nil?
         current_streak = nil

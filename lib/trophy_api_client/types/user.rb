@@ -51,13 +51,13 @@ module TrophyApiClient
     # @param updated [DateTime] The date and time the user was last updated, in ISO 8601 format.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::User]
-    def initialize(id:, device_tokens:, subscribe_to_emails:, attributes:, control:, created:, updated:, email: OMIT,
-                   name: OMIT, tz: OMIT, additional_properties: nil)
+    def initialize(id:, subscribe_to_emails:, attributes:, control:, created:, updated:, email: OMIT, name: OMIT,
+                   tz: OMIT, device_tokens: OMIT, additional_properties: nil)
       @id = id
       @email = email if email != OMIT
       @name = name if name != OMIT
       @tz = tz if tz != OMIT
-      @device_tokens = device_tokens
+      @device_tokens = device_tokens if device_tokens != OMIT
       @subscribe_to_emails = subscribe_to_emails
       @attributes = attributes
       @control = control
@@ -130,7 +130,7 @@ module TrophyApiClient
       obj.email&.is_a?(String) != false || raise("Passed value for field obj.email is not the expected type, validation failed.")
       obj.name&.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
       obj.tz&.is_a?(String) != false || raise("Passed value for field obj.tz is not the expected type, validation failed.")
-      obj.device_tokens.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
+      obj.device_tokens&.is_a?(Array) != false || raise("Passed value for field obj.device_tokens is not the expected type, validation failed.")
       obj.subscribe_to_emails.is_a?(Boolean) != false || raise("Passed value for field obj.subscribe_to_emails is not the expected type, validation failed.")
       obj.attributes.is_a?(Hash) != false || raise("Passed value for field obj.attributes is not the expected type, validation failed.")
       obj.control.is_a?(Boolean) != false || raise("Passed value for field obj.control is not the expected type, validation failed.")

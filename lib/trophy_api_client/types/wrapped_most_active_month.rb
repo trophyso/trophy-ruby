@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "completed_achievement_response"
+require_relative "user_achievement_response"
 require "ostruct"
 require "json"
 
@@ -13,7 +13,7 @@ module TrophyApiClient
     attr_reader :metrics
     # @return [Hash{String => TrophyApiClient::WrappedPoints}] The user's points during this period, keyed by points system key.
     attr_reader :points
-    # @return [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed during this period.
+    # @return [Array<TrophyApiClient::UserAchievementResponse>] Achievements completed during this period.
     attr_reader :achievements
     # @return [Hash{String => TrophyApiClient::UserLeaderboardResponse}] The user's best leaderboard rankings during this period, keyed by leaderboard
     #  key.
@@ -29,7 +29,7 @@ module TrophyApiClient
     # @param month [Integer] The month number (0-11, where 0 is January).
     # @param metrics [Hash{String => TrophyApiClient::WrappedMetric}] The user's metrics during this period, keyed by metric key.
     # @param points [Hash{String => TrophyApiClient::WrappedPoints}] The user's points during this period, keyed by points system key.
-    # @param achievements [Array<TrophyApiClient::CompletedAchievementResponse>] Achievements completed during this period.
+    # @param achievements [Array<TrophyApiClient::UserAchievementResponse>] Achievements completed during this period.
     # @param leaderboards [Hash{String => TrophyApiClient::UserLeaderboardResponse}] The user's best leaderboard rankings during this period, keyed by leaderboard
     #  key.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
@@ -68,7 +68,7 @@ module TrophyApiClient
       end
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
+        TrophyApiClient::UserAchievementResponse.from_json(json_object: item)
       end
       leaderboards = parsed_json["leaderboards"]&.transform_values do |value|
         value = value.to_json

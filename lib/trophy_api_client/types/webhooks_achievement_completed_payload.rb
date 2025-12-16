@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "user"
-require_relative "completed_achievement_response"
+require_relative "user_achievement_response"
 require "ostruct"
 require "json"
 
@@ -11,7 +11,7 @@ module TrophyApiClient
     attr_reader :type
     # @return [TrophyApiClient::User] The user who completed the achievement.
     attr_reader :user
-    # @return [TrophyApiClient::CompletedAchievementResponse] The achievement completion that occurred.
+    # @return [TrophyApiClient::UserAchievementResponse] The achievement completion that occurred.
     attr_reader :achievement
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -23,7 +23,7 @@ module TrophyApiClient
 
     # @param type [String] The webhook event type.
     # @param user [TrophyApiClient::User] The user who completed the achievement.
-    # @param achievement [TrophyApiClient::CompletedAchievementResponse] The achievement completion that occurred.
+    # @param achievement [TrophyApiClient::UserAchievementResponse] The achievement completion that occurred.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::WebhooksAchievementCompletedPayload]
     def initialize(type:, user:, achievement:, additional_properties: nil)
@@ -52,7 +52,7 @@ module TrophyApiClient
         achievement = nil
       else
         achievement = parsed_json["achievement"].to_json
-        achievement = TrophyApiClient::CompletedAchievementResponse.from_json(json_object: achievement)
+        achievement = TrophyApiClient::UserAchievementResponse.from_json(json_object: achievement)
       end
       new(
         type: type,
@@ -78,7 +78,7 @@ module TrophyApiClient
     def self.validate_raw(obj:)
       obj.type.is_a?(String) != false || raise("Passed value for field obj.type is not the expected type, validation failed.")
       TrophyApiClient::User.validate_raw(obj: obj.user)
-      TrophyApiClient::CompletedAchievementResponse.validate_raw(obj: obj.achievement)
+      TrophyApiClient::UserAchievementResponse.validate_raw(obj: obj.achievement)
     end
   end
 end

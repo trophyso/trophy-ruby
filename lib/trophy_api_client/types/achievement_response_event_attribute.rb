@@ -4,10 +4,12 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  class AchievementWithStatsResponseUserAttributesItem
-    # @return [String] The key of the user attribute.
+  # Event attribute filter that must be met for this achievement to be completed.
+  #  Only present if the achievement has an event filter configured.
+  class AchievementResponseEventAttribute
+    # @return [String] The key of the event attribute.
     attr_reader :key
-    # @return [String] The value of the user attribute.
+    # @return [String] The value of the event attribute.
     attr_reader :value
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -17,10 +19,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param key [String] The key of the user attribute.
-    # @param value [String] The value of the user attribute.
+    # @param key [String] The key of the event attribute.
+    # @param value [String] The value of the event attribute.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::AchievementWithStatsResponseUserAttributesItem]
+    # @return [TrophyApiClient::AchievementResponseEventAttribute]
     def initialize(key:, value:, additional_properties: nil)
       @key = key
       @value = value
@@ -28,11 +30,10 @@ module TrophyApiClient
       @_field_set = { "key": key, "value": value }
     end
 
-    # Deserialize a JSON object to an instance of
-    #  AchievementWithStatsResponseUserAttributesItem
+    # Deserialize a JSON object to an instance of AchievementResponseEventAttribute
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::AchievementWithStatsResponseUserAttributesItem]
+    # @return [TrophyApiClient::AchievementResponseEventAttribute]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -45,8 +46,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of AchievementWithStatsResponseUserAttributesItem to a
-    #  JSON object
+    # Serialize an instance of AchievementResponseEventAttribute to a JSON object
     #
     # @return [String]
     def to_json(*_args)

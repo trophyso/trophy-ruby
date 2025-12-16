@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "achievement_completion_response_achievement"
+require_relative "user_achievement_response"
 require "ostruct"
 require "json"
 
@@ -8,7 +8,7 @@ module TrophyApiClient
   class AchievementCompletionResponse
     # @return [String] The unique ID of the completion.
     attr_reader :completion_id
-    # @return [TrophyApiClient::AchievementCompletionResponseAchievement]
+    # @return [TrophyApiClient::UserAchievementResponse]
     attr_reader :achievement
     # @return [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
     #  completion.
@@ -22,7 +22,7 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param completion_id [String] The unique ID of the completion.
-    # @param achievement [TrophyApiClient::AchievementCompletionResponseAchievement]
+    # @param achievement [TrophyApiClient::UserAchievementResponse]
     # @param points [Hash{String => TrophyApiClient::MetricEventPointsResponse}] A map of points systems by key that were affected by this achievement
     #  completion.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
@@ -47,7 +47,7 @@ module TrophyApiClient
         achievement = nil
       else
         achievement = parsed_json["achievement"].to_json
-        achievement = TrophyApiClient::AchievementCompletionResponseAchievement.from_json(json_object: achievement)
+        achievement = TrophyApiClient::UserAchievementResponse.from_json(json_object: achievement)
       end
       points = parsed_json["points"]&.transform_values do |value|
         value = value.to_json
@@ -76,7 +76,7 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       obj.completion_id.is_a?(String) != false || raise("Passed value for field obj.completion_id is not the expected type, validation failed.")
-      TrophyApiClient::AchievementCompletionResponseAchievement.validate_raw(obj: obj.achievement)
+      TrophyApiClient::UserAchievementResponse.validate_raw(obj: obj.achievement)
       obj.points.is_a?(Hash) != false || raise("Passed value for field obj.points is not the expected type, validation failed.")
     end
   end

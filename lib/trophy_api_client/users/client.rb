@@ -8,7 +8,7 @@ require_relative "../types/metric_response"
 require "json"
 require_relative "types/users_metric_event_summary_request_aggregation"
 require_relative "types/users_metric_event_summary_response_item"
-require_relative "../types/completed_achievement_response"
+require_relative "../types/user_achievement_with_stats_response"
 require_relative "../types/streak_response"
 require_relative "../types/get_user_points_response"
 require_relative "types/users_points_event_summary_request_aggregation"
@@ -300,7 +300,7 @@ module TrophyApiClient
     #  user. When omitted or set to any other value, returns only completed
     #  achievements.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
+    # @return [Array<TrophyApiClient::UserAchievementWithStatsResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -330,7 +330,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(response.body)
       parsed_json&.map do |item|
         item = item.to_json
-        TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
+        TrophyApiClient::UserAchievementWithStatsResponse.from_json(json_object: item)
       end
     end
 
@@ -832,7 +832,7 @@ module TrophyApiClient
     #  user. When omitted or set to any other value, returns only completed
     #  achievements.
     # @param request_options [TrophyApiClient::RequestOptions]
-    # @return [Array<TrophyApiClient::CompletedAchievementResponse>]
+    # @return [Array<TrophyApiClient::UserAchievementWithStatsResponse>]
     # @example
     #  api = TrophyApiClient::Client.new(
     #    base_url: "https://api.example.com",
@@ -863,7 +863,7 @@ module TrophyApiClient
         parsed_json = JSON.parse(response.body)
         parsed_json&.map do |item|
           item = item.to_json
-          TrophyApiClient::CompletedAchievementResponse.from_json(json_object: item)
+          TrophyApiClient::UserAchievementWithStatsResponse.from_json(json_object: item)
         end
       end
     end

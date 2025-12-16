@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../../requests"
+require_relative "types/restore_streaks_request_users_item"
 require_relative "../../types/restore_streaks_response"
 require "async"
 
@@ -20,7 +21,8 @@ module TrophyApiClient
       #  the case of daily streaks), one year (in the case of weekly streaks), or two
       #  years (in the case of monthly streaks).
       #
-      # @param user_ids [Array<String>] Array of user IDs to restore streaks for. Maximum 100 users per request.
+      # @param users [Array<Hash>] Array of users to restore streaks for. Maximum 100 users per request.Request of type Array<TrophyApiClient::Admin::Streaks::RestoreStreaksRequestUsersItem>, as a Hash
+      #   * :id (String)
       # @param request_options [TrophyApiClient::RequestOptions]
       # @return [TrophyApiClient::RestoreStreaksResponse]
       # @example
@@ -29,8 +31,8 @@ module TrophyApiClient
       #    environment: TrophyApiClient::Environment::PRODUCTION,
       #    api_key: "YOUR_API_KEY"
       #  )
-      #  api.admin.streaks.restore(user_ids: ["user-123", "user-456"])
-      def restore(user_ids:, request_options: nil)
+      #  api.admin.streaks.restore(users: [{ id: "user-123" }, { id: "user-456" }])
+      def restore(users:, request_options: nil)
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -42,7 +44,7 @@ module TrophyApiClient
           unless request_options.nil? || request_options&.additional_query_parameters.nil?
             req.params = { **(request_options&.additional_query_parameters || {}) }.compact
           end
-          req.body = { **(request_options&.additional_body_parameters || {}), userIds: user_ids }.compact
+          req.body = { **(request_options&.additional_body_parameters || {}), users: users }.compact
           req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/streaks/restore"
         end
         TrophyApiClient::RestoreStreaksResponse.from_json(json_object: response.body)
@@ -63,7 +65,8 @@ module TrophyApiClient
       #  the case of daily streaks), one year (in the case of weekly streaks), or two
       #  years (in the case of monthly streaks).
       #
-      # @param user_ids [Array<String>] Array of user IDs to restore streaks for. Maximum 100 users per request.
+      # @param users [Array<Hash>] Array of users to restore streaks for. Maximum 100 users per request.Request of type Array<TrophyApiClient::Admin::Streaks::RestoreStreaksRequestUsersItem>, as a Hash
+      #   * :id (String)
       # @param request_options [TrophyApiClient::RequestOptions]
       # @return [TrophyApiClient::RestoreStreaksResponse]
       # @example
@@ -72,8 +75,8 @@ module TrophyApiClient
       #    environment: TrophyApiClient::Environment::PRODUCTION,
       #    api_key: "YOUR_API_KEY"
       #  )
-      #  api.admin.streaks.restore(user_ids: ["user-123", "user-456"])
-      def restore(user_ids:, request_options: nil)
+      #  api.admin.streaks.restore(users: [{ id: "user-123" }, { id: "user-456" }])
+      def restore(users:, request_options: nil)
         Async do
           response = @request_client.conn.post do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -86,7 +89,7 @@ module TrophyApiClient
             unless request_options.nil? || request_options&.additional_query_parameters.nil?
               req.params = { **(request_options&.additional_query_parameters || {}) }.compact
             end
-            req.body = { **(request_options&.additional_body_parameters || {}), userIds: user_ids }.compact
+            req.body = { **(request_options&.additional_body_parameters || {}), users: users }.compact
             req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/streaks/restore"
           end
           TrophyApiClient::RestoreStreaksResponse.from_json(json_object: response.body)

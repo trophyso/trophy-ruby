@@ -9,7 +9,8 @@ module TrophyApiClient
     attr_reader :user_id
     # @return [Integer] The length of the user's streak.
     attr_reader :streak_length
-    # @return [String] The timestamp the streak was extended, as a string.
+    # @return [String] The timestamp the streak was extended, as a string. Null if the streak is not
+    #  active.
     attr_reader :extended
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -21,15 +22,18 @@ module TrophyApiClient
 
     # @param user_id [String] The ID of the user.
     # @param streak_length [Integer] The length of the user's streak.
-    # @param extended [String] The timestamp the streak was extended, as a string.
+    # @param extended [String] The timestamp the streak was extended, as a string. Null if the streak is not
+    #  active.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::BulkStreakResponseItem]
-    def initialize(user_id:, streak_length:, extended:, additional_properties: nil)
+    def initialize(user_id:, streak_length:, extended: OMIT, additional_properties: nil)
       @user_id = user_id
       @streak_length = streak_length
-      @extended = extended
+      @extended = extended if extended != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "userId": user_id, "streakLength": streak_length, "extended": extended }
+      @_field_set = { "userId": user_id, "streakLength": streak_length, "extended": extended }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
     # Deserialize a JSON object to an instance of BulkStreakResponseItem
@@ -66,7 +70,7 @@ module TrophyApiClient
     def self.validate_raw(obj:)
       obj.user_id.is_a?(String) != false || raise("Passed value for field obj.user_id is not the expected type, validation failed.")
       obj.streak_length.is_a?(Integer) != false || raise("Passed value for field obj.streak_length is not the expected type, validation failed.")
-      obj.extended.is_a?(String) != false || raise("Passed value for field obj.extended is not the expected type, validation failed.")
+      obj.extended&.is_a?(String) != false || raise("Passed value for field obj.extended is not the expected type, validation failed.")
     end
   end
 end

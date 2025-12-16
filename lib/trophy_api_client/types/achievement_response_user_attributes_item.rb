@@ -4,12 +4,10 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Event attribute filter that must be met for this achievement to be completed.
-  #  Only present if the achievement has an event filter configured.
-  class AchievementWithStatsResponseEventAttribute
-    # @return [String] The key of the event attribute.
+  class AchievementResponseUserAttributesItem
+    # @return [String] The key of the user attribute.
     attr_reader :key
-    # @return [String] The value of the event attribute.
+    # @return [String] The value of the user attribute.
     attr_reader :value
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -19,10 +17,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param key [String] The key of the event attribute.
-    # @param value [String] The value of the event attribute.
+    # @param key [String] The key of the user attribute.
+    # @param value [String] The value of the user attribute.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::AchievementWithStatsResponseEventAttribute]
+    # @return [TrophyApiClient::AchievementResponseUserAttributesItem]
     def initialize(key:, value:, additional_properties: nil)
       @key = key
       @value = value
@@ -31,10 +29,10 @@ module TrophyApiClient
     end
 
     # Deserialize a JSON object to an instance of
-    #  AchievementWithStatsResponseEventAttribute
+    #  AchievementResponseUserAttributesItem
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::AchievementWithStatsResponseEventAttribute]
+    # @return [TrophyApiClient::AchievementResponseUserAttributesItem]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -47,8 +45,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of AchievementWithStatsResponseEventAttribute to a JSON
-    #  object
+    # Serialize an instance of AchievementResponseUserAttributesItem to a JSON object
     #
     # @return [String]
     def to_json(*_args)
