@@ -4,6 +4,8 @@ require_relative "../../requests"
 require_relative "../types/upserted_user"
 require_relative "../types/user"
 require_relative "../types/updated_user"
+require_relative "../types/user_preferences_response"
+require_relative "../types/notification_preferences"
 require_relative "../types/metric_response"
 require "json"
 require_relative "types/users_metric_event_summary_request_aggregation"
@@ -169,6 +171,73 @@ module TrophyApiClient
         req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
       end
       TrophyApiClient::User.from_json(json_object: response.body)
+    end
+
+    # Get a user's notification preferences.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::UserPreferencesResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.get_preferences(id: "user-123")
+    def get_preferences(id:, request_options: nil)
+      response = @request_client.conn.get do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/preferences"
+      end
+      TrophyApiClient::UserPreferencesResponse.from_json(json_object: response.body)
+    end
+
+    # Update a user's notification preferences.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param notifications [Hash] Request of type TrophyApiClient::NotificationPreferences, as a Hash
+    #   * :achievement_completed (Array<TrophyApiClient::NotificationChannel>)
+    #   * :recap (Array<TrophyApiClient::NotificationChannel>)
+    #   * :reactivation (Array<TrophyApiClient::NotificationChannel>)
+    #   * :streak_reminder (Array<TrophyApiClient::NotificationChannel>)
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::UserPreferencesResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.update_preferences(id: "user-123", notifications: { streak_reminder: [EMAIL] })
+    def update_preferences(id:, notifications: nil, request_options: nil)
+      response = @request_client.conn.patch do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        req.body = { **(request_options&.additional_body_parameters || {}), notifications: notifications }.compact
+        req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}/preferences"
+      end
+      TrophyApiClient::UserPreferencesResponse.from_json(json_object: response.body)
     end
 
     # Get a single user's progress against all active metrics.
@@ -694,6 +763,79 @@ module TrophyApiClient
           req.url "#{@request_client.get_url(environment: api, request_options: request_options)}/users/#{id}"
         end
         TrophyApiClient::User.from_json(json_object: response.body)
+      end
+    end
+
+    # Get a user's notification preferences.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::UserPreferencesResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.get_preferences(id: "user-123")
+    def get_preferences(id:, request_options: nil)
+      Async do
+        response = @request_client.conn.get do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/preferences"
+        end
+        TrophyApiClient::UserPreferencesResponse.from_json(json_object: response.body)
+      end
+    end
+
+    # Update a user's notification preferences.
+    #
+    # @param id [String] The user's ID in your database.
+    # @param notifications [Hash] Request of type TrophyApiClient::NotificationPreferences, as a Hash
+    #   * :achievement_completed (Array<TrophyApiClient::NotificationChannel>)
+    #   * :recap (Array<TrophyApiClient::NotificationChannel>)
+    #   * :reactivation (Array<TrophyApiClient::NotificationChannel>)
+    #   * :streak_reminder (Array<TrophyApiClient::NotificationChannel>)
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [TrophyApiClient::UserPreferencesResponse]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.update_preferences(id: "user-123", notifications: { streak_reminder: [EMAIL] })
+    def update_preferences(id:, notifications: nil, request_options: nil)
+      Async do
+        response = @request_client.conn.patch do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          req.body = { **(request_options&.additional_body_parameters || {}), notifications: notifications }.compact
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/preferences"
+        end
+        TrophyApiClient::UserPreferencesResponse.from_json(json_object: response.body)
       end
     end
 
