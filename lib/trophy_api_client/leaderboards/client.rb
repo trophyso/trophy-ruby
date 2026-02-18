@@ -17,8 +17,11 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Get all active leaderboards for your organization.
+    # Get all leaderboards for your organization. Finished leaderboards are excluded
+    #  by default.
     #
+    # @param include_finished [Boolean] When set to 'true', leaderboards with status 'finished' will be included in the
+    #  response. By default, finished leaderboards are excluded.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem>]
     # @example
@@ -27,8 +30,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.leaderboards.all
-    def all(request_options: nil)
+    #  api.leaderboards.all(include_finished: true)
+    def all(include_finished: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -37,9 +40,10 @@ module TrophyApiClient
       **@request_client.get_headers,
       **(request_options&.additional_headers || {})
         }.compact
-        unless request_options.nil? || request_options&.additional_query_parameters.nil?
-          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-        end
+        req.params = {
+          **(request_options&.additional_query_parameters || {}),
+          "includeFinished": include_finished
+        }.compact
         unless request_options.nil? || request_options&.additional_body_parameters.nil?
           req.body = { **(request_options&.additional_body_parameters || {}) }.compact
         end
@@ -117,8 +121,11 @@ module TrophyApiClient
       @request_client = request_client
     end
 
-    # Get all active leaderboards for your organization.
+    # Get all leaderboards for your organization. Finished leaderboards are excluded
+    #  by default.
     #
+    # @param include_finished [Boolean] When set to 'true', leaderboards with status 'finished' will be included in the
+    #  response. By default, finished leaderboards are excluded.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [Array<TrophyApiClient::Leaderboards::LeaderboardsAllResponseItem>]
     # @example
@@ -127,8 +134,8 @@ module TrophyApiClient
     #    environment: TrophyApiClient::Environment::PRODUCTION,
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.leaderboards.all
-    def all(request_options: nil)
+    #  api.leaderboards.all(include_finished: true)
+    def all(include_finished: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -138,9 +145,10 @@ module TrophyApiClient
         **@request_client.get_headers,
         **(request_options&.additional_headers || {})
           }.compact
-          unless request_options.nil? || request_options&.additional_query_parameters.nil?
-            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-          end
+          req.params = {
+            **(request_options&.additional_query_parameters || {}),
+            "includeFinished": include_finished
+          }.compact
           unless request_options.nil? || request_options&.additional_body_parameters.nil?
             req.body = { **(request_options&.additional_body_parameters || {}) }.compact
           end

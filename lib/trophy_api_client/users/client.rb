@@ -13,6 +13,7 @@ require_relative "types/users_metric_event_summary_response_item"
 require_relative "../types/user_achievement_with_stats_response"
 require_relative "../types/streak_response"
 require_relative "../types/get_user_points_response"
+require_relative "../types/points_boost"
 require_relative "types/users_points_event_summary_request_aggregation"
 require_relative "types/users_points_event_summary_response_item"
 require_relative "../types/user_leaderboard_response_with_history"
@@ -473,6 +474,45 @@ module TrophyApiClient
                                            request_options: request_options)}/users/#{id}/points/#{key}"
       end
       TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
+    end
+
+    # Get active points boosts for a user in a specific points system. Returns both
+    #  global boosts the user is eligible for and user-specific boosts.
+    #
+    # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [Array<TrophyApiClient::PointsBoost>]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.points_boosts(id: "userId", key: "points-system-key")
+    def points_boosts(id:, key:, request_options: nil)
+      response = @request_client.conn.get do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
+        req.url "#{@request_client.get_url(environment: api,
+                                           request_options: request_options)}/users/#{id}/points/#{key}/boosts"
+      end
+      parsed_json = JSON.parse(response.body)
+      parsed_json&.map do |item|
+        item = item.to_json
+        TrophyApiClient::PointsBoost.from_json(json_object: item)
+      end
     end
 
     # Get a summary of points awards over time for a user for a specific points
@@ -1083,6 +1123,47 @@ module TrophyApiClient
                                              request_options: request_options)}/users/#{id}/points/#{key}"
         end
         TrophyApiClient::GetUserPointsResponse.from_json(json_object: response.body)
+      end
+    end
+
+    # Get active points boosts for a user in a specific points system. Returns both
+    #  global boosts the user is eligible for and user-specific boosts.
+    #
+    # @param id [String] ID of the user.
+    # @param key [String] Key of the points system.
+    # @param request_options [TrophyApiClient::RequestOptions]
+    # @return [Array<TrophyApiClient::PointsBoost>]
+    # @example
+    #  api = TrophyApiClient::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: TrophyApiClient::Environment::PRODUCTION,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.users.points_boosts(id: "userId", key: "points-system-key")
+    def points_boosts(id:, key:, request_options: nil)
+      Async do
+        response = @request_client.conn.get do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
+          req.url "#{@request_client.get_url(environment: api,
+                                             request_options: request_options)}/users/#{id}/points/#{key}/boosts"
+        end
+        parsed_json = JSON.parse(response.body)
+        parsed_json&.map do |item|
+          item = item.to_json
+          TrophyApiClient::PointsBoost.from_json(json_object: item)
+        end
       end
     end
 

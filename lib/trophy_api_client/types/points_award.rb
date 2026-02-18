@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "points_trigger"
+require_relative "points_boost"
 require "ostruct"
 require "json"
 
@@ -16,6 +17,8 @@ module TrophyApiClient
     attr_reader :total
     # @return [TrophyApiClient::PointsTrigger]
     attr_reader :trigger
+    # @return [Array<TrophyApiClient::PointsBoost>] Array of points boosts that applied to this award.
+    attr_reader :boosts
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -29,21 +32,25 @@ module TrophyApiClient
     # @param date [String] The date these points were awarded, in ISO 8601 format.
     # @param total [Integer] The user's total points after this award occurred.
     # @param trigger [TrophyApiClient::PointsTrigger]
+    # @param boosts [Array<TrophyApiClient::PointsBoost>] Array of points boosts that applied to this award.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::PointsAward]
-    def initialize(id: OMIT, awarded: OMIT, date: OMIT, total: OMIT, trigger: OMIT, additional_properties: nil)
+    def initialize(id: OMIT, awarded: OMIT, date: OMIT, total: OMIT, trigger: OMIT, boosts: OMIT,
+                   additional_properties: nil)
       @id = id if id != OMIT
       @awarded = awarded if awarded != OMIT
       @date = date if date != OMIT
       @total = total if total != OMIT
       @trigger = trigger if trigger != OMIT
+      @boosts = boosts if boosts != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "id": id,
         "awarded": awarded,
         "date": date,
         "total": total,
-        "trigger": trigger
+        "trigger": trigger,
+        "boosts": boosts
       }.reject do |_k, v|
         v == OMIT
       end
@@ -66,12 +73,17 @@ module TrophyApiClient
         trigger = parsed_json["trigger"].to_json
         trigger = TrophyApiClient::PointsTrigger.from_json(json_object: trigger)
       end
+      boosts = parsed_json["boosts"]&.map do |item|
+        item = item.to_json
+        TrophyApiClient::PointsBoost.from_json(json_object: item)
+      end
       new(
         id: id,
         awarded: awarded,
         date: date,
         total: total,
         trigger: trigger,
+        boosts: boosts,
         additional_properties: struct
       )
     end
@@ -95,6 +107,7 @@ module TrophyApiClient
       obj.date&.is_a?(String) != false || raise("Passed value for field obj.date is not the expected type, validation failed.")
       obj.total&.is_a?(Integer) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
       obj.trigger.nil? || TrophyApiClient::PointsTrigger.validate_raw(obj: obj.trigger)
+      obj.boosts&.is_a?(Array) != false || raise("Passed value for field obj.boosts is not the expected type, validation failed.")
     end
   end
 end

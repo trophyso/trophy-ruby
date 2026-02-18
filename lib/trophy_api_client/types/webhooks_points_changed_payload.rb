@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "user"
-require_relative "get_user_points_response"
+require_relative "metric_event_points_response"
 require "ostruct"
 require "json"
 
@@ -11,7 +11,7 @@ module TrophyApiClient
     attr_reader :type
     # @return [TrophyApiClient::User] The user whose points increased or decreased.
     attr_reader :user
-    # @return [TrophyApiClient::GetUserPointsResponse] The user's points after the event.
+    # @return [TrophyApiClient::MetricEventPointsResponse] The user's points after the event (includes added amount for this event).
     attr_reader :points
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -23,7 +23,7 @@ module TrophyApiClient
 
     # @param type [String] The webhook event type.
     # @param user [TrophyApiClient::User] The user whose points increased or decreased.
-    # @param points [TrophyApiClient::GetUserPointsResponse] The user's points after the event.
+    # @param points [TrophyApiClient::MetricEventPointsResponse] The user's points after the event (includes added amount for this event).
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::WebhooksPointsChangedPayload]
     def initialize(type:, user:, points:, additional_properties: nil)
@@ -52,7 +52,7 @@ module TrophyApiClient
         points = nil
       else
         points = parsed_json["points"].to_json
-        points = TrophyApiClient::GetUserPointsResponse.from_json(json_object: points)
+        points = TrophyApiClient::MetricEventPointsResponse.from_json(json_object: points)
       end
       new(
         type: type,
@@ -78,7 +78,7 @@ module TrophyApiClient
     def self.validate_raw(obj:)
       obj.type.is_a?(String) != false || raise("Passed value for field obj.type is not the expected type, validation failed.")
       TrophyApiClient::User.validate_raw(obj: obj.user)
-      TrophyApiClient::GetUserPointsResponse.validate_raw(obj: obj.points)
+      TrophyApiClient::MetricEventPointsResponse.validate_raw(obj: obj.points)
     end
   end
 end
