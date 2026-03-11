@@ -6,5 +6,6 @@ module TrophyApiClient
     METRIC = "metric"
     STREAK = "streak"
     API = "api"
+    ACHIEVEMENT = "achievement"
   end
 end

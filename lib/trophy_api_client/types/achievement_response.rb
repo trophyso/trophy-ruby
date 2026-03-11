@@ -24,6 +24,9 @@ module TrophyApiClient
     # @return [Integer] The length of the streak required to complete the achievement (only applicable
     #  if trigger = 'streak')
     attr_reader :streak_length
+    # @return [Array<String>] The IDs of the prerequisite achievements that must be completed to earn this
+    #  achievement (only applicable if trigger = 'achievement')
+    attr_reader :achievement_ids
     # @return [String] The ID of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
     attr_reader :metric_id
@@ -56,6 +59,8 @@ module TrophyApiClient
     #  trigger = 'api')
     # @param streak_length [Integer] The length of the streak required to complete the achievement (only applicable
     #  if trigger = 'streak')
+    # @param achievement_ids [Array<String>] The IDs of the prerequisite achievements that must be completed to earn this
+    #  achievement (only applicable if trigger = 'achievement')
     # @param metric_id [String] The ID of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
     # @param metric_value [Float] The value of the metric required to complete the achievement (only applicable if
@@ -69,7 +74,7 @@ module TrophyApiClient
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AchievementResponse]
     def initialize(id:, name:, trigger:, description: OMIT, badge_url: OMIT, key: OMIT, streak_length: OMIT,
-                   metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, user_attributes: OMIT, event_attribute: OMIT, additional_properties: nil)
+                   achievement_ids: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, user_attributes: OMIT, event_attribute: OMIT, additional_properties: nil)
       @id = id
       @name = name
       @trigger = trigger
@@ -77,6 +82,7 @@ module TrophyApiClient
       @badge_url = badge_url if badge_url != OMIT
       @key = key if key != OMIT
       @streak_length = streak_length if streak_length != OMIT
+      @achievement_ids = achievement_ids if achievement_ids != OMIT
       @metric_id = metric_id if metric_id != OMIT
       @metric_value = metric_value if metric_value != OMIT
       @metric_name = metric_name if metric_name != OMIT
@@ -91,6 +97,7 @@ module TrophyApiClient
         "badgeUrl": badge_url,
         "key": key,
         "streakLength": streak_length,
+        "achievementIds": achievement_ids,
         "metricId": metric_id,
         "metricValue": metric_value,
         "metricName": metric_name,
@@ -115,6 +122,7 @@ module TrophyApiClient
       badge_url = parsed_json["badgeUrl"]
       key = parsed_json["key"]
       streak_length = parsed_json["streakLength"]
+      achievement_ids = parsed_json["achievementIds"]
       metric_id = parsed_json["metricId"]
       metric_value = parsed_json["metricValue"]
       metric_name = parsed_json["metricName"]
@@ -136,6 +144,7 @@ module TrophyApiClient
         badge_url: badge_url,
         key: key,
         streak_length: streak_length,
+        achievement_ids: achievement_ids,
         metric_id: metric_id,
         metric_value: metric_value,
         metric_name: metric_name,
@@ -166,6 +175,7 @@ module TrophyApiClient
       obj.badge_url&.is_a?(String) != false || raise("Passed value for field obj.badge_url is not the expected type, validation failed.")
       obj.key&.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.streak_length&.is_a?(Integer) != false || raise("Passed value for field obj.streak_length is not the expected type, validation failed.")
+      obj.achievement_ids&.is_a?(Array) != false || raise("Passed value for field obj.achievement_ids is not the expected type, validation failed.")
       obj.metric_id&.is_a?(String) != false || raise("Passed value for field obj.metric_id is not the expected type, validation failed.")
       obj.metric_value&.is_a?(Float) != false || raise("Passed value for field obj.metric_value is not the expected type, validation failed.")
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
