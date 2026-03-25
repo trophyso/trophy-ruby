@@ -1,19 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "points_level"
-require_relative "points_award"
 require "ostruct"
 require "json"
 
 module TrophyApiClient
-  class GetUserPointsResponse
-    # @return [Integer] The user's total points
-    attr_reader :total
-    # @return [TrophyApiClient::PointsLevel] The user's current level in this points system, or null if no levels are
-    #  configured or the user hasn't reached any level yet.
-    attr_reader :level
-    # @return [Array<TrophyApiClient::PointsAward>] Array of trigger awards that added points.
-    attr_reader :awards
+  # Base points system fields shared across responses.
+  class PointsResponse
     # @return [String] The ID of the points system
     attr_reader :id
     # @return [String] The key of the points system
@@ -34,10 +26,6 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param total [Integer] The user's total points
-    # @param level [TrophyApiClient::PointsLevel] The user's current level in this points system, or null if no levels are
-    #  configured or the user hasn't reached any level yet.
-    # @param awards [Array<TrophyApiClient::PointsAward>] Array of trigger awards that added points.
     # @param id [String] The ID of the points system
     # @param key [String] The key of the points system
     # @param name [String] The name of the points system
@@ -45,12 +33,8 @@ module TrophyApiClient
     # @param badge_url [String] The URL of the badge image for the points system
     # @param max_points [Float] The maximum number of points a user can be awarded in this points system
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::GetUserPointsResponse]
-    def initialize(total:, awards:, id:, key:, name:, level: OMIT, description: OMIT, badge_url: OMIT,
-                   max_points: OMIT, additional_properties: nil)
-      @total = total
-      @level = level if level != OMIT
-      @awards = awards
+    # @return [TrophyApiClient::PointsResponse]
+    def initialize(id:, key:, name:, description: OMIT, badge_url: OMIT, max_points: OMIT, additional_properties: nil)
       @id = id
       @key = key
       @name = name
@@ -59,9 +43,6 @@ module TrophyApiClient
       @max_points = max_points if max_points != OMIT
       @additional_properties = additional_properties
       @_field_set = {
-        "total": total,
-        "level": level,
-        "awards": awards,
         "id": id,
         "key": key,
         "name": name,
@@ -73,24 +54,13 @@ module TrophyApiClient
       end
     end
 
-    # Deserialize a JSON object to an instance of GetUserPointsResponse
+    # Deserialize a JSON object to an instance of PointsResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::GetUserPointsResponse]
+    # @return [TrophyApiClient::PointsResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
-      total = parsed_json["total"]
-      if parsed_json["level"].nil?
-        level = nil
-      else
-        level = parsed_json["level"].to_json
-        level = TrophyApiClient::PointsLevel.from_json(json_object: level)
-      end
-      awards = parsed_json["awards"]&.map do |item|
-        item = item.to_json
-        TrophyApiClient::PointsAward.from_json(json_object: item)
-      end
       id = parsed_json["id"]
       key = parsed_json["key"]
       name = parsed_json["name"]
@@ -98,9 +68,6 @@ module TrophyApiClient
       badge_url = parsed_json["badgeUrl"]
       max_points = parsed_json["maxPoints"]
       new(
-        total: total,
-        level: level,
-        awards: awards,
         id: id,
         key: key,
         name: name,
@@ -111,7 +78,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of GetUserPointsResponse to a JSON object
+    # Serialize an instance of PointsResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -125,9 +92,6 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.total.is_a?(Integer) != false || raise("Passed value for field obj.total is not the expected type, validation failed.")
-      obj.level.nil? || TrophyApiClient::PointsLevel.validate_raw(obj: obj.level)
-      obj.awards.is_a?(Array) != false || raise("Passed value for field obj.awards is not the expected type, validation failed.")
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
