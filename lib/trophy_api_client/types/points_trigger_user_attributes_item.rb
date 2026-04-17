@@ -4,12 +4,10 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Event attribute filter that must be met for this trigger to activate. Only
-  #  present if the trigger has an event filter configured.
-  class PointsTriggerResponseEventAttribute
-    # @return [String] The key of the event attribute.
+  class PointsTriggerUserAttributesItem
+    # @return [String] The key of the user attribute.
     attr_reader :key
-    # @return [String] The required value of the event attribute.
+    # @return [String] The required value of the user attribute.
     attr_reader :value
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -19,10 +17,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param key [String] The key of the event attribute.
-    # @param value [String] The required value of the event attribute.
+    # @param key [String] The key of the user attribute.
+    # @param value [String] The required value of the user attribute.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::PointsTriggerResponseEventAttribute]
+    # @return [TrophyApiClient::PointsTriggerUserAttributesItem]
     def initialize(key:, value:, additional_properties: nil)
       @key = key
       @value = value
@@ -30,10 +28,10 @@ module TrophyApiClient
       @_field_set = { "key": key, "value": value }
     end
 
-    # Deserialize a JSON object to an instance of PointsTriggerResponseEventAttribute
+    # Deserialize a JSON object to an instance of PointsTriggerUserAttributesItem
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::PointsTriggerResponseEventAttribute]
+    # @return [TrophyApiClient::PointsTriggerUserAttributesItem]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -46,7 +44,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of PointsTriggerResponseEventAttribute to a JSON object
+    # Serialize an instance of PointsTriggerUserAttributesItem to a JSON object
     #
     # @return [String]
     def to_json(*_args)

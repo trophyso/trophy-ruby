@@ -11,7 +11,8 @@ module TrophyApiClient
     # @return [Array<TrophyApiClient::StreakResponseStreakHistoryItem>] A list of the user's past streak periods up through the current period. Each
     #  period includes the start and end dates and the length of the streak.
     attr_reader :streak_history
-    # @return [Integer] The user's rank across all users. Null if the user has no active streak.
+    # @return [Integer] Deprecated. The user's rank across all users. Null if the user has no active
+    #  streak.
     attr_reader :rank
     # @return [Integer] The length of the user's current streak.
     attr_reader :length
@@ -47,7 +48,8 @@ module TrophyApiClient
 
     # @param streak_history [Array<TrophyApiClient::StreakResponseStreakHistoryItem>] A list of the user's past streak periods up through the current period. Each
     #  period includes the start and end dates and the length of the streak.
-    # @param rank [Integer] The user's rank across all users. Null if the user has no active streak.
+    # @param rank [Integer] Deprecated. The user's rank across all users. Null if the user has no active
+    #  streak.
     # @param length [Integer] The length of the user's current streak.
     # @param frequency [TrophyApiClient::StreakFrequency] The frequency of the streak.
     # @param started [String] The date the streak started.

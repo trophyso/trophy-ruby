@@ -2,8 +2,9 @@
 
 module TrophyApiClient
   # The status of the trigger.
-  class PointsTriggerResponseStatus
+  class PointsTriggerStatus
     ACTIVE = "active"
+    INACTIVE = "inactive"
     ARCHIVED = "archived"
   end
 end

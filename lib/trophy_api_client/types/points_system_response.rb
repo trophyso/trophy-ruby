@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "points_trigger_response"
+require_relative "points_trigger"
 require "ostruct"
 require "json"
 
@@ -16,7 +16,7 @@ module TrophyApiClient
     attr_reader :badge_url
     # @return [Float] The maximum number of points a user can be awarded in this points system
     attr_reader :max_points
-    # @return [Array<TrophyApiClient::PointsTriggerResponse>] Array of active triggers for this points system.
+    # @return [Array<TrophyApiClient::PointsTrigger>] Array of active triggers for this points system.
     attr_reader :triggers
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -31,7 +31,7 @@ module TrophyApiClient
     # @param description [String] The description of the points system.
     # @param badge_url [String] The URL of the badge image for the points system, if one has been uploaded.
     # @param max_points [Float] The maximum number of points a user can be awarded in this points system
-    # @param triggers [Array<TrophyApiClient::PointsTriggerResponse>] Array of active triggers for this points system.
+    # @param triggers [Array<TrophyApiClient::PointsTrigger>] Array of active triggers for this points system.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::PointsSystemResponse]
     def initialize(id:, name:, triggers:, description: OMIT, badge_url: OMIT, max_points: OMIT,
@@ -69,7 +69,7 @@ module TrophyApiClient
       max_points = parsed_json["maxPoints"]
       triggers = parsed_json["triggers"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::PointsTriggerResponse.from_json(json_object: item)
+        TrophyApiClient::PointsTrigger.from_json(json_object: item)
       end
       new(
         id: id,

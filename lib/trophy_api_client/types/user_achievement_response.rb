@@ -4,6 +4,7 @@ require "date"
 require_relative "achievement_response_trigger"
 require_relative "achievement_response_user_attributes_item"
 require_relative "achievement_response_event_attribute"
+require_relative "achievement_response_event_attributes_item"
 require "ostruct"
 require "json"
 
@@ -41,11 +42,13 @@ module TrophyApiClient
     #  trigger = 'metric')
     attr_reader :metric_name
     # @return [Array<TrophyApiClient::AchievementResponseUserAttributesItem>] User attribute filters that must be met for this achievement to be completed.
-    #  Only present if the achievement has user attribute filters configured.
     attr_reader :user_attributes
-    # @return [TrophyApiClient::AchievementResponseEventAttribute] Event attribute filter that must be met for this achievement to be completed.
-    #  Only present if the achievement has an event filter configured.
+    # @return [TrophyApiClient::AchievementResponseEventAttribute] Deprecated. Event attribute filter that must be met for this achievement to be
+    #  completed. Only present if the achievement has an event filter configured.
     attr_reader :event_attribute
+    # @return [Array<TrophyApiClient::AchievementResponseEventAttributesItem>] Event attribute filters that must be met for this achievement to be completed.
+    #  Omitted for non-metric achievements.
+    attr_reader :event_attributes
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -74,13 +77,14 @@ module TrophyApiClient
     # @param metric_name [String] The name of the metric associated with this achievement (only applicable if
     #  trigger = 'metric')
     # @param user_attributes [Array<TrophyApiClient::AchievementResponseUserAttributesItem>] User attribute filters that must be met for this achievement to be completed.
-    #  Only present if the achievement has user attribute filters configured.
-    # @param event_attribute [TrophyApiClient::AchievementResponseEventAttribute] Event attribute filter that must be met for this achievement to be completed.
-    #  Only present if the achievement has an event filter configured.
+    # @param event_attribute [TrophyApiClient::AchievementResponseEventAttribute] Deprecated. Event attribute filter that must be met for this achievement to be
+    #  completed. Only present if the achievement has an event filter configured.
+    # @param event_attributes [Array<TrophyApiClient::AchievementResponseEventAttributesItem>] Event attribute filters that must be met for this achievement to be completed.
+    #  Omitted for non-metric achievements.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::UserAchievementResponse]
-    def initialize(id:, name:, trigger:, achieved_at: OMIT, description: OMIT, badge_url: OMIT, key: OMIT,
-                   streak_length: OMIT, achievement_ids: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, user_attributes: OMIT, event_attribute: OMIT, additional_properties: nil)
+    def initialize(id:, name:, trigger:, user_attributes:, achieved_at: OMIT, description: OMIT, badge_url: OMIT, key: OMIT,
+                   streak_length: OMIT, achievement_ids: OMIT, metric_id: OMIT, metric_value: OMIT, metric_name: OMIT, event_attribute: OMIT, event_attributes: OMIT, additional_properties: nil)
       @achieved_at = achieved_at if achieved_at != OMIT
       @id = id
       @name = name
@@ -93,8 +97,9 @@ module TrophyApiClient
       @metric_id = metric_id if metric_id != OMIT
       @metric_value = metric_value if metric_value != OMIT
       @metric_name = metric_name if metric_name != OMIT
-      @user_attributes = user_attributes if user_attributes != OMIT
+      @user_attributes = user_attributes
       @event_attribute = event_attribute if event_attribute != OMIT
+      @event_attributes = event_attributes if event_attributes != OMIT
       @additional_properties = additional_properties
       @_field_set = {
         "achievedAt": achieved_at,
@@ -110,7 +115,8 @@ module TrophyApiClient
         "metricValue": metric_value,
         "metricName": metric_name,
         "userAttributes": user_attributes,
-        "eventAttribute": event_attribute
+        "eventAttribute": event_attribute,
+        "eventAttributes": event_attributes
       }.reject do |_k, v|
         v == OMIT
       end
@@ -145,6 +151,10 @@ module TrophyApiClient
         event_attribute = parsed_json["eventAttribute"].to_json
         event_attribute = TrophyApiClient::AchievementResponseEventAttribute.from_json(json_object: event_attribute)
       end
+      event_attributes = parsed_json["eventAttributes"]&.map do |item|
+        item = item.to_json
+        TrophyApiClient::AchievementResponseEventAttributesItem.from_json(json_object: item)
+      end
       new(
         achieved_at: achieved_at,
         id: id,
@@ -160,6 +170,7 @@ module TrophyApiClient
         metric_name: metric_name,
         user_attributes: user_attributes,
         event_attribute: event_attribute,
+        event_attributes: event_attributes,
         additional_properties: struct
       )
     end
@@ -190,8 +201,9 @@ module TrophyApiClient
       obj.metric_id&.is_a?(String) != false || raise("Passed value for field obj.metric_id is not the expected type, validation failed.")
       obj.metric_value&.is_a?(Float) != false || raise("Passed value for field obj.metric_value is not the expected type, validation failed.")
       obj.metric_name&.is_a?(String) != false || raise("Passed value for field obj.metric_name is not the expected type, validation failed.")
-      obj.user_attributes&.is_a?(Array) != false || raise("Passed value for field obj.user_attributes is not the expected type, validation failed.")
+      obj.user_attributes.is_a?(Array) != false || raise("Passed value for field obj.user_attributes is not the expected type, validation failed.")
       obj.event_attribute.nil? || TrophyApiClient::AchievementResponseEventAttribute.validate_raw(obj: obj.event_attribute)
+      obj.event_attributes&.is_a?(Array) != false || raise("Passed value for field obj.event_attributes is not the expected type, validation failed.")
     end
   end
 end
