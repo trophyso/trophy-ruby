@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
+require_relative "deleted_resource"
 require_relative "admin_issue"
 require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Response containing restored users and any issues encountered.
-  class RestoreStreaksResponse
-    # @return [Array<String>] Array of user IDs whose streaks were successfully restored.
-    attr_reader :restored_users
-    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during streak restoration.
+  # Response containing the points boosts that were archived and any per-item
+  #  issues.
+  class DeletePointsBoostsResponse
+    # @return [Array<TrophyApiClient::DeletedResource>] Array of archived points boosts represented by ID.
+    attr_reader :deleted
+    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost archival.
     attr_reader :issues
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -19,37 +21,40 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param restored_users [Array<String>] Array of user IDs whose streaks were successfully restored.
-    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during streak restoration.
+    # @param deleted [Array<TrophyApiClient::DeletedResource>] Array of archived points boosts represented by ID.
+    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost archival.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::RestoreStreaksResponse]
-    def initialize(restored_users:, issues:, additional_properties: nil)
-      @restored_users = restored_users
+    # @return [TrophyApiClient::DeletePointsBoostsResponse]
+    def initialize(deleted:, issues:, additional_properties: nil)
+      @deleted = deleted
       @issues = issues
       @additional_properties = additional_properties
-      @_field_set = { "restoredUsers": restored_users, "issues": issues }
+      @_field_set = { "deleted": deleted, "issues": issues }
     end
 
-    # Deserialize a JSON object to an instance of RestoreStreaksResponse
+    # Deserialize a JSON object to an instance of DeletePointsBoostsResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::RestoreStreaksResponse]
+    # @return [TrophyApiClient::DeletePointsBoostsResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
-      restored_users = parsed_json["restoredUsers"]
+      deleted = parsed_json["deleted"]&.map do |item|
+        item = item.to_json
+        TrophyApiClient::DeletedResource.from_json(json_object: item)
+      end
       issues = parsed_json["issues"]&.map do |item|
         item = item.to_json
         TrophyApiClient::AdminIssue.from_json(json_object: item)
       end
       new(
-        restored_users: restored_users,
+        deleted: deleted,
         issues: issues,
         additional_properties: struct
       )
     end
 
-    # Serialize an instance of RestoreStreaksResponse to a JSON object
+    # Serialize an instance of DeletePointsBoostsResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -63,7 +68,7 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.restored_users.is_a?(Array) != false || raise("Passed value for field obj.restored_users is not the expected type, validation failed.")
+      obj.deleted.is_a?(Array) != false || raise("Passed value for field obj.deleted is not the expected type, validation failed.")
       obj.issues.is_a?(Array) != false || raise("Passed value for field obj.issues is not the expected type, validation failed.")
     end
   end

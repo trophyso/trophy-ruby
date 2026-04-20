@@ -20,7 +20,7 @@ module TrophyApiClient
 
         # Create streak freezes for multiple users.
         #
-        # @param freezes [Array<Hash>] Array of freezes to create. Maximum 1,000 freezes per request.Request of type Array<TrophyApiClient::Admin::Streaks::Freezes::CreateStreakFreezesRequestFreezesItem>, as a Hash
+        # @param freezes [Array<Hash>] Array of freezes to create. Maximum 100 freezes per request.Request of type Array<TrophyApiClient::Admin::Streaks::Freezes::CreateStreakFreezesRequestFreezesItem>, as a Hash
         #   * :user_id (String)
         # @param request_options [TrophyApiClient::RequestOptions]
         # @return [TrophyApiClient::CreateStreakFreezesResponse]
@@ -62,7 +62,7 @@ module TrophyApiClient
 
         # Create streak freezes for multiple users.
         #
-        # @param freezes [Array<Hash>] Array of freezes to create. Maximum 1,000 freezes per request.Request of type Array<TrophyApiClient::Admin::Streaks::Freezes::CreateStreakFreezesRequestFreezesItem>, as a Hash
+        # @param freezes [Array<Hash>] Array of freezes to create. Maximum 100 freezes per request.Request of type Array<TrophyApiClient::Admin::Streaks::Freezes::CreateStreakFreezesRequestFreezesItem>, as a Hash
         #   * :user_id (String)
         # @param request_options [TrophyApiClient::RequestOptions]
         # @return [TrophyApiClient::CreateStreakFreezesResponse]

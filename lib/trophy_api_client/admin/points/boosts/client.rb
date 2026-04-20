@@ -3,7 +3,7 @@
 require_relative "../../../../requests"
 require_relative "types/create_points_boosts_request_boosts_item"
 require_relative "../../../types/create_points_boosts_response"
-require_relative "../../../types/archive_points_boosts_response"
+require_relative "../../../types/delete_points_boosts_response"
 require "async"
 
 module TrophyApiClient
@@ -22,7 +22,7 @@ module TrophyApiClient
         # Create points boosts for multiple users.
         #
         # @param system_key [String] The key of the points system to create boosts for.
-        # @param boosts [Array<Hash>] Array of boosts to create. Maximum 1,000 boosts per request.Request of type Array<TrophyApiClient::Admin::Points::Boosts::CreatePointsBoostsRequestBoostsItem>, as a Hash
+        # @param boosts [Array<Hash>] Array of boosts to create. Maximum 100 boosts per request.Request of type Array<TrophyApiClient::Admin::Points::Boosts::CreatePointsBoostsRequestBoostsItem>, as a Hash
         #   * :user_id (String)
         #   * :name (String)
         #   * :start (String)
@@ -64,7 +64,7 @@ module TrophyApiClient
         #
         # @param ids [String] A list of up to 100 boost IDs.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::ArchivePointsBoostsResponse]
+        # @return [TrophyApiClient::DeletePointsBoostsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
@@ -87,14 +87,14 @@ module TrophyApiClient
             end
             req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/boosts"
           end
-          TrophyApiClient::ArchivePointsBoostsResponse.from_json(json_object: response.body)
+          TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
         end
 
         # Archive a points boost by ID.
         #
         # @param id [String] The UUID of the points boost to archive
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [Void]
+        # @return [TrophyApiClient::DeletePointsBoostsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
@@ -103,7 +103,7 @@ module TrophyApiClient
         #  )
         #  api.admin.points.boosts.archive(id: "id")
         def archive(id:, request_options: nil)
-          @request_client.conn.delete do |req|
+          response = @request_client.conn.delete do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
             req.headers = {
@@ -120,6 +120,7 @@ module TrophyApiClient
             req.url "#{@request_client.get_url(environment: admin,
                                                request_options: request_options)}/points/boosts/#{id}"
           end
+          TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
         end
       end
 
@@ -136,7 +137,7 @@ module TrophyApiClient
         # Create points boosts for multiple users.
         #
         # @param system_key [String] The key of the points system to create boosts for.
-        # @param boosts [Array<Hash>] Array of boosts to create. Maximum 1,000 boosts per request.Request of type Array<TrophyApiClient::Admin::Points::Boosts::CreatePointsBoostsRequestBoostsItem>, as a Hash
+        # @param boosts [Array<Hash>] Array of boosts to create. Maximum 100 boosts per request.Request of type Array<TrophyApiClient::Admin::Points::Boosts::CreatePointsBoostsRequestBoostsItem>, as a Hash
         #   * :user_id (String)
         #   * :name (String)
         #   * :start (String)
@@ -180,7 +181,7 @@ module TrophyApiClient
         #
         # @param ids [String] A list of up to 100 boost IDs.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::ArchivePointsBoostsResponse]
+        # @return [TrophyApiClient::DeletePointsBoostsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
@@ -204,7 +205,7 @@ module TrophyApiClient
               end
               req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/boosts"
             end
-            TrophyApiClient::ArchivePointsBoostsResponse.from_json(json_object: response.body)
+            TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
           end
         end
 
@@ -212,7 +213,7 @@ module TrophyApiClient
         #
         # @param id [String] The UUID of the points boost to archive
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [Void]
+        # @return [TrophyApiClient::DeletePointsBoostsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
@@ -222,7 +223,7 @@ module TrophyApiClient
         #  api.admin.points.boosts.archive(id: "id")
         def archive(id:, request_options: nil)
           Async do
-            @request_client.conn.delete do |req|
+            response = @request_client.conn.delete do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
               req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
               req.headers = {
@@ -239,6 +240,7 @@ module TrophyApiClient
               req.url "#{@request_client.get_url(environment: admin,
                                                  request_options: request_options)}/points/boosts/#{id}"
             end
+            TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
           end
         end
       end

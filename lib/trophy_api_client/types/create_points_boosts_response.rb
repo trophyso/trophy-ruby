@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "created_points_boost"
-require_relative "bulk_insert_issue"
+require_relative "admin_issue"
 require "ostruct"
 require "json"
 
@@ -11,7 +11,7 @@ module TrophyApiClient
   class CreatePointsBoostsResponse
     # @return [Array<TrophyApiClient::CreatedPointsBoost>] Array of successfully created boosts.
     attr_reader :created
-    # @return [Array<TrophyApiClient::BulkInsertIssue>] Array of issues encountered during boost creation.
+    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost creation.
     attr_reader :issues
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -22,7 +22,7 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param created [Array<TrophyApiClient::CreatedPointsBoost>] Array of successfully created boosts.
-    # @param issues [Array<TrophyApiClient::BulkInsertIssue>] Array of issues encountered during boost creation.
+    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost creation.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::CreatePointsBoostsResponse]
     def initialize(created:, issues:, additional_properties: nil)
@@ -45,7 +45,7 @@ module TrophyApiClient
       end
       issues = parsed_json["issues"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::BulkInsertIssue.from_json(json_object: item)
+        TrophyApiClient::AdminIssue.from_json(json_object: item)
       end
       new(
         created: created,

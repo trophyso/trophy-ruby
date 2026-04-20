@@ -4,10 +4,10 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Response containing the count of archived points boosts.
-  class ArchivePointsBoostsResponse
-    # @return [Integer] The number of boosts that were archived.
-    attr_reader :archived_count
+  # A soft-deleted resource represented by ID.
+  class DeletedResource
+    # @return [String] The ID of the archived resource.
+    attr_reader :id
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -16,27 +16,27 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param archived_count [Integer] The number of boosts that were archived.
+    # @param id [String] The ID of the archived resource.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::ArchivePointsBoostsResponse]
-    def initialize(archived_count:, additional_properties: nil)
-      @archived_count = archived_count
+    # @return [TrophyApiClient::DeletedResource]
+    def initialize(id:, additional_properties: nil)
+      @id = id
       @additional_properties = additional_properties
-      @_field_set = { "archivedCount": archived_count }
+      @_field_set = { "id": id }
     end
 
-    # Deserialize a JSON object to an instance of ArchivePointsBoostsResponse
+    # Deserialize a JSON object to an instance of DeletedResource
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::ArchivePointsBoostsResponse]
+    # @return [TrophyApiClient::DeletedResource]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
-      archived_count = parsed_json["archivedCount"]
-      new(archived_count: archived_count, additional_properties: struct)
+      id = parsed_json["id"]
+      new(id: id, additional_properties: struct)
     end
 
-    # Serialize an instance of ArchivePointsBoostsResponse to a JSON object
+    # Serialize an instance of DeletedResource to a JSON object
     #
     # @return [String]
     def to_json(*_args)
@@ -50,7 +50,7 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.archived_count.is_a?(Integer) != false || raise("Passed value for field obj.archived_count is not the expected type, validation failed.")
+      obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
     end
   end
 end

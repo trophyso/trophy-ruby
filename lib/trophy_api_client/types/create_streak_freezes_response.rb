@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "bulk_insert_issue"
+require_relative "admin_issue"
 require "ostruct"
 require "json"
 
 module TrophyApiClient
   # Response containing any issues encountered while creating streak freezes.
   class CreateStreakFreezesResponse
-    # @return [Array<TrophyApiClient::BulkInsertIssue>] Array of issues encountered during freeze creation.
+    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during freeze creation.
     attr_reader :issues
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -17,7 +17,7 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param issues [Array<TrophyApiClient::BulkInsertIssue>] Array of issues encountered during freeze creation.
+    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during freeze creation.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::CreateStreakFreezesResponse]
     def initialize(issues:, additional_properties: nil)
@@ -35,7 +35,7 @@ module TrophyApiClient
       parsed_json = JSON.parse(json_object)
       issues = parsed_json["issues"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::BulkInsertIssue.from_json(json_object: item)
+        TrophyApiClient::AdminIssue.from_json(json_object: item)
       end
       new(issues: issues, additional_properties: struct)
     end

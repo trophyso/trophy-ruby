@@ -2,7 +2,7 @@
 
 module TrophyApiClient
   # The severity level of the issue.
-  class BulkInsertIssueLevel
+  class AdminIssueSeverity
     ERROR = "error"
     WARNING = "warning"
   end
