@@ -4,9 +4,9 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # A soft-deleted resource represented by ID.
+  # A deleted resource represented by ID.
   class DeletedResource
-    # @return [String] The ID of the archived resource.
+    # @return [String] The ID of the deleted resource.
     attr_reader :id
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -16,7 +16,7 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param id [String] The ID of the archived resource.
+    # @param id [String] The ID of the deleted resource.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::DeletedResource]
     def initialize(id:, additional_properties: nil)

@@ -6,10 +6,9 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Response containing the points boosts that were archived and any per-item
-  #  issues.
+  # Response containing the points boosts that were deleted and any per-item issues.
   class DeletePointsBoostsResponse
-    # @return [Array<TrophyApiClient::DeletedResource>] Array of archived points boosts represented by ID.
+    # @return [Array<TrophyApiClient::DeletedResource>] Array of deleted points boosts represented by ID.
     attr_reader :deleted
     # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost archival.
     attr_reader :issues
@@ -21,7 +20,7 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param deleted [Array<TrophyApiClient::DeletedResource>] Array of archived points boosts represented by ID.
+    # @param deleted [Array<TrophyApiClient::DeletedResource>] Array of deleted points boosts represented by ID.
     # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost archival.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::DeletePointsBoostsResponse]

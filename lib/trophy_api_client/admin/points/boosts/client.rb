@@ -60,7 +60,7 @@ module TrophyApiClient
           TrophyApiClient::CreatePointsBoostsResponse.from_json(json_object: response.body)
         end
 
-        # Archive multiple points boosts by ID.
+        # Delete multiple points boosts by ID.
         #
         # @param ids [String] A list of up to 100 boost IDs.
         # @param request_options [TrophyApiClient::RequestOptions]
@@ -71,8 +71,8 @@ module TrophyApiClient
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.batch_archive
-        def batch_archive(ids: nil, request_options: nil)
+        #  api.admin.points.boosts.delete
+        def delete(ids: nil, request_options: nil)
           response = @request_client.conn.delete do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -86,39 +86,6 @@ module TrophyApiClient
               req.body = { **(request_options&.additional_body_parameters || {}) }.compact
             end
             req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/boosts"
-          end
-          TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
-        end
-
-        # Archive a points boost by ID.
-        #
-        # @param id [String] The UUID of the points boost to archive
-        # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::DeletePointsBoostsResponse]
-        # @example
-        #  api = TrophyApiClient::Client.new(
-        #    base_url: "https://api.example.com",
-        #    environment: TrophyApiClient::Environment::PRODUCTION,
-        #    api_key: "YOUR_API_KEY"
-        #  )
-        #  api.admin.points.boosts.archive(id: "id")
-        def archive(id:, request_options: nil)
-          response = @request_client.conn.delete do |req|
-            req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-            req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
-            req.headers = {
-          **(req.headers || {}),
-          **@request_client.get_headers,
-          **(request_options&.additional_headers || {})
-            }.compact
-            unless request_options.nil? || request_options&.additional_query_parameters.nil?
-              req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-            end
-            unless request_options.nil? || request_options&.additional_body_parameters.nil?
-              req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-            end
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/boosts/#{id}"
           end
           TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
         end
@@ -177,7 +144,7 @@ module TrophyApiClient
           end
         end
 
-        # Archive multiple points boosts by ID.
+        # Delete multiple points boosts by ID.
         #
         # @param ids [String] A list of up to 100 boost IDs.
         # @param request_options [TrophyApiClient::RequestOptions]
@@ -188,8 +155,8 @@ module TrophyApiClient
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.batch_archive
-        def batch_archive(ids: nil, request_options: nil)
+        #  api.admin.points.boosts.delete
+        def delete(ids: nil, request_options: nil)
           Async do
             response = @request_client.conn.delete do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -204,41 +171,6 @@ module TrophyApiClient
                 req.body = { **(request_options&.additional_body_parameters || {}) }.compact
               end
               req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/boosts"
-            end
-            TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
-          end
-        end
-
-        # Archive a points boost by ID.
-        #
-        # @param id [String] The UUID of the points boost to archive
-        # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::DeletePointsBoostsResponse]
-        # @example
-        #  api = TrophyApiClient::Client.new(
-        #    base_url: "https://api.example.com",
-        #    environment: TrophyApiClient::Environment::PRODUCTION,
-        #    api_key: "YOUR_API_KEY"
-        #  )
-        #  api.admin.points.boosts.archive(id: "id")
-        def archive(id:, request_options: nil)
-          Async do
-            response = @request_client.conn.delete do |req|
-              req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
-              req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
-              req.headers = {
-            **(req.headers || {}),
-            **@request_client.get_headers,
-            **(request_options&.additional_headers || {})
-              }.compact
-              unless request_options.nil? || request_options&.additional_query_parameters.nil?
-                req.params = { **(request_options&.additional_query_parameters || {}) }.compact
-              end
-              unless request_options.nil? || request_options&.additional_body_parameters.nil?
-                req.body = { **(request_options&.additional_body_parameters || {}) }.compact
-              end
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/boosts/#{id}"
             end
             TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
           end
