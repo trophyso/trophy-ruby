@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "metric_status"
 require_relative "user_achievement_response"
 require "ostruct"
 require "json"
@@ -13,8 +12,6 @@ module TrophyApiClient
     attr_reader :key
     # @return [String] The name of the metric.
     attr_reader :name
-    # @return [TrophyApiClient::MetricStatus] The status of the metric.
-    attr_reader :status
     # @return [Float] The user's current total for the metric.
     attr_reader :current
     # @return [Array<TrophyApiClient::UserAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
@@ -30,27 +27,18 @@ module TrophyApiClient
     # @param id [String] The unique ID of the metric.
     # @param key [String] The unique key of the metric.
     # @param name [String] The name of the metric.
-    # @param status [TrophyApiClient::MetricStatus] The status of the metric.
     # @param current [Float] The user's current total for the metric.
     # @param achievements [Array<TrophyApiClient::UserAchievementResponse>] A list of the metric's achievements and the user's progress towards each.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::MetricResponse]
-    def initialize(id:, key:, name:, status:, current:, achievements:, additional_properties: nil)
+    def initialize(id:, key:, name:, current:, achievements:, additional_properties: nil)
       @id = id
       @key = key
       @name = name
-      @status = status
       @current = current
       @achievements = achievements
       @additional_properties = additional_properties
-      @_field_set = {
-        "id": id,
-        "key": key,
-        "name": name,
-        "status": status,
-        "current": current,
-        "achievements": achievements
-      }
+      @_field_set = { "id": id, "key": key, "name": name, "current": current, "achievements": achievements }
     end
 
     # Deserialize a JSON object to an instance of MetricResponse
@@ -63,7 +51,6 @@ module TrophyApiClient
       id = parsed_json["id"]
       key = parsed_json["key"]
       name = parsed_json["name"]
-      status = parsed_json["status"]
       current = parsed_json["current"]
       achievements = parsed_json["achievements"]&.map do |item|
         item = item.to_json
@@ -73,7 +60,6 @@ module TrophyApiClient
         id: id,
         key: key,
         name: name,
-        status: status,
         current: current,
         achievements: achievements,
         additional_properties: struct
@@ -97,7 +83,6 @@ module TrophyApiClient
       obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
       obj.key.is_a?(String) != false || raise("Passed value for field obj.key is not the expected type, validation failed.")
       obj.name.is_a?(String) != false || raise("Passed value for field obj.name is not the expected type, validation failed.")
-      obj.status.is_a?(TrophyApiClient::MetricStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
       obj.current.is_a?(Float) != false || raise("Passed value for field obj.current is not the expected type, validation failed.")
       obj.achievements.is_a?(Array) != false || raise("Passed value for field obj.achievements is not the expected type, validation failed.")
     end

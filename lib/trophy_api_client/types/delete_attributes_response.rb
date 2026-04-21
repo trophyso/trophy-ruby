@@ -6,11 +6,12 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Response containing the points boosts that were deleted and any per-item issues.
-  class DeletePointsBoostsResponse
-    # @return [Array<TrophyApiClient::DeletedResource>] Array of deleted points boosts represented by ID.
+  # Response containing deleted attributes represented by ID and any per-item
+  #  issues, including invalid or missing attribute IDs.
+  class DeleteAttributesResponse
+    # @return [Array<TrophyApiClient::DeletedResource>] Array of deleted attributes represented by ID.
     attr_reader :deleted
-    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost deletion.
+    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during attribute deletion.
     attr_reader :issues
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -20,10 +21,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param deleted [Array<TrophyApiClient::DeletedResource>] Array of deleted points boosts represented by ID.
-    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost deletion.
+    # @param deleted [Array<TrophyApiClient::DeletedResource>] Array of deleted attributes represented by ID.
+    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during attribute deletion.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::DeletePointsBoostsResponse]
+    # @return [TrophyApiClient::DeleteAttributesResponse]
     def initialize(deleted:, issues:, additional_properties: nil)
       @deleted = deleted
       @issues = issues
@@ -31,10 +32,10 @@ module TrophyApiClient
       @_field_set = { "deleted": deleted, "issues": issues }
     end
 
-    # Deserialize a JSON object to an instance of DeletePointsBoostsResponse
+    # Deserialize a JSON object to an instance of DeleteAttributesResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::DeletePointsBoostsResponse]
+    # @return [TrophyApiClient::DeleteAttributesResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
@@ -53,7 +54,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of DeletePointsBoostsResponse to a JSON object
+    # Serialize an instance of DeleteAttributesResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)

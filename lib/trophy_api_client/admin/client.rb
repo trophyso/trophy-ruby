@@ -2,6 +2,8 @@
 
 require_relative "../../requests"
 require_relative "streaks/client"
+require_relative "attributes/client"
+require_relative "metrics/client"
 require_relative "points/client"
 
 module TrophyApiClient
@@ -9,6 +11,10 @@ module TrophyApiClient
     class Client
       # @return [TrophyApiClient::Admin::StreaksClient]
       attr_reader :streaks
+      # @return [TrophyApiClient::Admin::AttributesClient]
+      attr_reader :attributes
+      # @return [TrophyApiClient::Admin::MetricsClient]
+      attr_reader :metrics
       # @return [TrophyApiClient::Admin::Points::Client]
       attr_reader :admin
 
@@ -16,6 +22,8 @@ module TrophyApiClient
       # @return [TrophyApiClient::Admin::Client]
       def initialize(request_client:)
         @streaks = TrophyApiClient::Admin::StreaksClient.new(request_client: request_client)
+        @attributes = TrophyApiClient::Admin::AttributesClient.new(request_client: request_client)
+        @metrics = TrophyApiClient::Admin::MetricsClient.new(request_client: request_client)
         @admin = TrophyApiClient::Admin::Points::Client.new(request_client: request_client)
       end
     end
@@ -23,6 +31,10 @@ module TrophyApiClient
     class AsyncClient
       # @return [TrophyApiClient::Admin::AsyncStreaksClient]
       attr_reader :streaks
+      # @return [TrophyApiClient::Admin::AsyncAttributesClient]
+      attr_reader :attributes
+      # @return [TrophyApiClient::Admin::AsyncMetricsClient]
+      attr_reader :metrics
       # @return [TrophyApiClient::Admin::Points::AsyncClient]
       attr_reader :admin
 
@@ -30,6 +42,8 @@ module TrophyApiClient
       # @return [TrophyApiClient::Admin::AsyncClient]
       def initialize(request_client:)
         @streaks = TrophyApiClient::Admin::AsyncStreaksClient.new(request_client: request_client)
+        @attributes = TrophyApiClient::Admin::AsyncAttributesClient.new(request_client: request_client)
+        @metrics = TrophyApiClient::Admin::AsyncMetricsClient.new(request_client: request_client)
         @admin = TrophyApiClient::Admin::Points::AsyncClient.new(request_client: request_client)
       end
     end
