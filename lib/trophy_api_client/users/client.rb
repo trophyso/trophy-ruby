@@ -33,7 +33,7 @@ module TrophyApiClient
 
     # Create a new user.
     #
-    # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
+    # @param request [Hash] Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
     #   * :email (String)
     #   * :name (String)
@@ -657,7 +657,7 @@ module TrophyApiClient
 
     # Create a new user.
     #
-    # @param request [Hash] The user object.Request of type TrophyApiClient::UpsertedUser, as a Hash
+    # @param request [Hash] Request of type TrophyApiClient::UpsertedUser, as a Hash
     #   * :id (String)
     #   * :email (String)
     #   * :name (String)

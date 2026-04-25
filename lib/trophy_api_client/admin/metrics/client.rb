@@ -58,7 +58,7 @@ module TrophyApiClient
         end
       end
 
-      # Create metrics in bulk.
+      # Create metrics.
       #
       # @param request [TrophyApiClient::CREATE_METRICS_REQUEST]
       # @param request_options [TrophyApiClient::RequestOptions]
@@ -88,7 +88,7 @@ module TrophyApiClient
         TrophyApiClient::CreateMetricsResponse.from_json(json_object: response.body)
       end
 
-      # Delete metrics in bulk by ID.
+      # Delete metrics by ID.
       #
       # @param ids [String] Metric IDs to delete. Repeat the query param or provide a comma-separated list.
       # @param request_options [TrophyApiClient::RequestOptions]
@@ -118,7 +118,7 @@ module TrophyApiClient
         TrophyApiClient::DeleteMetricsResponse.from_json(json_object: response.body)
       end
 
-      # Update metrics in bulk by ID.
+      # Update metrics by ID.
       #
       # @param request [TrophyApiClient::UPDATE_METRICS_REQUEST]
       # @param request_options [TrophyApiClient::RequestOptions]
@@ -232,7 +232,7 @@ module TrophyApiClient
         end
       end
 
-      # Create metrics in bulk.
+      # Create metrics.
       #
       # @param request [TrophyApiClient::CREATE_METRICS_REQUEST]
       # @param request_options [TrophyApiClient::RequestOptions]
@@ -264,7 +264,7 @@ module TrophyApiClient
         end
       end
 
-      # Delete metrics in bulk by ID.
+      # Delete metrics by ID.
       #
       # @param ids [String] Metric IDs to delete. Repeat the query param or provide a comma-separated list.
       # @param request_options [TrophyApiClient::RequestOptions]
@@ -296,7 +296,7 @@ module TrophyApiClient
         end
       end
 
-      # Update metrics in bulk by ID.
+      # Update metrics by ID.
       #
       # @param request [TrophyApiClient::UPDATE_METRICS_REQUEST]
       # @param request_options [TrophyApiClient::RequestOptions]
