@@ -1,48 +1,43 @@
 # frozen_string_literal: true
 
 require_relative "../../../../requests"
-require_relative "../../../types/list_points_boosts_response"
+require_relative "../../../types/list_points_systems_response"
 require "json"
-require_relative "../../../types/create_points_boosts_request"
-require_relative "../../../types/create_points_boosts_response"
-require_relative "../../../types/delete_points_boosts_response"
-require_relative "../../../types/patch_points_boosts_request"
-require_relative "../../../types/patch_points_boosts_response"
-require_relative "../../../types/admin_points_boost"
+require_relative "../../../types/create_points_systems_request"
+require_relative "../../../types/create_points_systems_response"
+require_relative "../../../types/delete_points_systems_response"
+require_relative "../../../types/update_points_systems_request"
+require_relative "../../../types/update_points_systems_response"
+require_relative "../../../types/admin_points_system"
 require "async"
 
 module TrophyApiClient
   module Admin
     module Points
-      class BoostsClient
+      class SystemsClient
         # @return [TrophyApiClient::RequestClient]
         attr_reader :request_client
 
         # @param request_client [TrophyApiClient::RequestClient]
-        # @return [TrophyApiClient::Admin::Points::BoostsClient]
+        # @return [TrophyApiClient::Admin::Points::SystemsClient]
         def initialize(request_client:)
           @request_client = request_client
         end
 
-        # List points boosts for a system.
+        # List points systems.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param limit [Integer] Maximum number of results to return (1-100, default 10).
-        # @param skip [Integer] Number of results to skip for pagination (default 0).
+        # @param limit [Integer] Number of records to return.
+        # @param skip [Integer] Number of records to skip from the start of the list.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::LIST_POINTS_BOOSTS_RESPONSE]
+        # @return [TrophyApiClient::LIST_POINTS_SYSTEMS_RESPONSE]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.list(
-        #    system_id: "550e8400-e29b-41d4-a716-446655440000",
-        #    limit: 1,
-        #    skip: 1
-        #  )
-        def list(system_id:, limit: nil, skip: nil, request_options: nil)
+        #  api.admin.points.systems.list(limit: 1, skip: 1)
+        def list(limit: nil, skip: nil, request_options: nil)
           response = @request_client.conn.get do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -59,30 +54,29 @@ module TrophyApiClient
             unless request_options.nil? || request_options&.additional_body_parameters.nil?
               req.body = { **(request_options&.additional_body_parameters || {}) }.compact
             end
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/#{system_id}/boosts"
+            req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
           end
           parsed_json = JSON.parse(response.body)
           parsed_json&.map do |item|
             item = item.to_json
-            TrophyApiClient::AdminPointsBoost.from_json(json_object: item)
+            TrophyApiClient::AdminPointsSystem.from_json(json_object: item)
           end
         end
 
-        # Create points boosts.
+        # Create points systems. Optionally include sub-entities (levels, boosts,
+        #  triggers) in each system payload to create them alongside the system.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param request [TrophyApiClient::CREATE_POINTS_BOOSTS_REQUEST]
+        # @param request [TrophyApiClient::CREATE_POINTS_SYSTEMS_REQUEST]
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::CreatePointsBoostsResponse]
+        # @return [TrophyApiClient::CreatePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.create(system_id: "550e8400-e29b-41d4-a716-446655440000", request: [{ user_id: "user-123", name: "Double XP Weekend", start: "2024-01-01", end_: "2024-01-03", multiplier: 2 }])
-        def create(system_id:, request:, request_options: nil)
+        #  api.admin.points.systems.create(request: [{ name: "XP", key: "xp", description: "Experience points", levels: [{ name: "Bronze", key: "bronze", points: 100 }, { name: "Silver", key: "silver", points: 500 }] }])
+        def create(request:, request_options: nil)
           response = @request_client.conn.post do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -95,26 +89,24 @@ module TrophyApiClient
               req.params = { **(request_options&.additional_query_parameters || {}) }.compact
             end
             req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/#{system_id}/boosts"
+            req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
           end
-          TrophyApiClient::CreatePointsBoostsResponse.from_json(json_object: response.body)
+          TrophyApiClient::CreatePointsSystemsResponse.from_json(json_object: response.body)
         end
 
-        # Delete multiple points boosts by ID.
+        # Delete (archive) points systems by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param ids [String] A list of up to 100 boost IDs.
+        # @param ids [String] The IDs of the points systems to delete.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::DeletePointsBoostsResponse]
+        # @return [TrophyApiClient::DeletePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.delete
-        def delete(system_id:, ids: nil, request_options: nil)
+        #  api.admin.points.systems.delete
+        def delete(ids: nil, request_options: nil)
           response = @request_client.conn.delete do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -127,26 +119,24 @@ module TrophyApiClient
             unless request_options.nil? || request_options&.additional_body_parameters.nil?
               req.body = { **(request_options&.additional_body_parameters || {}) }.compact
             end
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/#{system_id}/boosts"
+            req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
           end
-          TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
+          TrophyApiClient::DeletePointsSystemsResponse.from_json(json_object: response.body)
         end
 
-        # Update multiple points boosts.
+        # Update points systems by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param request [TrophyApiClient::PATCH_POINTS_BOOSTS_REQUEST]
+        # @param request [TrophyApiClient::UPDATE_POINTS_SYSTEMS_REQUEST]
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::PatchPointsBoostsResponse]
+        # @return [TrophyApiClient::UpdatePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.update(system_id: "550e8400-e29b-41d4-a716-446655440000", request: [{ id: "550e8400-e29b-41d4-a716-446655440000", name: "Updated Boost Name", multiplier: 3 }])
-        def update(system_id:, request:, request_options: nil)
+        #  api.admin.points.systems.update(request: [{ id: "550e8400-e29b-41d4-a716-446655440000", name: "New Name" }])
+        def update(request:, request_options: nil)
           response = @request_client.conn.patch do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -159,26 +149,24 @@ module TrophyApiClient
               req.params = { **(request_options&.additional_query_parameters || {}) }.compact
             end
             req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/#{system_id}/boosts"
+            req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
           end
-          TrophyApiClient::PatchPointsBoostsResponse.from_json(json_object: response.body)
+          TrophyApiClient::UpdatePointsSystemsResponse.from_json(json_object: response.body)
         end
 
-        # Get a single points boost by ID.
+        # Get a points system by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param id [String] The UUID of the points boost.
+        # @param id [String] The ID of the points system.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::AdminPointsBoost]
+        # @return [TrophyApiClient::AdminPointsSystem]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.get(system_id: "550e8400-e29b-41d4-a716-446655440000", id: "660f9500-f30c-42e5-b827-557766550001")
-        def get(system_id:, id:, request_options: nil)
+        #  api.admin.points.systems.get(id: "550e8400-e29b-41d4-a716-446655440000")
+        def get(id:, request_options: nil)
           response = @request_client.conn.get do |req|
             req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
             req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
@@ -193,42 +181,36 @@ module TrophyApiClient
             unless request_options.nil? || request_options&.additional_body_parameters.nil?
               req.body = { **(request_options&.additional_body_parameters || {}) }.compact
             end
-            req.url "#{@request_client.get_url(environment: admin,
-                                               request_options: request_options)}/points/#{system_id}/boosts/#{id}"
+            req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/#{id}"
           end
-          TrophyApiClient::AdminPointsBoost.from_json(json_object: response.body)
+          TrophyApiClient::AdminPointsSystem.from_json(json_object: response.body)
         end
       end
 
-      class AsyncBoostsClient
+      class AsyncSystemsClient
         # @return [TrophyApiClient::AsyncRequestClient]
         attr_reader :request_client
 
         # @param request_client [TrophyApiClient::AsyncRequestClient]
-        # @return [TrophyApiClient::Admin::Points::AsyncBoostsClient]
+        # @return [TrophyApiClient::Admin::Points::AsyncSystemsClient]
         def initialize(request_client:)
           @request_client = request_client
         end
 
-        # List points boosts for a system.
+        # List points systems.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param limit [Integer] Maximum number of results to return (1-100, default 10).
-        # @param skip [Integer] Number of results to skip for pagination (default 0).
+        # @param limit [Integer] Number of records to return.
+        # @param skip [Integer] Number of records to skip from the start of the list.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::LIST_POINTS_BOOSTS_RESPONSE]
+        # @return [TrophyApiClient::LIST_POINTS_SYSTEMS_RESPONSE]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.list(
-        #    system_id: "550e8400-e29b-41d4-a716-446655440000",
-        #    limit: 1,
-        #    skip: 1
-        #  )
-        def list(system_id:, limit: nil, skip: nil, request_options: nil)
+        #  api.admin.points.systems.list(limit: 1, skip: 1)
+        def list(limit: nil, skip: nil, request_options: nil)
           Async do
             response = @request_client.conn.get do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -246,31 +228,30 @@ module TrophyApiClient
               unless request_options.nil? || request_options&.additional_body_parameters.nil?
                 req.body = { **(request_options&.additional_body_parameters || {}) }.compact
               end
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/#{system_id}/boosts"
+              req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
             end
             parsed_json = JSON.parse(response.body)
             parsed_json&.map do |item|
               item = item.to_json
-              TrophyApiClient::AdminPointsBoost.from_json(json_object: item)
+              TrophyApiClient::AdminPointsSystem.from_json(json_object: item)
             end
           end
         end
 
-        # Create points boosts.
+        # Create points systems. Optionally include sub-entities (levels, boosts,
+        #  triggers) in each system payload to create them alongside the system.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param request [TrophyApiClient::CREATE_POINTS_BOOSTS_REQUEST]
+        # @param request [TrophyApiClient::CREATE_POINTS_SYSTEMS_REQUEST]
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::CreatePointsBoostsResponse]
+        # @return [TrophyApiClient::CreatePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.create(system_id: "550e8400-e29b-41d4-a716-446655440000", request: [{ user_id: "user-123", name: "Double XP Weekend", start: "2024-01-01", end_: "2024-01-03", multiplier: 2 }])
-        def create(system_id:, request:, request_options: nil)
+        #  api.admin.points.systems.create(request: [{ name: "XP", key: "xp", description: "Experience points", levels: [{ name: "Bronze", key: "bronze", points: 100 }, { name: "Silver", key: "silver", points: 500 }] }])
+        def create(request:, request_options: nil)
           Async do
             response = @request_client.conn.post do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -284,27 +265,25 @@ module TrophyApiClient
                 req.params = { **(request_options&.additional_query_parameters || {}) }.compact
               end
               req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/#{system_id}/boosts"
+              req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
             end
-            TrophyApiClient::CreatePointsBoostsResponse.from_json(json_object: response.body)
+            TrophyApiClient::CreatePointsSystemsResponse.from_json(json_object: response.body)
           end
         end
 
-        # Delete multiple points boosts by ID.
+        # Delete (archive) points systems by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param ids [String] A list of up to 100 boost IDs.
+        # @param ids [String] The IDs of the points systems to delete.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::DeletePointsBoostsResponse]
+        # @return [TrophyApiClient::DeletePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.delete
-        def delete(system_id:, ids: nil, request_options: nil)
+        #  api.admin.points.systems.delete
+        def delete(ids: nil, request_options: nil)
           Async do
             response = @request_client.conn.delete do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -318,27 +297,25 @@ module TrophyApiClient
               unless request_options.nil? || request_options&.additional_body_parameters.nil?
                 req.body = { **(request_options&.additional_body_parameters || {}) }.compact
               end
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/#{system_id}/boosts"
+              req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
             end
-            TrophyApiClient::DeletePointsBoostsResponse.from_json(json_object: response.body)
+            TrophyApiClient::DeletePointsSystemsResponse.from_json(json_object: response.body)
           end
         end
 
-        # Update multiple points boosts.
+        # Update points systems by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param request [TrophyApiClient::PATCH_POINTS_BOOSTS_REQUEST]
+        # @param request [TrophyApiClient::UPDATE_POINTS_SYSTEMS_REQUEST]
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::PatchPointsBoostsResponse]
+        # @return [TrophyApiClient::UpdatePointsSystemsResponse]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.update(system_id: "550e8400-e29b-41d4-a716-446655440000", request: [{ id: "550e8400-e29b-41d4-a716-446655440000", name: "Updated Boost Name", multiplier: 3 }])
-        def update(system_id:, request:, request_options: nil)
+        #  api.admin.points.systems.update(request: [{ id: "550e8400-e29b-41d4-a716-446655440000", name: "New Name" }])
+        def update(request:, request_options: nil)
           Async do
             response = @request_client.conn.patch do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -352,27 +329,25 @@ module TrophyApiClient
                 req.params = { **(request_options&.additional_query_parameters || {}) }.compact
               end
               req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/#{system_id}/boosts"
+              req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points"
             end
-            TrophyApiClient::PatchPointsBoostsResponse.from_json(json_object: response.body)
+            TrophyApiClient::UpdatePointsSystemsResponse.from_json(json_object: response.body)
           end
         end
 
-        # Get a single points boost by ID.
+        # Get a points system by ID.
         #
-        # @param system_id [String] The UUID of the points system.
-        # @param id [String] The UUID of the points boost.
+        # @param id [String] The ID of the points system.
         # @param request_options [TrophyApiClient::RequestOptions]
-        # @return [TrophyApiClient::AdminPointsBoost]
+        # @return [TrophyApiClient::AdminPointsSystem]
         # @example
         #  api = TrophyApiClient::Client.new(
         #    base_url: "https://api.example.com",
         #    environment: TrophyApiClient::Environment::PRODUCTION,
         #    api_key: "YOUR_API_KEY"
         #  )
-        #  api.admin.points.boosts.get(system_id: "550e8400-e29b-41d4-a716-446655440000", id: "660f9500-f30c-42e5-b827-557766550001")
-        def get(system_id:, id:, request_options: nil)
+        #  api.admin.points.systems.get(id: "550e8400-e29b-41d4-a716-446655440000")
+        def get(id:, request_options: nil)
           Async do
             response = @request_client.conn.get do |req|
               req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -388,10 +363,9 @@ module TrophyApiClient
               unless request_options.nil? || request_options&.additional_body_parameters.nil?
                 req.body = { **(request_options&.additional_body_parameters || {}) }.compact
               end
-              req.url "#{@request_client.get_url(environment: admin,
-                                                 request_options: request_options)}/points/#{system_id}/boosts/#{id}"
+              req.url "#{@request_client.get_url(environment: admin, request_options: request_options)}/points/#{id}"
             end
-            TrophyApiClient::AdminPointsBoost.from_json(json_object: response.body)
+            TrophyApiClient::AdminPointsSystem.from_json(json_object: response.body)
           end
         end
       end

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module TrophyApiClient
-  # How boosted points are rounded.
-  class CreatedPointsBoostRounding
+  # Updated rounding strategy.
+  class PatchPointsBoostsRequestItemRounding
     DOWN = "down"
     UP = "up"
     NEAREST = "nearest"

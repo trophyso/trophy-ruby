@@ -2,7 +2,7 @@
 
 module TrophyApiClient
   # The status of the boost.
-  class CreatedPointsBoostStatus
+  class AdminPointsBoostStatus
     ACTIVE = "active"
     SCHEDULED = "scheduled"
     FINISHED = "finished"

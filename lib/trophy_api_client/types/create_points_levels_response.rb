@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-require_relative "admin_points_boost"
+require_relative "admin_points_level"
 require_relative "admin_issue"
 require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # Response containing created boosts and any issues encountered while creating
-  #  points boosts.
-  class CreatePointsBoostsResponse
-    # @return [Array<TrophyApiClient::AdminPointsBoost>] Array of successfully created boosts.
+  # Response containing created levels and any per-item issues.
+  class CreatePointsLevelsResponse
+    # @return [Array<TrophyApiClient::AdminPointsLevel>] Array of successfully created levels.
     attr_reader :created
-    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost creation.
+    # @return [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during level creation.
     attr_reader :issues
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
@@ -21,10 +20,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param created [Array<TrophyApiClient::AdminPointsBoost>] Array of successfully created boosts.
-    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during boost creation.
+    # @param created [Array<TrophyApiClient::AdminPointsLevel>] Array of successfully created levels.
+    # @param issues [Array<TrophyApiClient::AdminIssue>] Array of issues encountered during level creation.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @return [TrophyApiClient::CreatePointsBoostsResponse]
+    # @return [TrophyApiClient::CreatePointsLevelsResponse]
     def initialize(created:, issues:, additional_properties: nil)
       @created = created
       @issues = issues
@@ -32,16 +31,16 @@ module TrophyApiClient
       @_field_set = { "created": created, "issues": issues }
     end
 
-    # Deserialize a JSON object to an instance of CreatePointsBoostsResponse
+    # Deserialize a JSON object to an instance of CreatePointsLevelsResponse
     #
     # @param json_object [String]
-    # @return [TrophyApiClient::CreatePointsBoostsResponse]
+    # @return [TrophyApiClient::CreatePointsLevelsResponse]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
       created = parsed_json["created"]&.map do |item|
         item = item.to_json
-        TrophyApiClient::AdminPointsBoost.from_json(json_object: item)
+        TrophyApiClient::AdminPointsLevel.from_json(json_object: item)
       end
       issues = parsed_json["issues"]&.map do |item|
         item = item.to_json
@@ -54,7 +53,7 @@ module TrophyApiClient
       )
     end
 
-    # Serialize an instance of CreatePointsBoostsResponse to a JSON object
+    # Serialize an instance of CreatePointsLevelsResponse to a JSON object
     #
     # @return [String]
     def to_json(*_args)
