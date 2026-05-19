@@ -5,6 +5,7 @@ require_relative "attributes/client"
 require_relative "metrics/client"
 require_relative "leaderboards/client"
 require_relative "streaks/client"
+require_relative "tenants/client"
 require_relative "points/client"
 
 module TrophyApiClient
@@ -18,6 +19,8 @@ module TrophyApiClient
       attr_reader :leaderboards
       # @return [TrophyApiClient::Admin::StreaksClient]
       attr_reader :streaks
+      # @return [TrophyApiClient::Admin::TenantsClient]
+      attr_reader :tenants
       # @return [TrophyApiClient::Admin::Points::Client]
       attr_reader :admin
 
@@ -28,6 +31,7 @@ module TrophyApiClient
         @metrics = TrophyApiClient::Admin::MetricsClient.new(request_client: request_client)
         @leaderboards = TrophyApiClient::Admin::LeaderboardsClient.new(request_client: request_client)
         @streaks = TrophyApiClient::Admin::StreaksClient.new(request_client: request_client)
+        @tenants = TrophyApiClient::Admin::TenantsClient.new(request_client: request_client)
         @admin = TrophyApiClient::Admin::Points::Client.new(request_client: request_client)
       end
     end
@@ -41,6 +45,8 @@ module TrophyApiClient
       attr_reader :leaderboards
       # @return [TrophyApiClient::Admin::AsyncStreaksClient]
       attr_reader :streaks
+      # @return [TrophyApiClient::Admin::AsyncTenantsClient]
+      attr_reader :tenants
       # @return [TrophyApiClient::Admin::Points::AsyncClient]
       attr_reader :admin
 
@@ -51,6 +57,7 @@ module TrophyApiClient
         @metrics = TrophyApiClient::Admin::AsyncMetricsClient.new(request_client: request_client)
         @leaderboards = TrophyApiClient::Admin::AsyncLeaderboardsClient.new(request_client: request_client)
         @streaks = TrophyApiClient::Admin::AsyncStreaksClient.new(request_client: request_client)
+        @tenants = TrophyApiClient::Admin::AsyncTenantsClient.new(request_client: request_client)
         @admin = TrophyApiClient::Admin::Points::AsyncClient.new(request_client: request_client)
       end
     end

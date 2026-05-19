@@ -33,15 +33,19 @@ module TrophyApiClient
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
+    # @param tenant_id [String] The tenant identifier for multi-tenant organisations. Required when the
+    #  organisation has multi-tenancy enabled. The value should be your internal ID for
+    #  the tenant. Ignored for single-tenant organisations.
     # @return [TrophyApiClient::Client]
     def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
-                   timeout_in_seconds: nil)
+                   timeout_in_seconds: nil, tenant_id: nil)
       @request_client = TrophyApiClient::RequestClient.new(
         base_url: base_url,
         environment: environment,
         max_retries: max_retries,
         timeout_in_seconds: timeout_in_seconds,
-        api_key: api_key
+        api_key: api_key,
+        tenant_id: tenant_id
       )
       @achievements = TrophyApiClient::AchievementsClient.new(request_client: @request_client)
       @metrics = TrophyApiClient::MetricsClient.new(request_client: @request_client)
@@ -74,15 +78,19 @@ module TrophyApiClient
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
+    # @param tenant_id [String] The tenant identifier for multi-tenant organisations. Required when the
+    #  organisation has multi-tenancy enabled. The value should be your internal ID for
+    #  the tenant. Ignored for single-tenant organisations.
     # @return [TrophyApiClient::AsyncClient]
     def initialize(api_key:, base_url: nil, environment: TrophyApiClient::Environment::PRODUCTION, max_retries: nil,
-                   timeout_in_seconds: nil)
+                   timeout_in_seconds: nil, tenant_id: nil)
       @async_request_client = TrophyApiClient::AsyncRequestClient.new(
         base_url: base_url,
         environment: environment,
         max_retries: max_retries,
         timeout_in_seconds: timeout_in_seconds,
-        api_key: api_key
+        api_key: api_key,
+        tenant_id: tenant_id
       )
       @achievements = TrophyApiClient::AsyncAchievementsClient.new(request_client: @async_request_client)
       @metrics = TrophyApiClient::AsyncMetricsClient.new(request_client: @async_request_client)

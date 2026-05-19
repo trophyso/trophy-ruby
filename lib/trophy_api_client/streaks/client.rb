@@ -35,6 +35,7 @@ module TrophyApiClient
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers["Tenant-ID"] = request_options.tenant_id unless request_options&.tenant_id.nil?
         req.headers = {
       **(req.headers || {}),
       **@request_client.get_headers,
@@ -70,6 +71,7 @@ module TrophyApiClient
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers["Tenant-ID"] = request_options.tenant_id unless request_options&.tenant_id.nil?
         req.headers = {
       **(req.headers || {}),
       **@request_client.get_headers,
@@ -117,6 +119,7 @@ module TrophyApiClient
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers["Tenant-ID"] = request_options.tenant_id unless request_options&.tenant_id.nil?
           req.headers = {
         **(req.headers || {}),
         **@request_client.get_headers,
@@ -154,6 +157,7 @@ module TrophyApiClient
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["X-API-KEY"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers["Tenant-ID"] = request_options.tenant_id unless request_options&.tenant_id.nil?
           req.headers = {
         **(req.headers || {}),
         **@request_client.get_headers,

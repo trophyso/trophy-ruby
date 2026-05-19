@@ -23,7 +23,7 @@ module TrophyApiClient
     attr_reader :multiplier
     # @return [TrophyApiClient::AdminPointsBoostRounding] How boosted points are rounded.
     attr_reader :rounding
-    # @return [String] The customer ID of the user the boost was created for, or null for
+    # @return [String] The ID of the user the boost was created for, or null for
     #  global/attribute-filtered boosts.
     attr_reader :user_id
     # @return [Array<TrophyApiClient::AdminPointsBoostUserAttributesItem>] User attribute filters applied to the boost. Only present for non-user-specific
@@ -44,7 +44,7 @@ module TrophyApiClient
     # @param end_ [String] The end date (YYYY-MM-DD) or null if no end date.
     # @param multiplier [Float] The points multiplier.
     # @param rounding [TrophyApiClient::AdminPointsBoostRounding] How boosted points are rounded.
-    # @param user_id [String] The customer ID of the user the boost was created for, or null for
+    # @param user_id [String] The ID of the user the boost was created for, or null for
     #  global/attribute-filtered boosts.
     # @param user_attributes [Array<TrophyApiClient::AdminPointsBoostUserAttributesItem>] User attribute filters applied to the boost. Only present for non-user-specific
     #  boosts (i.e. when `userId` is null). Empty array if no filters are set.
