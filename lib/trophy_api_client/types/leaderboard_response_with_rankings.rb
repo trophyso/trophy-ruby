@@ -79,8 +79,8 @@ module TrophyApiClient
     #  type. Null for one-time leaderboards.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::LeaderboardResponseWithRankings]
-    def initialize(status:, rankings:, id:, name:, key:, rank_by:, breakdown_attributes:, start:, max_participants:, breakdown_attribute: OMIT,
-                   metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, description: OMIT, end_: OMIT, run_unit: OMIT, run_interval: OMIT, additional_properties: nil)
+    def initialize(status:, rankings:, id:, name:, key:, rank_by:, breakdown_attributes:, start:, breakdown_attribute: OMIT,
+                   metric_key: OMIT, metric_name: OMIT, points_system_key: OMIT, points_system_name: OMIT, description: OMIT, end_: OMIT, max_participants: OMIT, run_unit: OMIT, run_interval: OMIT, additional_properties: nil)
       @status = status
       @rankings = rankings
       @id = id
@@ -96,7 +96,7 @@ module TrophyApiClient
       @description = description if description != OMIT
       @start = start
       @end_ = end_ if end_ != OMIT
-      @max_participants = max_participants
+      @max_participants = max_participants if max_participants != OMIT
       @run_unit = run_unit if run_unit != OMIT
       @run_interval = run_interval if run_interval != OMIT
       @additional_properties = additional_properties
@@ -204,7 +204,7 @@ module TrophyApiClient
       obj.description&.is_a?(String) != false || raise("Passed value for field obj.description is not the expected type, validation failed.")
       obj.start.is_a?(String) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
       obj.end_&.is_a?(String) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
-      obj.max_participants.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
+      obj.max_participants&.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
       obj.run_unit&.is_a?(TrophyApiClient::LeaderboardResponseRunUnit) != false || raise("Passed value for field obj.run_unit is not the expected type, validation failed.")
       obj.run_interval&.is_a?(Integer) != false || raise("Passed value for field obj.run_interval is not the expected type, validation failed.")
     end

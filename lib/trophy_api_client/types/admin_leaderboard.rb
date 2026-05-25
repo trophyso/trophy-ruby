@@ -61,8 +61,8 @@ module TrophyApiClient
     # @param run_interval [Integer] The number of recurrence units between leaderboard runs.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::AdminLeaderboard]
-    def initialize(id:, name:, key:, status:, rank_by:, max_participants:, start:, breakdown_attributes:,
-                   description: OMIT, metric_id: OMIT, points_system_id: OMIT, end_: OMIT, run_unit: OMIT, run_interval: OMIT, additional_properties: nil)
+    def initialize(id:, name:, key:, status:, rank_by:, start:, breakdown_attributes:, description: OMIT, metric_id: OMIT, points_system_id: OMIT,
+                   max_participants: OMIT, end_: OMIT, run_unit: OMIT, run_interval: OMIT, additional_properties: nil)
       @id = id
       @name = name
       @key = key
@@ -71,7 +71,7 @@ module TrophyApiClient
       @rank_by = rank_by
       @metric_id = metric_id if metric_id != OMIT
       @points_system_id = points_system_id if points_system_id != OMIT
-      @max_participants = max_participants
+      @max_participants = max_participants if max_participants != OMIT
       @start = start
       @end_ = end_ if end_ != OMIT
       @breakdown_attributes = breakdown_attributes
@@ -160,7 +160,7 @@ module TrophyApiClient
       obj.rank_by.is_a?(TrophyApiClient::AdminLeaderboardRankBy) != false || raise("Passed value for field obj.rank_by is not the expected type, validation failed.")
       obj.metric_id&.is_a?(String) != false || raise("Passed value for field obj.metric_id is not the expected type, validation failed.")
       obj.points_system_id&.is_a?(String) != false || raise("Passed value for field obj.points_system_id is not the expected type, validation failed.")
-      obj.max_participants.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
+      obj.max_participants&.is_a?(Integer) != false || raise("Passed value for field obj.max_participants is not the expected type, validation failed.")
       obj.start.is_a?(String) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
       obj.end_&.is_a?(String) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
       obj.breakdown_attributes.is_a?(Array) != false || raise("Passed value for field obj.breakdown_attributes is not the expected type, validation failed.")
