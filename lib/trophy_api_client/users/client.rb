@@ -582,13 +582,13 @@ module TrophyApiClient
       end
     end
 
-    # Get a user's rank, value, and history for a specific leaderboard.
+    # Get a user's rank, value, and daily ranking history for a specific leaderboard.
     #
     # @param id [String] The user's ID in your database.
     # @param key [String] Unique key of the leaderboard as set when created.
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
-    # @param num_events [Integer] The number of events to return in the history array.
+    # @param num_events [Integer] The number of days to return in the leaderboard history for the user.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
     # @example
@@ -1252,13 +1252,13 @@ module TrophyApiClient
       end
     end
 
-    # Get a user's rank, value, and history for a specific leaderboard.
+    # Get a user's rank, value, and daily ranking history for a specific leaderboard.
     #
     # @param id [String] The user's ID in your database.
     # @param key [String] Unique key of the leaderboard as set when created.
     # @param run [String] Specific run date in YYYY-MM-DD format. If not provided, returns the current
     #  run.
-    # @param num_events [Integer] The number of events to return in the history array.
+    # @param num_events [Integer] The number of days to return in the leaderboard history for the user.
     # @param request_options [TrophyApiClient::RequestOptions]
     # @return [TrophyApiClient::UserLeaderboardResponseWithHistory]
     # @example

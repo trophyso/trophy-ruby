@@ -5,9 +5,12 @@ require "ostruct"
 require "json"
 
 module TrophyApiClient
-  # A leaderboard event representing a change in a user's rank or value.
+  # A daily leaderboard snapshot entry representing the user's rank/value state and
+  #  the previous persisted state.
   class LeaderboardEvent
-    # @return [DateTime] The timestamp when the event occurred.
+    # @return [String] The leaderboard snapshot date in YYYY-MM-DD format.
+    attr_reader :date
+    # @return [DateTime] Deprecated ISO timestamp for the snapshot day boundary. Use `date` instead.
     attr_reader :timestamp
     # @return [Integer] The user's rank before this event, or null if they were not on the leaderboard.
     attr_reader :previous_rank
@@ -27,7 +30,8 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param timestamp [DateTime] The timestamp when the event occurred.
+    # @param date [String] The leaderboard snapshot date in YYYY-MM-DD format.
+    # @param timestamp [DateTime] Deprecated ISO timestamp for the snapshot day boundary. Use `date` instead.
     # @param previous_rank [Integer] The user's rank before this event, or null if they were not on the leaderboard.
     # @param rank [Integer] The user's rank after this event, or null if they are no longer on the
     #  leaderboard.
@@ -36,15 +40,17 @@ module TrophyApiClient
     #  leaderboard.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::LeaderboardEvent]
-    def initialize(timestamp: OMIT, previous_rank: OMIT, rank: OMIT, previous_value: OMIT, value: OMIT,
+    def initialize(date:, timestamp:, previous_rank: OMIT, rank: OMIT, previous_value: OMIT, value: OMIT,
                    additional_properties: nil)
-      @timestamp = timestamp if timestamp != OMIT
+      @date = date
+      @timestamp = timestamp
       @previous_rank = previous_rank if previous_rank != OMIT
       @rank = rank if rank != OMIT
       @previous_value = previous_value if previous_value != OMIT
       @value = value if value != OMIT
       @additional_properties = additional_properties
       @_field_set = {
+        "date": date,
         "timestamp": timestamp,
         "previousRank": previous_rank,
         "rank": rank,
@@ -62,12 +68,14 @@ module TrophyApiClient
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
+      date = parsed_json["date"]
       timestamp = (DateTime.parse(parsed_json["timestamp"]) unless parsed_json["timestamp"].nil?)
       previous_rank = parsed_json["previousRank"]
       rank = parsed_json["rank"]
       previous_value = parsed_json["previousValue"]
       value = parsed_json["value"]
       new(
+        date: date,
         timestamp: timestamp,
         previous_rank: previous_rank,
         rank: rank,
@@ -91,7 +99,8 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.timestamp&.is_a?(DateTime) != false || raise("Passed value for field obj.timestamp is not the expected type, validation failed.")
+      obj.date.is_a?(String) != false || raise("Passed value for field obj.date is not the expected type, validation failed.")
+      obj.timestamp.is_a?(DateTime) != false || raise("Passed value for field obj.timestamp is not the expected type, validation failed.")
       obj.previous_rank&.is_a?(Integer) != false || raise("Passed value for field obj.previous_rank is not the expected type, validation failed.")
       obj.rank&.is_a?(Integer) != false || raise("Passed value for field obj.rank is not the expected type, validation failed.")
       obj.previous_value&.is_a?(Integer) != false || raise("Passed value for field obj.previous_value is not the expected type, validation failed.")

@@ -9,7 +9,7 @@ require "json"
 module TrophyApiClient
   # A user's data for a specific leaderboard including rank, value, and history.
   class UserLeaderboardResponseWithHistory
-    # @return [Array<TrophyApiClient::LeaderboardEvent>] An array of events showing the user's rank and value changes over time.
+    # @return [Array<TrophyApiClient::LeaderboardEvent>] An array of daily change events showing the user's rank and value over time.
     attr_reader :history
     # @return [Integer] The user's current rank in this leaderboard. Null if the user is not on the
     #  leaderboard.
@@ -60,7 +60,7 @@ module TrophyApiClient
 
     OMIT = Object.new
 
-    # @param history [Array<TrophyApiClient::LeaderboardEvent>] An array of events showing the user's rank and value changes over time.
+    # @param history [Array<TrophyApiClient::LeaderboardEvent>] An array of daily change events showing the user's rank and value over time.
     # @param rank [Integer] The user's current rank in this leaderboard. Null if the user is not on the
     #  leaderboard.
     # @param value [Integer] The user's current value in this leaderboard. Null if the user is not on the
