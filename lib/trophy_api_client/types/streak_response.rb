@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "date"
 require_relative "streak_response_streak_history_item"
 require_relative "streak_frequency"
 require "ostruct"
@@ -8,12 +9,12 @@ require "json"
 module TrophyApiClient
   # An object representing the user's streak.
   class StreakResponse
+    # @return [DateTime] The timestamp the streak was most recently extended. Null if the streak is not
+    #  active.
+    attr_reader :extended
     # @return [Array<TrophyApiClient::StreakResponseStreakHistoryItem>] A list of the user's past streak periods up through the current period. Each
     #  period includes the start and end dates and the length of the streak.
     attr_reader :streak_history
-    # @return [Integer] Deprecated. The user's rank across all users. Null if the user has no active
-    #  streak.
-    attr_reader :rank
     # @return [Integer] The length of the user's current streak.
     attr_reader :length
     # @return [TrophyApiClient::StreakFrequency] The frequency of the streak.
@@ -46,10 +47,10 @@ module TrophyApiClient
 
     OMIT = Object.new
 
+    # @param extended [DateTime] The timestamp the streak was most recently extended. Null if the streak is not
+    #  active.
     # @param streak_history [Array<TrophyApiClient::StreakResponseStreakHistoryItem>] A list of the user's past streak periods up through the current period. Each
     #  period includes the start and end dates and the length of the streak.
-    # @param rank [Integer] Deprecated. The user's rank across all users. Null if the user has no active
-    #  streak.
     # @param length [Integer] The length of the user's current streak.
     # @param frequency [TrophyApiClient::StreakFrequency] The frequency of the streak.
     # @param started [String] The date the streak started.
@@ -66,10 +67,10 @@ module TrophyApiClient
     #  the organization has enabled streak freeze auto-earn.
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::StreakResponse]
-    def initialize(length:, frequency:, streak_history: OMIT, rank: OMIT, started: OMIT, period_start: OMIT,
+    def initialize(streak_history:, length:, frequency:, extended: OMIT, started: OMIT, period_start: OMIT,
                    period_end: OMIT, expires: OMIT, freezes: OMIT, max_freezes: OMIT, freeze_auto_earn_interval: OMIT, freeze_auto_earn_amount: OMIT, additional_properties: nil)
-      @streak_history = streak_history if streak_history != OMIT
-      @rank = rank if rank != OMIT
+      @extended = extended if extended != OMIT
+      @streak_history = streak_history
       @length = length
       @frequency = frequency
       @started = started if started != OMIT
@@ -82,8 +83,8 @@ module TrophyApiClient
       @freeze_auto_earn_amount = freeze_auto_earn_amount if freeze_auto_earn_amount != OMIT
       @additional_properties = additional_properties
       @_field_set = {
+        "extended": extended,
         "streakHistory": streak_history,
-        "rank": rank,
         "length": length,
         "frequency": frequency,
         "started": started,
@@ -106,11 +107,11 @@ module TrophyApiClient
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
       parsed_json = JSON.parse(json_object)
+      extended = (DateTime.parse(parsed_json["extended"]) unless parsed_json["extended"].nil?)
       streak_history = parsed_json["streakHistory"]&.map do |item|
         item = item.to_json
         TrophyApiClient::StreakResponseStreakHistoryItem.from_json(json_object: item)
       end
-      rank = parsed_json["rank"]
       length = parsed_json["length"]
       frequency = parsed_json["frequency"]
       started = parsed_json["started"]
@@ -122,8 +123,8 @@ module TrophyApiClient
       freeze_auto_earn_interval = parsed_json["freezeAutoEarnInterval"]
       freeze_auto_earn_amount = parsed_json["freezeAutoEarnAmount"]
       new(
+        extended: extended,
         streak_history: streak_history,
-        rank: rank,
         length: length,
         frequency: frequency,
         started: started,
@@ -152,8 +153,8 @@ module TrophyApiClient
     # @param obj [Object]
     # @return [Void]
     def self.validate_raw(obj:)
-      obj.streak_history&.is_a?(Array) != false || raise("Passed value for field obj.streak_history is not the expected type, validation failed.")
-      obj.rank&.is_a?(Integer) != false || raise("Passed value for field obj.rank is not the expected type, validation failed.")
+      obj.extended&.is_a?(DateTime) != false || raise("Passed value for field obj.extended is not the expected type, validation failed.")
+      obj.streak_history.is_a?(Array) != false || raise("Passed value for field obj.streak_history is not the expected type, validation failed.")
       obj.length.is_a?(Integer) != false || raise("Passed value for field obj.length is not the expected type, validation failed.")
       obj.frequency.is_a?(TrophyApiClient::StreakFrequency) != false || raise("Passed value for field obj.frequency is not the expected type, validation failed.")
       obj.started&.is_a?(String) != false || raise("Passed value for field obj.started is not the expected type, validation failed.")
