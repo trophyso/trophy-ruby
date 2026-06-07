@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "notification_preferences"
+require_relative "streak_preferences"
 require "ostruct"
 require "json"
 
@@ -9,6 +10,8 @@ module TrophyApiClient
   class UserPreferencesResponse
     # @return [TrophyApiClient::NotificationPreferences]
     attr_reader :notifications
+    # @return [TrophyApiClient::StreakPreferences]
+    attr_reader :streak
     # @return [OpenStruct] Additional properties unmapped to the current class definition
     attr_reader :additional_properties
     # @return [Object]
@@ -18,12 +21,16 @@ module TrophyApiClient
     OMIT = Object.new
 
     # @param notifications [TrophyApiClient::NotificationPreferences]
+    # @param streak [TrophyApiClient::StreakPreferences]
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @return [TrophyApiClient::UserPreferencesResponse]
-    def initialize(notifications:, additional_properties: nil)
+    def initialize(notifications:, streak: OMIT, additional_properties: nil)
       @notifications = notifications
+      @streak = streak if streak != OMIT
       @additional_properties = additional_properties
-      @_field_set = { "notifications": notifications }
+      @_field_set = { "notifications": notifications, "streak": streak }.reject do |_k, v|
+        v == OMIT
+      end
     end
 
     # Deserialize a JSON object to an instance of UserPreferencesResponse
@@ -39,7 +46,17 @@ module TrophyApiClient
         notifications = parsed_json["notifications"].to_json
         notifications = TrophyApiClient::NotificationPreferences.from_json(json_object: notifications)
       end
-      new(notifications: notifications, additional_properties: struct)
+      if parsed_json["streak"].nil?
+        streak = nil
+      else
+        streak = parsed_json["streak"].to_json
+        streak = TrophyApiClient::StreakPreferences.from_json(json_object: streak)
+      end
+      new(
+        notifications: notifications,
+        streak: streak,
+        additional_properties: struct
+      )
     end
 
     # Serialize an instance of UserPreferencesResponse to a JSON object
@@ -57,6 +74,7 @@ module TrophyApiClient
     # @return [Void]
     def self.validate_raw(obj:)
       TrophyApiClient::NotificationPreferences.validate_raw(obj: obj.notifications)
+      obj.streak.nil? || TrophyApiClient::StreakPreferences.validate_raw(obj: obj.streak)
     end
   end
 end
