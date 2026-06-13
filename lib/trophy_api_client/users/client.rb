@@ -222,6 +222,7 @@ module TrophyApiClient
     #   * :reactivation (Array<TrophyApiClient::NotificationChannel>)
     #   * :streak_reminder (Array<TrophyApiClient::NotificationChannel>)
     # @param streak [Hash] Request of type TrophyApiClient::StreakPreferences, as a Hash
+    #   * :enabled (Boolean)
     #   * :evaluation_mode (TrophyApiClient::StreakEvaluationModePreference)
     #   * :metrics (Array<TrophyApiClient::StreakMetricPreference>)
     # @param request_options [TrophyApiClient::RequestOptions]
@@ -881,6 +882,7 @@ module TrophyApiClient
     #   * :reactivation (Array<TrophyApiClient::NotificationChannel>)
     #   * :streak_reminder (Array<TrophyApiClient::NotificationChannel>)
     # @param streak [Hash] Request of type TrophyApiClient::StreakPreferences, as a Hash
+    #   * :enabled (Boolean)
     #   * :evaluation_mode (TrophyApiClient::StreakEvaluationModePreference)
     #   * :metrics (Array<TrophyApiClient::StreakMetricPreference>)
     # @param request_options [TrophyApiClient::RequestOptions]
