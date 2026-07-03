@@ -1,0 +1,9 @@
+{
+  "cliVersion": "5.62.0",
+  "generatorName": "fernapi/fern-ruby-sdk",
+  "generatorVersion": "1.13.2",
+  "originGitCommit": "b18b99972464468a34beacaa16d18002f3d55fce",
+  "originGitCommitIsDirty": false,
+  "invokedBy": "ci",
+  "ciProvider": "github"
+}
