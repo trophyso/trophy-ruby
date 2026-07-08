@@ -24,6 +24,10 @@ module Trophy
 
       field :end_, -> { String }, optional: true, nullable: false, api_name: "end"
 
+      field :start_time, -> { String }, optional: true, nullable: false, api_name: "startTime"
+
+      field :end_time, -> { String }, optional: true, nullable: false, api_name: "endTime"
+
       field :breakdown_attributes, -> { Internal::Types::Array[String] }, optional: true, nullable: false, api_name: "breakdownAttributes"
 
       field :run_unit, -> { Trophy::Types::CreateLeaderboardRequestItemRunUnit }, optional: true, nullable: false, api_name: "runUnit"

@@ -30,6 +30,10 @@ module Trophy
 
       field :end_, -> { String }, optional: true, nullable: false, api_name: "end"
 
+      field :start_time, -> { String }, optional: true, nullable: false, api_name: "startTime"
+
+      field :end_time, -> { String }, optional: true, nullable: false, api_name: "endTime"
+
       field :max_participants, -> { Integer }, optional: true, nullable: false, api_name: "maxParticipants"
 
       field :run_unit, -> { Trophy::Types::LeaderboardResponseRunUnit }, optional: true, nullable: false, api_name: "runUnit"
