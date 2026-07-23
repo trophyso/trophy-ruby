@@ -3127,6 +3127,135 @@ client.admin.streaks.restore(users: [{
 </dl>
 </details>
 
+## Admin ApplicationApiKeys
+<details><summary><code>client.admin.application_api_keys.<a href="/lib/trophy/admin/application_api_keys/client.rb">create</a>(request) -> Trophy::Types::CreateApplicationKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create application API keys scoped to specific users. Each key can only perform operations on behalf of the user it was created for.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.application_api_keys.create(request: [{
+  user_id: "user_123"
+}, {
+  user_id: "user_456"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Internal::Types::Array[Trophy::Types::CreateApplicationKeyRequestItem]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::ApplicationApiKeys::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.application_api_keys.<a href="/lib/trophy/admin/application_api_keys/client.rb">delete</a>() -> Trophy::Types::DeleteApplicationKeysResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete application API keys by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.application_api_keys.delete(ids: ["550e8400-e29b-41d4-a716-446655440000"])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ids:** `String` — Application API key IDs (UUIDs returned at creation time). Repeat the query param or provide a comma-separated list. Maximum 100 IDs per request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::ApplicationApiKeys::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Admin Tenants
 <details><summary><code>client.admin.tenants.<a href="/lib/trophy/admin/tenants/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::AdminTenant]</code></summary>
 <dl>

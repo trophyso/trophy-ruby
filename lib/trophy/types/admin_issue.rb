@@ -4,6 +4,8 @@ module Trophy
   module Types
     # An issue encountered while processing an item in an admin API request.
     class AdminIssue < Internal::Types::Model
+      field :id, -> { String }, optional: true, nullable: false
+
       field :user_id, -> { String }, optional: true, nullable: false, api_name: "userId"
 
       field :boost_id, -> { String }, optional: true, nullable: false, api_name: "boostId"

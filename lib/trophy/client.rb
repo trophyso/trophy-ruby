@@ -9,7 +9,7 @@ module Trophy
     # @param max_retries [Integer]
     #
     # @return [void]
-    def initialize(api_key:, base_url: nil, environment: Trophy::Environment::PRODUCTION, sdk_version: "1.17.0", max_retries: 2)
+    def initialize(api_key:, base_url: nil, environment: Trophy::Environment::PRODUCTION, sdk_version: "1.18.0", max_retries: 2)
       @base_url = base_url
       @environment = environment
 
