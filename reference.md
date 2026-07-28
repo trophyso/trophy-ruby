@@ -2716,6 +2716,85 @@ client.admin.metrics.get(id: "550e8400-e29b-41d4-a716-446655440000")
 </dl>
 </details>
 
+<details><summary><code>client.admin.metrics.<a href="/lib/trophy/admin/metrics/client.rb">batch_events</a>(request) -> Trophy::Types::BatchEventsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit up to 1,000 metric events for asynchronous processing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.metrics.batch_events(request: [{
+  key: "words-written",
+  user: {
+    id: "18",
+    email: "user@example.com",
+    tz: "Europe/London",
+    attributes: {
+      department: "engineering",
+      role: "developer"
+    }
+  },
+  value: 750,
+  attributes: {
+    category: "writing",
+    source: "mobile-app"
+  },
+  idempotency_key: "e4296e4b-8493-4bd1-9c30-5a1a9ac4d78f"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Internal::Types::Array[Trophy::Types::BatchMetricEvent]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Metrics::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Admin Leaderboards
 <details><summary><code>client.admin.leaderboards.<a href="/lib/trophy/admin/leaderboards/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::AdminLeaderboard]</code></summary>
 <dl>

@@ -194,6 +194,40 @@ module Trophy
             raise error_class.new(response.body, code: code)
           end
         end
+
+        # Submit up to 1,000 metric events for asynchronous processing.
+        #
+        # @param request_options [Hash]
+        # @param params [Hash]
+        # @option request_options [String] :base_url
+        # @option request_options [Hash{String => Object}] :additional_headers
+        # @option request_options [Hash{String => Object}] :additional_query_parameters
+        # @option request_options [Hash{String => Object}] :additional_body_parameters
+        # @option request_options [Integer] :timeout_in_seconds
+        #
+        # @return [Trophy::Types::BatchEventsResponse]
+        def batch_events(request_options: {}, **params)
+          params = Trophy::Internal::Types::Utils.normalize_keys(params)
+          request = Trophy::Internal::JSON::Request.new(
+            base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
+            method: "POST",
+            path: "metrics/events",
+            body: params,
+            request_options: request_options
+          )
+          begin
+            response = @client.send(request)
+          rescue Net::HTTPRequestTimeout
+            raise Trophy::Errors::TimeoutError
+          end
+          code = response.code.to_i
+          if code.between?(200, 299)
+            Trophy::Types::BatchEventsResponse.load(response.body)
+          else
+            error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+            raise error_class.new(response.body, code: code)
+          end
+        end
       end
     end
   end
