@@ -1,3 +1,3 @@
 module MyGem
-  VERSION = "1.19.0"
+  VERSION = "1.20.1"
 end
