@@ -91,7 +91,7 @@ module Trophy
             end
           end
 
-          # Delete (archive) points systems by ID.
+          # Delete points systems by ID.
           #
           # @param request_options [Hash]
           # @param params [Hash]

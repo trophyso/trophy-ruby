@@ -92,7 +92,7 @@ module Trophy
             end
           end
 
-          # Delete (archive) points triggers by ID. Maximum 100 trigger IDs per request.
+          # Delete points triggers by ID. Maximum 100 trigger IDs per request.
           #
           # @param request_options [Hash]
           # @param params [Hash]

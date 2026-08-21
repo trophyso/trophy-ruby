@@ -2,7 +2,7 @@
 
 module Trophy
   module Types
-    # Response containing archived streak pauses and any issues encountered.
+    # Response containing deleted streak pauses and any issues encountered.
     class DeleteStreakPausesResponse < Internal::Types::Model
       field :deleted, -> { Internal::Types::Array[Trophy::Types::DeletedResource] }, optional: false, nullable: false
 
