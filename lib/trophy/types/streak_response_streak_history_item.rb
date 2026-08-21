@@ -11,6 +11,8 @@ module Trophy
       field :length, -> { Integer }, optional: false, nullable: false
 
       field :used_freeze, -> { Internal::Types::Boolean }, optional: true, nullable: false, api_name: "usedFreeze"
+
+      field :used_pause, -> { Internal::Types::Boolean }, optional: false, nullable: false, api_name: "usedPause"
     end
   end
 end

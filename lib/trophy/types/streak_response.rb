@@ -27,6 +27,8 @@ module Trophy
       field :extended, -> { String }, optional: true, nullable: false
 
       field :streak_history, -> { Internal::Types::Array[Trophy::Types::StreakResponseStreakHistoryItem] }, optional: false, nullable: false, api_name: "streakHistory"
+
+      field :pauses, -> { Internal::Types::Array[Trophy::Types::StreakResponsePausesItem] }, optional: false, nullable: false
     end
   end
 end

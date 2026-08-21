@@ -56,6 +56,11 @@ module Trophy
         def freezes
           @freezes ||= Trophy::Admin::Streaks::Freezes::Client.new(client: @client, base_url: @base_url, environment: @environment)
         end
+
+        # @return [Trophy::Pauses::Client]
+        def pauses
+          @pauses ||= Trophy::Admin::Streaks::Pauses::Client.new(client: @client, base_url: @base_url, environment: @environment)
+        end
       end
     end
   end

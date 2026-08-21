@@ -5219,3 +5219,136 @@ client.admin.streaks.freezes.create(freezes: [{
 </dl>
 </details>
 
+## Admin Streaks Pauses
+<details><summary><code>client.admin.streaks.pauses.<a href="/lib/trophy/admin/streaks/pauses/client.rb">create</a>(request) -> Trophy::Types::CreateStreakPausesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create streak pauses for multiple users. A pause covers a specific date range and maintains the user's streak length during that range instead of ending the streak. Start dates in the past are rejected.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.streaks.pauses.create(pauses: [{
+  user_id: "user-123",
+  start: "2026-08-20",
+  end_: "2026-08-27"
+}, {
+  user_id: "user-456",
+  start: "2026-09-01",
+  end_: "2026-09-07"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**pauses:** `Internal::Types::Array[Trophy::Admin::Streaks::Pauses::Types::CreateStreakPausesRequestPausesItem]` — Array of pauses to create. Maximum 100 pauses per request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Streaks::Pauses::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.streaks.pauses.<a href="/lib/trophy/admin/streaks/pauses/client.rb">delete</a>() -> Trophy::Types::DeleteStreakPausesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Archive streak pauses by ID. Pause records are not deleted; their status is set to archived so they no longer apply to streak logic.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.streaks.pauses.delete(ids: %w[550e8400-e29b-41d4-a716-446655440000 550e8400-e29b-41d4-a716-446655440001])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ids:** `String` — Streak pause IDs to archive. Repeat the query param or provide a comma-separated list.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Streaks::Pauses::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
