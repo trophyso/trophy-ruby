@@ -17,6 +17,8 @@ module Trophy
 
       field :streak_length, -> { Integer }, optional: true, nullable: false, api_name: "streakLength"
 
+      field :anniversary_years, -> { Integer }, optional: true, nullable: false, api_name: "anniversaryYears"
+
       field :achievement_ids, -> { Internal::Types::Array[String] }, optional: true, nullable: false, api_name: "achievementIds"
 
       field :metric_id, -> { String }, optional: true, nullable: false, api_name: "metricId"

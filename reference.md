@@ -407,6 +407,7 @@ client.users.identify(
   id: "id",
   email: "user@example.com",
   tz: "Europe/London",
+  sign_up_date: "2020-08-20",
   attributes: {
     department: "engineering",
     role: "developer"

@@ -9,6 +9,7 @@ module Trophy
       STREAK = "streak"
       API = "api"
       ACHIEVEMENT = "achievement"
+      ANNIVERSARY = "anniversary"
     end
   end
 end
