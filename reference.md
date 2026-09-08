@@ -3815,6 +3815,61 @@ client.admin.application_api_keys.delete(ids: ["550e8400-e29b-41d4-a716-44665544
 </dl>
 </details>
 
+## Admin Environments
+<details><summary><code>client.admin.environments.<a href="/lib/trophy/admin/environments/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::AdminEnvironment]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List active environments.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.environments.list
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Environments::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Admin Tenants
 <details><summary><code>client.admin.tenants.<a href="/lib/trophy/admin/tenants/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::AdminTenant]</code></summary>
 <dl>

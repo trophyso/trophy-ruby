@@ -49,6 +49,11 @@ module Trophy
         @application_api_keys ||= Trophy::Admin::ApplicationApiKeys::Client.new(client: @client, base_url: @base_url, environment: @environment)
       end
 
+      # @return [Trophy::Environments::Client]
+      def environments
+        @environments ||= Trophy::Admin::Environments::Client.new(client: @client, base_url: @base_url, environment: @environment)
+      end
+
       # @return [Trophy::Tenants::Client]
       def tenants
         @tenants ||= Trophy::Admin::Tenants::Client.new(client: @client, base_url: @base_url, environment: @environment)

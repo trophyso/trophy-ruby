@@ -2,7 +2,7 @@
   "cliVersion": "5.62.0",
   "generatorName": "fernapi/fern-ruby-sdk",
   "generatorVersion": "1.13.2",
-  "originGitCommit": "a26ab659060cc5cbecdc6795eb97b136e2694cdd",
+  "originGitCommit": "19712978734e8ed2f50ee8914cc8ff1f3a01c459",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
   "ciProvider": "github"
