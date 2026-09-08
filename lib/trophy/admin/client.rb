@@ -19,6 +19,11 @@ module Trophy
         @attributes ||= Trophy::Admin::Attributes::Client.new(client: @client, base_url: @base_url, environment: @environment)
       end
 
+      # @return [Trophy::Achievements::Client]
+      def achievements
+        @achievements ||= Trophy::Admin::Achievements::Client.new(client: @client, base_url: @base_url, environment: @environment)
+      end
+
       # @return [Trophy::Metrics::Client]
       def metrics
         @metrics ||= Trophy::Admin::Metrics::Client.new(client: @client, base_url: @base_url, environment: @environment)
@@ -32,6 +37,11 @@ module Trophy
       # @return [Trophy::Streaks::Client]
       def streaks
         @streaks ||= Trophy::Admin::Streaks::Client.new(client: @client, base_url: @base_url, environment: @environment)
+      end
+
+      # @return [Trophy::Settings::Client]
+      def settings
+        @settings ||= Trophy::Admin::Settings::Client.new(client: @client, base_url: @base_url, environment: @environment)
       end
 
       # @return [Trophy::ApplicationApiKeys::Client]

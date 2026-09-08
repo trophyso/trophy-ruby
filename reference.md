@@ -2379,6 +2379,338 @@ client.admin.attributes.get(id: "550e8400-e29b-41d4-a716-446655440000")
 </dl>
 </details>
 
+## Admin Achievements
+<details><summary><code>client.admin.achievements.<a href="/lib/trophy/admin/achievements/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::AdminAchievement]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List achievements.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.achievements.all
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**limit:** `Integer` — Number of records to return.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**skip:** `Integer` — Number of records to skip from the start of the list.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Achievements::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.achievements.<a href="/lib/trophy/admin/achievements/client.rb">create</a>(request) -> Trophy::Types::CreateAchievementsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create achievements. Trigger-specific fields are required based on `trigger`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.achievements.create(request: [{
+  name: "First Workout",
+  trigger: "metric",
+  metric_id: "660f9500-f30c-42e5-b827-557766550001",
+  metric_value: 1
+}, {
+  name: "Custom Unlock",
+  trigger: "api",
+  key: "custom-unlock"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Internal::Types::Array[Trophy::Types::CreateAchievementRequestItem]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Achievements::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.achievements.<a href="/lib/trophy/admin/achievements/client.rb">delete</a>() -> Trophy::Types::DeleteAchievementsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete achievements by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.achievements.delete(ids: %w[550e8400-e29b-41d4-a716-446655440000 550e8400-e29b-41d4-a716-446655440001])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ids:** `String` — Achievement IDs to delete. Repeat the query param or provide a comma-separated list.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Achievements::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.achievements.<a href="/lib/trophy/admin/achievements/client.rb">update</a>(request) -> Trophy::Types::UpdateAchievementsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update achievements by ID. Maximum 100 achievements per request. Only provided fields are updated; omitted fields are preserved.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.achievements.update(request: [{
+  id: "550e8400-e29b-41d4-a716-446655440000",
+  name: "First Workout Completed",
+  status: "active"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Internal::Types::Array[Trophy::Types::UpdateAchievementRequestItem]` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Achievements::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.achievements.<a href="/lib/trophy/admin/achievements/client.rb">get</a>(id) -> Trophy::Types::AdminAchievement</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an achievement by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.achievements.get(id: "550e8400-e29b-41d4-a716-446655440000")
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The UUID of the achievement to retrieve.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Achievements::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Admin Metrics
 <details><summary><code>client.admin.metrics.<a href="/lib/trophy/admin/metrics/client.rb">list</a>() -> Internal::Types::Array[Trophy::Types::CreatedMetric]</code></summary>
 <dl>
@@ -2879,7 +3211,7 @@ client.leaderboards.all
 <dl>
 <dd>
 
-Create leaderboards. Maximum 100 leaderboards per request.
+Create leaderboards.
 </dd>
 </dl>
 </dd>
@@ -3196,6 +3528,153 @@ client.admin.streaks.restore(users: [{
 <dd>
 
 **request_options:** `Trophy::Admin::Streaks::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Admin Settings
+<details><summary><code>client.admin.settings.<a href="/lib/trophy/admin/settings/client.rb">get</a>() -> Trophy::Types::AdminSettings</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get branding, experimentation, and aggregation settings.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.settings.get
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Settings::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.settings.<a href="/lib/trophy/admin/settings/client.rb">update</a>(request) -> Trophy::Types::AdminSettings</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update branding, experimentation, and aggregation settings.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.settings.update(
+  branding: {
+    app_name: "Trophy",
+    app_url: "https://app.example.com",
+    brand_color: "#1a2b3c",
+    logo: {
+      url: "https://cdn.example.com/logo.png"
+    }
+  },
+  experimentation: {
+    control_ratio: 10,
+    user_activation_window: 14
+  },
+  aggregation_period: "weekly"
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**branding:** `Trophy::Types::UpdateAdminSettingsBranding` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**experimentation:** `Trophy::Types::UpdateAdminSettingsExperimentation` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**aggregation_period:** `Trophy::Types::AdminAggregationPeriod` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Settings::RequestOptions` 
     
 </dd>
 </dl>
@@ -4485,7 +4964,7 @@ client.admin.points.levels.list(
 <dl>
 <dd>
 
-Create points levels. Maximum 100 levels per request.
+Create points levels.
 </dd>
 </dl>
 </dd>
@@ -4866,7 +5345,7 @@ client.admin.points.triggers.list(
 <dl>
 <dd>
 
-Create points triggers in bulk. Maximum 100 triggers per request.
+Create points triggers in bulk.
 </dd>
 </dl>
 </dd>
@@ -5342,6 +5821,178 @@ client.admin.streaks.pauses.delete(ids: %w[550e8400-e29b-41d4-a716-446655440000 
 <dd>
 
 **request_options:** `Trophy::Admin::Streaks::Pauses::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Admin Streaks Settings
+<details><summary><code>client.admin.streaks.settings.<a href="/lib/trophy/admin/streaks/settings/client.rb">get</a>() -> Trophy::Types::StreakSettings</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the organization's streak configuration.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.streaks.settings.get
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Streaks::Settings::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.admin.streaks.settings.<a href="/lib/trophy/admin/streaks/settings/client.rb">update</a>(request) -> Trophy::Types::StreakSettings</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the organization's streak configuration.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.streaks.settings.update(
+  frequency: "daily",
+  evaluation_mode: "OR",
+  customization_enabled: true,
+  days_off: [0, 6],
+  metrics: [{
+    key: "words-written",
+    threshold: 500
+  }],
+  freezes: {
+    start_count: 1,
+    max_count: 2,
+    auto_earn_interval: 7,
+    auto_earn_amount: 1
+  }
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**frequency:** `Trophy::Types::AdminStreakFrequency` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**evaluation_mode:** `Trophy::Types::AdminStreakEvaluationMode` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**customization_enabled:** `Internal::Types::Boolean` — Whether users can override streak evaluation mode, metric thresholds, and days off via preferences.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**days_off:** `Internal::Types::Array[Integer]` — Days of the week that do not count toward the daily streak. A non-empty array is only allowed when the resulting frequency is `daily`. Changing frequency away from `daily` clears stored days off even when this field is omitted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metrics:** `Internal::Types::Array[Trophy::Types::StreakSettingsMetric]` — Replacement list of streak metrics. Keys must be unique and must exist on the organization.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**freezes:** `Trophy::Types::UpdateStreakSettingsFreezes` — Replacement freeze configuration, or `null` to disable freezes.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Streaks::Settings::RequestOptions` 
     
 </dd>
 </dl>

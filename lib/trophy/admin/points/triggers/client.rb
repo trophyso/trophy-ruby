@@ -57,7 +57,7 @@ module Trophy
             end
           end
 
-          # Create points triggers in bulk. Maximum 100 triggers per request.
+          # Create points triggers in bulk.
           #
           # @param request_options [Hash]
           # @param params [Trophy::Types::CreatePointsTriggersRequest]

@@ -61,6 +61,11 @@ module Trophy
         def pauses
           @pauses ||= Trophy::Admin::Streaks::Pauses::Client.new(client: @client, base_url: @base_url, environment: @environment)
         end
+
+        # @return [Trophy::Settings::Client]
+        def settings
+          @settings ||= Trophy::Admin::Streaks::Settings::Client.new(client: @client, base_url: @base_url, environment: @environment)
+        end
       end
     end
   end

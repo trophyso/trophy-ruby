@@ -2,7 +2,7 @@
 
 module Trophy
   module Admin
-    module Leaderboards
+    module Achievements
       class Client
         # @param client [Trophy::Internal::Http::RawClient]
         # @param base_url [String, nil]
@@ -15,7 +15,7 @@ module Trophy
           @environment = environment
         end
 
-        # List leaderboards.
+        # List achievements.
         #
         # @param request_options [Hash]
         # @param params [Hash]
@@ -27,7 +27,7 @@ module Trophy
         # @option params [Integer, nil] :limit
         # @option params [Integer, nil] :skip
         #
-        # @return [Array[Trophy::Types::AdminLeaderboard]]
+        # @return [Array[Trophy::Types::AdminAchievement]]
         def list(request_options: {}, **params)
           params = Trophy::Internal::Types::Utils.normalize_keys(params)
           query_params = {}
@@ -37,7 +37,7 @@ module Trophy
           request = Trophy::Internal::JSON::Request.new(
             base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
             method: "GET",
-            path: "leaderboards",
+            path: "achievements",
             query: query_params,
             request_options: request_options
           )
@@ -48,30 +48,30 @@ module Trophy
           end
           code = response.code.to_i
           if code.between?(200, 299)
-            Trophy::Types::ListLeaderboardsResponse.load(response.body)
+            Trophy::Types::ListAchievementsResponse.load(response.body)
           else
             error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
             raise error_class.new(response.body, code: code)
           end
         end
 
-        # Create leaderboards.
+        # Create achievements. Trigger-specific fields are required based on `trigger`.
         #
         # @param request_options [Hash]
-        # @param params [Trophy::Types::CreateLeaderboardsRequest]
+        # @param params [Trophy::Types::CreateAchievementsRequest]
         # @option request_options [String] :base_url
         # @option request_options [Hash{String => Object}] :additional_headers
         # @option request_options [Hash{String => Object}] :additional_query_parameters
         # @option request_options [Hash{String => Object}] :additional_body_parameters
         # @option request_options [Integer] :timeout_in_seconds
         #
-        # @return [Trophy::Types::CreateLeaderboardsResponse]
+        # @return [Trophy::Types::CreateAchievementsResponse]
         def create(request_options: {}, **params)
           params = Trophy::Internal::Types::Utils.normalize_keys(params)
           request = Trophy::Internal::JSON::Request.new(
             base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
             method: "POST",
-            path: "leaderboards",
+            path: "achievements",
             body: params,
             request_options: request_options
           )
@@ -82,14 +82,14 @@ module Trophy
           end
           code = response.code.to_i
           if code.between?(200, 299)
-            Trophy::Types::CreateLeaderboardsResponse.load(response.body)
+            Trophy::Types::CreateAchievementsResponse.load(response.body)
           else
             error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
             raise error_class.new(response.body, code: code)
           end
         end
 
-        # Delete leaderboards by ID.
+        # Delete achievements by ID.
         #
         # @param request_options [Hash]
         # @param params [Hash]
@@ -100,7 +100,7 @@ module Trophy
         # @option request_options [Integer] :timeout_in_seconds
         # @option params [String, nil] :ids
         #
-        # @return [Trophy::Types::DeleteLeaderboardsResponse]
+        # @return [Trophy::Types::DeleteAchievementsResponse]
         def delete(request_options: {}, **params)
           params = Trophy::Internal::Types::Utils.normalize_keys(params)
           query_params = {}
@@ -109,7 +109,7 @@ module Trophy
           request = Trophy::Internal::JSON::Request.new(
             base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
             method: "DELETE",
-            path: "leaderboards",
+            path: "achievements",
             query: query_params,
             request_options: request_options
           )
@@ -120,31 +120,31 @@ module Trophy
           end
           code = response.code.to_i
           if code.between?(200, 299)
-            Trophy::Types::DeleteLeaderboardsResponse.load(response.body)
+            Trophy::Types::DeleteAchievementsResponse.load(response.body)
           else
             error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
             raise error_class.new(response.body, code: code)
           end
         end
 
-        # Update leaderboards by ID. Updating `status` behaves the same as activating, scheduling, deactivating, or
-        # finishing a leaderboard in the dashboard.
+        # Update achievements by ID. Maximum 100 achievements per request. Only provided fields are updated; omitted
+        # fields are preserved.
         #
         # @param request_options [Hash]
-        # @param params [Trophy::Types::UpdateLeaderboardsRequest]
+        # @param params [Trophy::Types::UpdateAchievementsRequest]
         # @option request_options [String] :base_url
         # @option request_options [Hash{String => Object}] :additional_headers
         # @option request_options [Hash{String => Object}] :additional_query_parameters
         # @option request_options [Hash{String => Object}] :additional_body_parameters
         # @option request_options [Integer] :timeout_in_seconds
         #
-        # @return [Trophy::Types::UpdateLeaderboardsResponse]
+        # @return [Trophy::Types::UpdateAchievementsResponse]
         def update(request_options: {}, **params)
           params = Trophy::Internal::Types::Utils.normalize_keys(params)
           request = Trophy::Internal::JSON::Request.new(
             base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
             method: "PATCH",
-            path: "leaderboards",
+            path: "achievements",
             body: params,
             request_options: request_options
           )
@@ -155,14 +155,14 @@ module Trophy
           end
           code = response.code.to_i
           if code.between?(200, 299)
-            Trophy::Types::UpdateLeaderboardsResponse.load(response.body)
+            Trophy::Types::UpdateAchievementsResponse.load(response.body)
           else
             error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
             raise error_class.new(response.body, code: code)
           end
         end
 
-        # Get a leaderboard by ID.
+        # Get an achievement by ID.
         #
         # @param request_options [Hash]
         # @param params [Hash]
@@ -173,13 +173,13 @@ module Trophy
         # @option request_options [Integer] :timeout_in_seconds
         # @option params [String] :id
         #
-        # @return [Trophy::Types::AdminLeaderboard]
+        # @return [Trophy::Types::AdminAchievement]
         def get(request_options: {}, **params)
           params = Trophy::Internal::Types::Utils.normalize_keys(params)
           request = Trophy::Internal::JSON::Request.new(
             base_url: request_options[:base_url] || @base_url || @environment&.dig(:admin),
             method: "GET",
-            path: "leaderboards/#{URI.encode_uri_component(params[:id].to_s)}",
+            path: "achievements/#{URI.encode_uri_component(params[:id].to_s)}",
             request_options: request_options
           )
           begin
@@ -189,7 +189,7 @@ module Trophy
           end
           code = response.code.to_i
           if code.between?(200, 299)
-            Trophy::Types::AdminLeaderboard.load(response.body)
+            Trophy::Types::AdminAchievement.load(response.body)
           else
             error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
             raise error_class.new(response.body, code: code)
