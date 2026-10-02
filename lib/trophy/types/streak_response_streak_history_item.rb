@@ -13,6 +13,8 @@ module Trophy
       field :used_freeze, -> { Internal::Types::Boolean }, optional: true, nullable: false, api_name: "usedFreeze"
 
       field :used_pause, -> { Internal::Types::Boolean }, optional: false, nullable: false, api_name: "usedPause"
+
+      field :reset_at, -> { String }, optional: true, nullable: false, api_name: "resetAt"
     end
   end
 end

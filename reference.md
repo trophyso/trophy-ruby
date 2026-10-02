@@ -3539,6 +3539,72 @@ client.admin.streaks.restore(users: [{
 </dl>
 </details>
 
+<details><summary><code>client.admin.streaks.<a href="/lib/trophy/admin/streaks/client.rb">reset</a>(request) -> Trophy::Types::ResetStreaksResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Reset the current streak to zero for multiple users.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.admin.streaks.reset(users: [{
+  id: "user-123"
+}, {
+  id: "user-456"
+}])
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**users:** `Internal::Types::Array[Trophy::Admin::Streaks::Types::ResetStreaksRequestUsersItem]` — Array of users to reset streaks for. Maximum 100 users per request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Admin::Streaks::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Admin Settings
 <details><summary><code>client.admin.settings.<a href="/lib/trophy/admin/settings/client.rb">get</a>() -> Trophy::Types::AdminSettings</code></summary>
 <dl>
