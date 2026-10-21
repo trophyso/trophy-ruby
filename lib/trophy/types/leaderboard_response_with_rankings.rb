@@ -39,6 +39,8 @@ module Trophy
 
       field :run_interval, -> { Integer }, optional: true, nullable: false, api_name: "runInterval"
 
+      field :user_attributes, -> { Internal::Types::Array[Trophy::Types::LeaderboardResponseUserAttributesItem] }, optional: false, nullable: false, api_name: "userAttributes"
+
       field :status, -> { Trophy::Types::LeaderboardResponseWithRankingsStatus }, optional: false, nullable: false
 
       field :rankings, -> { Internal::Types::Array[Trophy::Types::LeaderboardRanking] }, optional: false, nullable: false

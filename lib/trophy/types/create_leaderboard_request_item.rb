@@ -33,6 +33,8 @@ module Trophy
       field :run_unit, -> { Trophy::Types::CreateLeaderboardRequestItemRunUnit }, optional: true, nullable: false, api_name: "runUnit"
 
       field :run_interval, -> { Integer }, optional: true, nullable: false, api_name: "runInterval"
+
+      field :user_attributes, -> { Internal::Types::Array[Trophy::Types::CreateLeaderboardRequestItemUserAttributesItem] }, optional: true, nullable: false, api_name: "userAttributes"
     end
   end
 end
