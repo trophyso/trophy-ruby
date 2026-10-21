@@ -33,6 +33,15 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          bundle exec rake release
+          bundle exec rake build
+          bundle exec rake release:rubygem_push
+          VERSION=$(ruby -e 'print Gem::Specification.load(Dir["*.gemspec"].first).version')
+          git fetch --tags
+          if git rev-parse "refs/tags/v${VERSION}" >/dev/null 2>&1; then
+            echo "Tag v${VERSION} already exists"
+          else
+            git tag "v${VERSION}" -m "Release ${VERSION}"
+            git push origin "v${VERSION}"
+          fi
         env:
           GEM_HOST_API_KEY: ${{ secrets.RUBY_API_KEY }}
