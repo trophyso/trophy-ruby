@@ -94,6 +94,7 @@ client.achievements.complete(
   user: {
     email: "user@example.com",
     tz: "Europe/London",
+    subscribe_to_emails: true,
     id: "user-id"
   }
 )
