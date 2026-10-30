@@ -24,6 +24,11 @@ module Trophy
         @achievements ||= Trophy::Admin::Achievements::Client.new(client: @client, base_url: @base_url, environment: @environment)
       end
 
+      # @return [Trophy::Rewards::Client]
+      def rewards
+        @rewards ||= Trophy::Admin::Rewards::Client.new(client: @client, base_url: @base_url, environment: @environment)
+      end
+
       # @return [Trophy::Metrics::Client]
       def metrics
         @metrics ||= Trophy::Admin::Metrics::Client.new(client: @client, base_url: @base_url, environment: @environment)

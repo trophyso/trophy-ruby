@@ -8,6 +8,10 @@ module Trophy
       field :achievement, -> { Trophy::Types::UserAchievementResponse }, optional: false, nullable: false
 
       field :points, -> { Internal::Types::Hash[String, Trophy::Types::MetricEventPointsResponse] }, optional: false, nullable: false
+
+      field :leaderboards, -> { Internal::Types::Hash[String, Trophy::Types::MetricEventLeaderboardResponse] }, optional: false, nullable: false
+
+      field :rewards, -> { Internal::Types::Array[Trophy::Types::UserRewardResponse] }, optional: false, nullable: false
     end
   end
 end

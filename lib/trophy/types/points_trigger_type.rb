@@ -10,6 +10,7 @@ module Trophy
       STREAK = "streak"
       TIME = "time"
       USER_CREATION = "user_creation"
+      REWARD = "reward"
     end
   end
 end

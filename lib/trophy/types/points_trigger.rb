@@ -23,6 +23,10 @@ module Trophy
 
       field :achievement_name, -> { String }, optional: true, nullable: false, api_name: "achievementName"
 
+      field :reward_key, -> { String }, optional: true, nullable: false, api_name: "rewardKey"
+
+      field :reward_name, -> { String }, optional: true, nullable: false, api_name: "rewardName"
+
       field :time_unit, -> { Trophy::Types::PointsTriggerTimeUnit }, optional: true, nullable: false, api_name: "timeUnit"
 
       field :time_interval, -> { Integer }, optional: true, nullable: false, api_name: "timeInterval"

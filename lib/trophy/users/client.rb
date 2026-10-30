@@ -372,6 +372,51 @@ module Trophy
         raise error_class.new(response.body, code: code)
       end
 
+      # Get rewards awarded to a user. Filter by redeemed state and the date the reward was awarded.
+      #
+      # @param request_options [Hash]
+      # @param params [Hash]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      # @option params [Boolean, nil] :redeemed
+      # @option params [String, nil] :start_date
+      # @option params [String, nil] :end_date
+      # @option params [Integer, nil] :skip
+      # @option params [Integer, nil] :limit
+      #
+      # @return [Array[Trophy::Types::UserRewardResponse]]
+      def rewards(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        query_params = {}
+        query_params["redeemed"] = params[:redeemed] if params.key?(:redeemed)
+        query_params["startDate"] = params[:start_date] if params.key?(:start_date)
+        query_params["endDate"] = params[:end_date] if params.key?(:end_date)
+        query_params["skip"] = params[:skip] if params.key?(:skip)
+        query_params["limit"] = params[:limit] if params.key?(:limit)
+
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "GET",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/rewards",
+          query: query_params,
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        return if code.between?(200, 299)
+
+        error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+        raise error_class.new(response.body, code: code)
+      end
+
       # Get a user's streak data.
       #
       # @param request_options [Hash]

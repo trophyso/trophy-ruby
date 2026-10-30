@@ -17,6 +17,8 @@ module Trophy
 
       field :leaderboards, -> { Internal::Types::Hash[String, Trophy::Types::MetricEventLeaderboardResponse] }, optional: false, nullable: false
 
+      field :rewards, -> { Internal::Types::Array[Trophy::Types::UserRewardResponse] }, optional: false, nullable: false
+
       field :idempotency_key, -> { String }, optional: true, nullable: false, api_name: "idempotencyKey"
 
       field :idempotent_replayed, -> { Internal::Types::Boolean }, optional: true, nullable: false, api_name: "idempotentReplayed"
