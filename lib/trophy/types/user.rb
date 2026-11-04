@@ -22,6 +22,8 @@ module Trophy
 
       field :control, -> { Internal::Types::Boolean }, optional: false, nullable: false
 
+      field :agentic_messaging_enabled, -> { Internal::Types::Boolean }, optional: false, nullable: false, api_name: "agenticMessagingEnabled"
+
       field :created, -> { String }, optional: false, nullable: false
 
       field :updated, -> { String }, optional: false, nullable: false
