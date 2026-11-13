@@ -9,6 +9,8 @@ module Trophy
         field :notifications, -> { Trophy::Types::NotificationPreferences }, optional: true, nullable: false
 
         field :streak, -> { Trophy::Types::StreakPreferences }, optional: true, nullable: false
+
+        field :messaging, -> { Trophy::Types::MessagingPreferences }, optional: true, nullable: false
       end
     end
   end

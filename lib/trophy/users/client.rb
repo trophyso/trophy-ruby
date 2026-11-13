@@ -152,7 +152,7 @@ module Trophy
         end
       end
 
-      # Get a user's notification preferences.
+      # Get a user's notification, streak and agentic messaging preferences.
       #
       # @param request_options [Hash]
       # @param params [Hash]
@@ -186,8 +186,8 @@ module Trophy
         end
       end
 
-      # Update a user's notification and streak preferences. Streak preferences other than `streak.enabled` require
-      # streak customization to be enabled in your Trophy dashboard settings.
+      # Update a user's notification, streak and agentic messaging preferences. Streak preferences other than
+      # `streak.enabled` require streak customization to be enabled in your Trophy dashboard settings.
       #
       # @param request_options [Hash]
       # @param params [Trophy::Users::Types::UpdateUserPreferencesRequest]
