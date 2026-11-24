@@ -1180,6 +1180,529 @@ client.users.rewards(
 </dl>
 </details>
 
+<details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">goals</a>(id) -> Internal::Types::Array[Trophy::Types::GoalResponse]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a user's goals, each with its steps. Filter by status, and page through them with `skip` and `limit`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.users.goals(
+  id: "user-123",
+  status: "active",
+  skip: 1,
+  limit: 1
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The user's ID in your database.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**status:** `Trophy::Types::GoalStatus` — When set, only return goals with this status. A goal's steps come with it, whatever their own status.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**skip:** `Integer` — Number of goals to skip. Defaults to 0.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Integer` — Maximum number of goals to return. Defaults to 100 and cannot exceed 100.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Users::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">create_goal</a>(id, request) -> Trophy::Types::GoalResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a goal for a user, or with `parent` a step at the end of that goal's steps.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.users.create_goal(
+  id: "user-123",
+  key: "spanish-exam",
+  label: "Spanish B1 exam",
+  completion: "none",
+  due_at: "2026-11-20T09:00:00Z"
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The user's ID in your database.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**key:** `String` — The goal's key, unique per user. 1–100 letters, numbers, hyphens or underscores, and not `plural` or `singular`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parent:** `String` — The key of a goal to add this to as a step, after its last. The parent can't be a step, can't have more than 100 steps, and the request can't have `steps`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**label:** `String` — What the goal is, as messages name it, e.g. "Spanish B1 exam".
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**completion:** `Trophy::Types::GoalCompletion` — How the goal is completed. Defaults to `manual`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**due_at:** `String` — When the goal is due, as an ISO 8601 date and time. Without an offset, it's in the user's timezone. Required with `completion: none`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**completed_at:** `String` — When the user completed the goal, if they already have, as an ISO 8601 date and time. Without an offset, it's in the user's timezone, and a time after now is read as now. Not with `completion: none`, which is never completed, or `completion: metric`, which completes when its metric reaches the target.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metric:** `String` — The metric's key. Required with `completion: metric`, and only for it.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target:** `Integer` — The metric total that completes it. Required with `completion: metric`, and only for it.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start:** `String` — `completion: metric` only. The date, in the user's timezone, the metric total counts from. Defaults to today.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**steps:** `Internal::Types::Array[Trophy::Types::GoalStepRequest]` — The goal's steps, in order, each with its own key.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Users::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">get_goal</a>(id, key) -> Trophy::Types::GoalResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a user's goal or step by its key, with a goal's steps.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.users.get_goal(
+  id: "user-123",
+  key: "spanish-exam"
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The user's ID in your database.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**key:** `String` — The goal's or step's key.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Users::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">delete_goal</a>(id, key) -> </code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a user's goal.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.users.delete_goal(
+  id: "user-123",
+  key: "spanish-exam"
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The user's ID in your database.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**key:** `String` — The goal's key.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Users::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">update_goal</a>(id, key, request) -> Trophy::Types::GoalResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a goal for a user.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```ruby
+client.users.update_goal(
+  id: "user-123",
+  key: "first-essay",
+  completed_at: "2026-11-12T14:21:08Z"
+)
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `String` — The user's ID in your database.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**key:** `String` — The goal's key.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**label:** `String` — What the goal is, as messages name it. Null clears it.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**completion:** `Trophy::Types::GoalCompletion` — How the goal is completed. Changing it to `none` uncompletes the goal, and needs it to have a `dueAt`; changing it to `metric` needs a `metric` and `target`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**due_at:** `String` — When the goal is due, as an ISO 8601 date and time. Without an offset, it's in the user's timezone. Null clears it, except with `completion: none`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**completed_at:** `String` — When the user completed the goal, as an ISO 8601 date and time. Without an offset, it's in the user's timezone, and a time after now is read as now. Null uncompletes it. Not with `completion: none`, which is never completed, or `completion: metric`, which completes when its metric reaches the target.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metric:** `String` — `completion: metric` only. The metric's key. Changing the metric, target or start checks the goal against its target again, which can complete or uncomplete it; other changes leave a completed goal completed.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**target:** `Integer` — `completion: metric` only. The metric total that completes it.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**start:** `String` — `completion: metric` only. The date, in the user's timezone, the metric total counts from.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**steps:** `Internal::Types::Array[Trophy::Types::GoalStepRequest]` — Replaces the goal's steps, in order: a step whose key the goal has is updated, the others are added, and steps left out are deleted. Not for a step, since steps are one level deep.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request_options:** `Trophy::Users::RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.users.<a href="/lib/trophy/users/client.rb">streak</a>(id) -> Trophy::Types::StreakResponse</code></summary>
 <dl>
 <dd>

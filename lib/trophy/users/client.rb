@@ -417,6 +417,194 @@ module Trophy
         raise error_class.new(response.body, code: code)
       end
 
+      # Get a user's goals, each with its steps. Filter by status, and page through them with `skip` and `limit`.
+      #
+      # @param request_options [Hash]
+      # @param params [Hash]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      # @option params [Trophy::Types::GoalStatus, nil] :status
+      # @option params [Integer, nil] :skip
+      # @option params [Integer, nil] :limit
+      #
+      # @return [Array[Trophy::Types::GoalResponse]]
+      def goals(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        query_params = {}
+        query_params["status"] = params[:status] if params.key?(:status)
+        query_params["skip"] = params[:skip] if params.key?(:skip)
+        query_params["limit"] = params[:limit] if params.key?(:limit)
+
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "GET",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/goals",
+          query: query_params,
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        return if code.between?(200, 299)
+
+        error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+        raise error_class.new(response.body, code: code)
+      end
+
+      # Create a goal for a user, or with `parent` a step at the end of that goal's steps.
+      #
+      # @param request_options [Hash]
+      # @param params [Trophy::Users::Types::CreateGoalRequest]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      #
+      # @return [Trophy::Types::GoalResponse]
+      def create_goal(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        request_data = Trophy::Users::Types::CreateGoalRequest.new(params).to_h
+        non_body_param_names = %w[id]
+        body = request_data.except(*non_body_param_names)
+
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "POST",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/goals",
+          body: body,
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        if code.between?(200, 299)
+          Trophy::Types::GoalResponse.load(response.body)
+        else
+          error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+          raise error_class.new(response.body, code: code)
+        end
+      end
+
+      # Get a user's goal or step by its key, with a goal's steps.
+      #
+      # @param request_options [Hash]
+      # @param params [Hash]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      # @option params [String] :key
+      #
+      # @return [Trophy::Types::GoalResponse]
+      def get_goal(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "GET",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/goals/#{URI.encode_uri_component(params[:key].to_s)}",
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        if code.between?(200, 299)
+          Trophy::Types::GoalResponse.load(response.body)
+        else
+          error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+          raise error_class.new(response.body, code: code)
+        end
+      end
+
+      # Delete a user's goal.
+      #
+      # @param request_options [Hash]
+      # @param params [Hash]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      # @option params [String] :key
+      #
+      # @return [untyped]
+      def delete_goal(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "DELETE",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/goals/#{URI.encode_uri_component(params[:key].to_s)}",
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        return if code.between?(200, 299)
+
+        error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+        raise error_class.new(response.body, code: code)
+      end
+
+      # Update a goal for a user.
+      #
+      # @param request_options [Hash]
+      # @param params [Trophy::Users::Types::UpdateGoalRequest]
+      # @option request_options [String] :base_url
+      # @option request_options [Hash{String => Object}] :additional_headers
+      # @option request_options [Hash{String => Object}] :additional_query_parameters
+      # @option request_options [Hash{String => Object}] :additional_body_parameters
+      # @option request_options [Integer] :timeout_in_seconds
+      # @option params [String] :id
+      # @option params [String] :key
+      #
+      # @return [Trophy::Types::GoalResponse]
+      def update_goal(request_options: {}, **params)
+        params = Trophy::Internal::Types::Utils.normalize_keys(params)
+        request_data = Trophy::Users::Types::UpdateGoalRequest.new(params).to_h
+        non_body_param_names = %w[id key]
+        body = request_data.except(*non_body_param_names)
+
+        request = Trophy::Internal::JSON::Request.new(
+          base_url: request_options[:base_url] || @base_url || @environment&.dig(:api),
+          method: "PATCH",
+          path: "users/#{URI.encode_uri_component(params[:id].to_s)}/goals/#{URI.encode_uri_component(params[:key].to_s)}",
+          body: body,
+          request_options: request_options
+        )
+        begin
+          response = @client.send(request)
+        rescue Net::HTTPRequestTimeout
+          raise Trophy::Errors::TimeoutError
+        end
+        code = response.code.to_i
+        if code.between?(200, 299)
+          Trophy::Types::GoalResponse.load(response.body)
+        else
+          error_class = Trophy::Errors::ResponseError.subclass_for_code(code)
+          raise error_class.new(response.body, code: code)
+        end
+      end
+
       # Get a user's streak data.
       #
       # @param request_options [Hash]
